@@ -1,0 +1,75 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.x2mobile.wodjar"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(".." + File.separator + "certificate" + File.separator + "release.jks")
+            storePassword "244R3@H2S&Fi"
+            keyAlias "x2mobilekey"
+            keyPassword "6r8Z5h%6c0Be"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.anko:anko-sdk15:$anko_version"
+    compile "org.jetbrains.anko:anko-common:$anko_version"
+    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
+    compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:design:$support_version"
+    compile "com.android.support:recyclerview-v7:$support_version"
+    compile "com.android.support:percent:$support_version"
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.dmitrymalkovich.android:material-design-dimens:1.4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'co.infinum:materialdatetimepicker-support:3.1.3'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.amazonaws:aws-android-sdk-core:2.4.0'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.4.0'
+    compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.4.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.21.1'
+
+    kapt 'com.android.databinding:compiler:2.3.0'
+}
+
+repositories {
+    mavenCentral()
+}

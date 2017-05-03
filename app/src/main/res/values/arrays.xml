@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="personal_record_type_names">
+        <item>Back Squat</item>
+        <item>Front Squat</item>
+        <item>Bench Press</item>
+        <item>Clean</item>
+        <item>Jerk</item>
+        <item>Clean &amp; Jerk</item>
+        <item>Power Clean</item>
+        <item>Snatch</item>
+        <item>Power Snatch</item>
+        <item>One Handed Snatch</item>
+        <item>Overhead Squat</item>
+        <item>Dead Lift</item>
+        <item>Push Press</item>
+        <item>Shoulder Press</item>
+        <item>Thruster</item>
+        <item>Turkish Get-up</item>
+        <item>Weighted Pull-up</item>
+        <item>Weighted Ring-Dip</item>
+        <item>500 m Row</item>
+        <item>1000 m Row</item>
+        <item>2000 m Row</item>
+        <item>5000 m Row</item>
+        <item>100 m Run</item>
+        <item>1 km Run</item>
+        <item>3 km Run</item>
+        <item>5 km Run</item>
+        <item>10 km Run</item>
+        <item>1/2 marathon Run</item>
+        <item>1 marathon Run</item>
+    </array>
+
+    <array name="personal_record_type_categories">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </array>
+</resources>

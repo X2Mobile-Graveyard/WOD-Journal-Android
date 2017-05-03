@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">WOD Journal</string>
+
+    <string name="facebook_app_id" translatable="false">692928100868197</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb692928100868197</string>
+
+    <string name="done">Done</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+
+    <string name="weight">Weight</string>
+    <string name="reps">Rounds/Reps</string>
+    <string name="time">Time</string>
+
+    <string name="weight_prefix">Weight %s</string>
+    <string name="reps_prefix">Rounds/Reps %d</string>
+    <string name="time_prefix">Time %s</string>
+
+    <string name="personal_record">Personal Records</string>
+
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="error_occurred">An error occurred</string>
+    <string name="login_expired">Login session expired, please log in again</string>
+    <string name="image_upload_failed">Image upload failed</string>
+
+    <string name="weight_lifted">Weight Lifted (%s)</string>
+    <string name="reps_completed">Rounds/Reps completed</string>
+    <string name="time_spent">Time (hh:mm:ss)</string>
+
+    <string name="rx">RX</string>
+    <string name="rx_prefix">RX:</string>
+
+    <string name="kg">kg</string>
+    <string name="lb">lb</string>
+
+    <string name="kg_suffix">"%.2f" kg</string>
+    <string name="lb_suffix">"%.2f" lb</string>
+
+    <string name="note">Notes</string>
+    <string name="add_picture">Add picture</string>
+    <string name="field_mandatory">This field is mandatory</string>
+
+    <string name="saving">Saving…</string>
+
+    <string name="login">Login</string>
+    <string name="logging">Logging…</string>
+    <string name="register">Register</string>
+    <string name="registering">Registering…</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+
+    <string name="storage_permission_denied">Operation cannot be completed without access to the storage.</string>
+
+    <string name="login_to_continue">You need to log in to continue</string>
+
+    <string name="delete">Delete</string>
+    <string name="deleting">Deleting…</string>
+    <string name="delete_record">Delete Record</string>
+</resources>

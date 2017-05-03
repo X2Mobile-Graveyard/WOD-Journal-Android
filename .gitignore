@@ -1,0 +1,73 @@
+#built application artefacts
+*.apk
+*.apk.*
+*.ap_
+.fbprefs
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+*.DS_Store
+
+
+*.DS_Store
+# classpath
+*.classpath
+
+# No Logs
+*.log
+
+# generated files
+**/bin
+bin/
+**/gen
+gen/
+.apt_generated/
+jars/
+
+# Local configuration file (sdk path, etc)
+**/local.properties
+
+#ant build files artefacts
+**/build/temp/
+
+#exclude code analyzer reports
+**/build/reports
+
+#exclude emma coverage reports
+**/coverage
+
+#exclude mvn build artefacts
+**/target
+target
+
+#exclude eclipse settings
+**/.settings
+
+#discard maven release plugin release properties
+release.properties
+
+#exclude eclipse .metadata
+**/.metadata
+.metadata
+
+#exclude ProGuard gen
+**/proguard/*.txt
+
+#Android Studio
+.gradle
+.idea
+build
+app/app.iml
+local.properties
+*.iml
+*/*.iml
+volley/volley.iml
+
+*.DS_Store
+*/.DS_Store
+*/gradlew~
+
+BuildData

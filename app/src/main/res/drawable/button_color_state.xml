@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed background -->
+    <item android:alpha="0.25" android:color="@color/accent" android:state_pressed="true" />
+
+    <!-- Disabled background -->
+    <item android:color="#a5a5a5" android:state_enabled="false" />
+
+    <!-- Enabled background -->
+    <item android:color="@color/accent" />
+</selector>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/material_component_lists_single_line_height"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/material_layout_keylines_screen_edge_margin"
+    android:paddingLeft="@dimen/material_layout_keylines_screen_edge_margin"
+    android:paddingRight="@dimen/material_layout_keylines_screen_edge_margin"
+    android:paddingStart="@dimen/material_layout_keylines_screen_edge_margin">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="Front Squat" />
+
+    <ImageView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/material_layout_keylines_screen_edge_margin"
+        android:layout_marginStart="@dimen/material_layout_keylines_screen_edge_margin"
+        android:src="@drawable/green_circle"
+        android:visibility="gone" />
+
+</LinearLayout>

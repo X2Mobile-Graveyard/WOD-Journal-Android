@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.text.format.DateFormat" />
+
+        <import type="com.x2mobile.wodjar.util.TimeUtil" />
+
+        <variable
+            name="viewModel"
+            type="com.x2mobile.wodjar.ui.binding.model.PersonalRecordViewModel" />
+    </data>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.weightSelected}"
+                    android:enabled="@{viewModel.weightEnabled}"
+                    android:text="@string/weight" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/reps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.repsSelected}"
+                    android:enabled="@{viewModel.repsEnabled}"
+                    android:text="@string/reps" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.timeSelected}"
+                    android:enabled="@{viewModel.timeEnabled}"
+                    android:text="@string/time" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </RadioGroup>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:hint="@{viewModel.weightLiftedHint}"
+                android:visibility="@{viewModel.weightSelected ? View.VISIBLE : View.GONE}">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/weight_lifted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focus="@{viewModel.weightSelected}"
+                    android:inputType="numberDecimal"
+                    android:text="@={viewModel.personalRecord.resultWeight}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:visibility="@{viewModel.repsSelected ? View.VISIBLE : View.GONE}">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/reps_completed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focus="@{viewModel.repsSelected}"
+                    android:hint="@string/reps_completed"
+                    android:inputType="number"
+                    android:text="@={viewModel.personalRecord.resultReps}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:visibility="@{viewModel.timeSelected ? View.VISIBLE : View.GONE}">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/time_spent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:focus="@{viewModel.timeSelected}"
+                    android:hint="@string/time_spent"
+                    android:text="@{TimeUtil.formatTime(viewModel.personalRecord.resultTime)}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/material_layout_keylines_horizontal_mobile_margin"
+                    android:layout_marginRight="@dimen/material_layout_keylines_horizontal_mobile_margin"
+                    android:text="@string/rx_prefix" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@={viewModel.personalRecord.rx}" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/note"
+                    android:text="@={viewModel.personalRecord.notes}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:id="@+id/add_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.imageAvailable ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_camera"
+                        android:tint="@android:color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="@string/add_picture" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_today"
+                        android:tint="@android:color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="@{DateFormat.getMediumDateFormat(context).format(viewModel.personalRecord.date)}" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <android.support.percent.PercentRelativeLayout
+                android:id="@+id/image_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:scaleType="centerCrop"
+                    app:layout_aspectRatio="178%"
+                    app:layout_widthPercent="100%" />
+
+                <ImageView
+                    android:id="@+id/remove_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/ic_clear"
+                    android:visibility="@{viewModel.imageAvailable ? View.VISIBLE : View.GONE}" />
+            </android.support.percent.PercentRelativeLayout>
+
+            <TextView
+                android:id="@+id/delete_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/delete_record"
+                android:textColor="@color/red"
+                android:visibility="@{viewModel.personalRecord.id >= 0 ? View.VISIBLE : View.GONE}" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>
