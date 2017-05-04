@@ -1,12 +1,17 @@
 package com.x2mobile.wodjar.fragments
 
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import com.classlink.analytics.business.Preference
 import com.x2mobile.wodjar.R
@@ -29,6 +34,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
+
 
 class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
 
@@ -75,6 +81,8 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
+
+        ItemTouchHelper(DeleteTouchHelperCallback(context, this)).attachToRecyclerView(recyclerView)
     }
 
     override fun onDestroy() {
@@ -129,6 +137,12 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
         }
     }
 
+    override fun onRecordTypeRemoved(position: Int) {
+        val personalRecordType = adapter.getItem(position)
+        adapter.removeItem(position)
+        Service.deletePersonalRecordType(personalRecordType.name!!)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedIn(event: LoggedInEvent) {
         Service.getPersonalRecordTypes()
@@ -181,6 +195,55 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
             positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
             cancelButton { }
         }.show()
+    }
+
+    class DeleteTouchHelperCallback(context: Context, val callback: PersonalRecordTypeListener) : ItemTouchHelper.Callback() {
+
+        var deleteIcon: Drawable? = null
+
+        val backgroundPaint: Paint = Paint()
+
+        init {
+            deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
+
+            backgroundPaint.style = Paint.Style.FILL
+            backgroundPaint.color = Color.RED
+        }
+
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+            return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.END)
+        }
+
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            callback.onRecordTypeRemoved(viewHolder.adapterPosition)
+        }
+
+        override fun onChildDraw(canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                                 dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+            super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            val itemView = viewHolder.itemView
+
+            canvas.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat(), backgroundPaint)
+
+            if (dX >= deleteIcon!!.intrinsicWidth * 1.5f) {
+                val left = itemView.left + (dX - deleteIcon!!.intrinsicWidth) / 2
+                val bottom = Math.round((itemView.height - deleteIcon!!.intrinsicHeight) / 2f)
+                deleteIcon!!.setBounds(Math.round(left), itemView.top + bottom, Math.round(left) + deleteIcon!!.intrinsicWidth, itemView.bottom - bottom)
+                deleteIcon!!.draw(canvas)
+            }
+        }
+
+        override fun isItemViewSwipeEnabled(): Boolean {
+            return true
+        }
+
+        override fun isLongPressDragEnabled(): Boolean {
+            return false
+        }
     }
 
 }

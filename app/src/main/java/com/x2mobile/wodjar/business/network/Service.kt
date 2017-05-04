@@ -70,6 +70,11 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun deletePersonalRecords(ids: List<Int>, callback: Callback<Void> = DeletePersonalRecordsCallback()) {
+        val call = api.deletePersonalRecords(ids)
+        call.enqueue(callback)
+    }
+
     fun updatePersonalRecordType(ids: List<Int>, name: String, callback: Callback<Void> = UpdatePersonalRecordTypeCallback()) {
         val call = api.updatePersonalRecords(ids, name)
         call.enqueue(callback)

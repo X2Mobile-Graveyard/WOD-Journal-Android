@@ -30,6 +30,9 @@ interface Api {
     @DELETE("personal_records/{id}")
     fun deletePersonalRecord(@Path("id") id: Int): Call<Void>
 
+    @DELETE("delete-prs")
+    fun deletePersonalRecords(@Body ids: List<Int>): Call<Void>
+
     @PUT("update-prs/{name}")
     fun updatePersonalRecords(@Body ids: List<Int>, @Path("name") name: String): Call<Void>
 
