@@ -13,9 +13,11 @@ import com.facebook.login.widget.LoginButton
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.base.BaseFormActivity
 import com.x2mobile.wodjar.business.network.Service
+import com.x2mobile.wodjar.data.event.LoggedInEvent
 import com.x2mobile.wodjar.data.event.LoginRequestEvent
 import com.x2mobile.wodjar.data.event.LoginRequestFailureEvent
 import com.x2mobile.wodjar.data.model.User
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.indeterminateProgressDialog
@@ -88,7 +90,8 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
             if (loginResponse.errors == null) {
                 Preference.setUserId(this, loginResponse.userId)
                 Preference.setToken(this, loginResponse.authToken)
-                setResult(Activity.RESULT_OK)
+                Preference.setDisplayName(this, username.text.toString())
+                EventBus.getDefault().post(LoggedInEvent())
                 finish()
             } else {
                 toast(loginResponse.errors!!.first())

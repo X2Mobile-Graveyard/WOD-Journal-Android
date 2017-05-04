@@ -11,6 +11,9 @@
     <color name="primary_hint_inverse_text">#80FFFFFF</color>
     <color name="primary_hint_text">#61212121</color>
 
+    <color name="navigation_header_color">#081C21</color>
+    <color name="navigation_menu_icon_color">#5D7C84</color>
+
     <color name="green">#437C05</color>
     <color name="red">#FF0000</color>
 </resources>

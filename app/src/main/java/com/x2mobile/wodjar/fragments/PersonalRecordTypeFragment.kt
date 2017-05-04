@@ -1,4 +1,4 @@
-package com.x2mobile.wodjar.activity
+package com.x2mobile.wodjar.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -7,17 +7,19 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import com.classlink.analytics.business.Preference
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.base.BaseActivity
+import com.x2mobile.wodjar.activity.LoginActivity
+import com.x2mobile.wodjar.activity.PersonalRecordActivity
+import com.x2mobile.wodjar.activity.PersonalRecordListActivity
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.PersonalRecord
 import com.x2mobile.wodjar.data.model.PersonalRecordCategory
 import com.x2mobile.wodjar.data.model.PersonalRecordType
+import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.PersonalRecordTypeAdapter
 import com.x2mobile.wodjar.ui.callback.PersonalRecordTypeListener
 import org.greenrobot.eventbus.EventBus
@@ -28,29 +30,17 @@ import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
+class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
 
-class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
-
-    val REQUEST_CODE_LOGIN = 9
-
-    val adapter by lazy { PersonalRecordTypeAdapter(this, this) }
+    val adapter by lazy { PersonalRecordTypeAdapter(context, this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.personal_record_type)
-
-        title = getString(R.string.personal_record)
-
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
-        val recyclerView = findViewById(R.id.recycler_view) as RecyclerView
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        setHasOptionsMenu(true)
 
         EventBus.getDefault().register(this)
 
-        if (Preference.isLoggedIn(this@PersonalRecordTypeActivity)) {
+        if (Preference.isLoggedIn(context)) {
             Service.getPersonalRecordTypes()
         } else {
             val personalRecordTypeNames = resources.getStringArray(R.array.personal_record_type_names)
@@ -68,15 +58,34 @@ class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        toolbarDelegate.title = getString(R.string.personal_records)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.personal_record_type, container, false);
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
+        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
         EventBus.getDefault().unregister(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.menu_personal_records, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_personal_records, menu)
 
         val searchView = menu.findItem(R.id.search_menu).actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
@@ -91,15 +100,13 @@ class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
                 return true
             }
         })
-
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_menu -> {
-                if (Preference.isLoggedIn(this@PersonalRecordTypeActivity)) {
-                    startActivity(intentFor<PersonalRecordActivity>())
+                if (Preference.isLoggedIn(context)) {
+                    startActivity(context.intentFor<PersonalRecordActivity>())
                 } else {
                     showLoginAlert()
                 }
@@ -110,23 +117,21 @@ class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == Activity.RESULT_OK) {
-            Service.getPersonalRecordTypes()
-        }
-    }
-
     override fun onRecordTypeClicked(personalRecordType: PersonalRecordType) {
-        if (Preference.isLoggedIn(this@PersonalRecordTypeActivity)) {
+        if (Preference.isLoggedIn(context)) {
             if (personalRecordType.present) {
-                startActivity(intentFor<PersonalRecordListActivity>(NavigationConstants.KEY_PERSONAL_RECORD_TYPE to personalRecordType))
+                startActivity(context.intentFor<PersonalRecordListActivity>(NavigationConstants.KEY_PERSONAL_RECORD_TYPE to personalRecordType))
             } else {
-                startActivity(intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD to PersonalRecord(personalRecordType)))
+                startActivity(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD to PersonalRecord(personalRecordType)))
             }
         } else {
             showLoginAlert()
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoggedIn(event: LoggedInEvent) {
+        Service.getPersonalRecordTypes()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -136,7 +141,7 @@ class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
             adapter.setItems(requestResponseEvent.response.body().personalRecordTypes!!.sortedBy(PersonalRecordType::updated)
                     .asReversed().toMutableList())
         } else {
-            toast(R.string.error_occurred)
+            context.toast(R.string.error_occurred)
         }
     }
 
@@ -172,9 +177,10 @@ class PersonalRecordTypeActivity : BaseActivity(), PersonalRecordTypeListener {
     }
 
     private fun showLoginAlert() {
-        alert(R.string.login_to_continue) {
-            positiveButton(getString(R.string.login)) { startActivityForResult(intentFor<LoginActivity>(), REQUEST_CODE_LOGIN) }
+        context.alert(R.string.login_to_continue) {
+            positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
             cancelButton { }
         }.show()
     }
+
 }

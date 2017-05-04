@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="fab_padding">96dp</dimen> //80dp is the fab and 16dp padding
+
+    <dimen name="profile_image_size">70dp</dimen>
 </resources>

@@ -76,7 +76,7 @@ class PersonalRecordFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         personalRecord = (savedInstanceState?.get(NavigationConstants.KEY_PERSONAL_RECORD) ?: (arguments?.get(NavigationConstants.KEY_PERSONAL_RECORD)
                 ?: PersonalRecord())) as PersonalRecord
         if (personalRecord!!.name == null) {
-            personalRecord!!.name = getString(R.string.personal_record)
+            personalRecord!!.name = getString(R.string.personal_records)
         }
 
         viewModel = PersonalRecordViewModel(context, personalRecord!!)

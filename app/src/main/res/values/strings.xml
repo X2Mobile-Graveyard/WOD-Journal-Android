@@ -16,7 +16,8 @@
     <string name="reps_prefix">Rounds/Reps %d</string>
     <string name="time_prefix">Time %s</string>
 
-    <string name="personal_record">Personal Records</string>
+    <string name="personal_records">Personal Records</string>
+    <string name="workout_day">Workout Of The Day</string>
 
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
@@ -45,6 +46,7 @@
     <string name="saving">Saving…</string>
 
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="logging">Logging…</string>
     <string name="register">Register</string>
     <string name="registering">Registering…</string>
@@ -59,4 +61,6 @@
     <string name="delete">Delete</string>
     <string name="deleting">Deleting…</string>
     <string name="delete_record">Delete Record</string>
+
+    <string name="no_user">No user</string>
 </resources>
