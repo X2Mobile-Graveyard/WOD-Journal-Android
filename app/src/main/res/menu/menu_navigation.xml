@@ -8,6 +8,9 @@
             android:id="@+id/wod"
             android:title="@string/workout_day" />
         <item
+            android:id="@+id/feedback"
+            android:title="@string/feedback" />
+        <item
             android:id="@+id/login"
             android:title="@string/login" />
         <item

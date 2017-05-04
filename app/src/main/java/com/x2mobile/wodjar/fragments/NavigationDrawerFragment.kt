@@ -1,6 +1,9 @@
 package com.x2mobile.wodjar.fragments
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView
@@ -13,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.classlink.analytics.business.Preference
+import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.business.callback.NavigationDrawerCallback
@@ -28,6 +32,9 @@ import org.jetbrains.anko.intentFor
    * design guidelines](https://developer.android.com/design/patterns/navigation-drawer.html#Interaction) for a complete explanation of the behaviors implemented here.
  */
 class NavigationDrawerFragment : Fragment() {
+
+    private val CONTACT_X2MOBILE_NET = "contact@x2mobile.net"
+    private val MAILTO = "mailto"
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -64,7 +71,20 @@ class NavigationDrawerFragment : Fragment() {
 
         navigationView!!.setNavigationItemSelectedListener { item ->
             selectedNavigationType = NavigationType.fromId(item.itemId)
-            if (selectedNavigationType == NavigationType.LOGIN) {
+            if (selectedNavigationType == NavigationType.FEEDBACK) {
+                var displayName = Preference.getDisplayName(context)
+                if (TextUtils.isEmpty(displayName)) {
+                    displayName = ""
+                }
+
+                val emailIntent = Intent(Intent.ACTION_SENDTO)
+                emailIntent.data = Uri.fromParts(MAILTO, CONTACT_X2MOBILE_NET, null)
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject, getString(R.string.app_name)))
+                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_body, displayName, BuildConfig.VERSION_NAME,
+                        Build.MODEL, Build.VERSION.SDK_INT))
+                startActivity(Intent.createChooser(emailIntent, null))
+                false
+            } else if (selectedNavigationType == NavigationType.LOGIN) {
                 startActivity(context.intentFor<LoginActivity>())
                 false
             } else if (selectedNavigationType == NavigationType.LOGOUT) {
@@ -141,7 +161,7 @@ class NavigationDrawerFragment : Fragment() {
 
     enum class NavigationType constructor(@IdRes val id: Int) {
 
-        PR(R.id.pr), WOD(R.id.wod), LOGIN(R.id.login), LOGOUT(R.id.logout);
+        PR(R.id.pr), WOD(R.id.wod), FEEDBACK(R.id.feedback), LOGIN(R.id.login), LOGOUT(R.id.logout);
 
         companion object {
 

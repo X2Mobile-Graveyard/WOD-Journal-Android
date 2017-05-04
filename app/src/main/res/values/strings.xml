@@ -63,4 +63,8 @@
     <string name="delete_record">Delete Record</string>
 
     <string name="no_user">No user</string>
+
+    <string name="feedback">Feedback</string>
+    <string name="feedback_subject">Feedback %s Android App</string>
+    <string name="feedback_body">Username: %1$s\nApp version: %2$s\nDevice info: %3$s - %4$d</string>
 </resources>
