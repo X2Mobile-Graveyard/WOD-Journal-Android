@@ -1,9 +1,9 @@
 package com.x2mobile.wodjar.business.network
 
 import android.content.Context
-import com.classlink.analytics.business.Preference
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.WodJarApplication
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.callback.*
 import com.x2mobile.wodjar.data.model.*
 import okhttp3.Interceptor
@@ -82,6 +82,11 @@ object Service {
 
     fun deletePersonalRecordType(name: String, callback: Callback<Void> = DeletePersonalRecordTypeCallback()) {
         val call = api.deletePersonalRecords(name)
+        call.enqueue(callback)
+    }
+
+    fun getWorkouts(callback: Callback<WorkoutsResponse> = WorkoutssCallback()) {
+        val call = api.getWorkouts()
         call.enqueue(callback)
     }
 

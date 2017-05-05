@@ -38,4 +38,7 @@ interface Api {
 
     @DELETE("delete-prs-by-name/{name}")
     fun deletePersonalRecords(@Path("name") name: String): Call<Void>
+
+    @GET("list-wods")
+    fun getWorkouts(): Call<WorkoutsResponse>
 }

@@ -9,10 +9,10 @@ import com.x2mobile.wodjar.data.model.UnitType
 object Preference {
 
     private val TOKEN = "token"
-    private val USER_ID = "user_id"
-    private val DISPLAY_NAME = "display_name"
-    private val PROFILE_PICTURE_URL = "profile_picture_url"
-    private val UNIT_TYPE = "unit_type"
+    private val USER_ID = "userId"
+    private val DISPLAY_NAME = "displayName"
+    private val PROFILE_PICTURE_URL = "profilePictureUrl"
+    private val IMPERIAL_UNIT_TYPE = "imperialUnitType"
 
     fun getToken(context: Context): String? {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(TOKEN, null)
@@ -50,12 +50,8 @@ object Preference {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PROFILE_PICTURE_URL, url).apply()
     }
 
-    fun getUnitType(context: Context) : UnitType {
-        return UnitType.values()[PreferenceManager.getDefaultSharedPreferences(context).getInt(UNIT_TYPE, 0)]
-    }
-
-    fun setUnitType(context: Context, type: UnitType) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(UNIT_TYPE, type.ordinal).apply()
+    fun getUnitType(context: Context): UnitType {
+        return if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(IMPERIAL_UNIT_TYPE, false)) UnitType.IMPERIAL else UnitType.METRIC
     }
 
     fun clear(context: Context) {

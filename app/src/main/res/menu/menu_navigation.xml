@@ -6,7 +6,10 @@
             android:title="@string/personal_records" />
         <item
             android:id="@+id/wod"
-            android:title="@string/workout_day" />
+            android:title="@string/workouts" />
+        <item
+            android:id="@+id/options"
+            android:title="@string/options" />
         <item
             android:id="@+id/feedback"
             android:title="@string/feedback" />

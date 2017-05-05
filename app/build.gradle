@@ -51,6 +51,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
     compile "com.android.support:recyclerview-v7:$support_version"
+    compile "com.android.support:preference-v14:$support_version"
     compile "com.android.support:percent:$support_version"
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'

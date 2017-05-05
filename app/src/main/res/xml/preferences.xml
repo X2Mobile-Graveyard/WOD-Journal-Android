@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/unit_type">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="imperialUnitType"
+            android:title="@string/imperial" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

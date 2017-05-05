@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.classlink.analytics.business.Preference
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
@@ -161,7 +161,7 @@ class NavigationDrawerFragment : Fragment() {
 
     enum class NavigationType constructor(@IdRes val id: Int) {
 
-        PR(R.id.pr), WOD(R.id.wod), FEEDBACK(R.id.feedback), LOGIN(R.id.login), LOGOUT(R.id.logout);
+        PR(R.id.pr), WOD(R.id.wod), OPTIONS(R.id.options), FEEDBACK(R.id.feedback), LOGIN(R.id.login), LOGOUT(R.id.logout);
 
         companion object {
 

@@ -10,6 +10,7 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:textColorPrimaryInverse">@color/primary_inverse_text</item>
         <item name="android:textColorSecondaryInverse">@color/secondary_inverse_text</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.Translucent" parent="AppTheme">
