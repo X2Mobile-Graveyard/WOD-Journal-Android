@@ -5,9 +5,10 @@ import android.os.Parcelable
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 import com.x2mobile.wodjar.data.model.adapter.PersonalRecordCategoryAdapter
+import com.x2mobile.wodjar.data.model.base.Filterable
 import java.util.*
 
-class PersonalRecordType() : Parcelable {
+class PersonalRecordType() : Parcelable, Filterable {
 
     @SerializedName("name")
     var name: String? = null
@@ -42,6 +43,10 @@ class PersonalRecordType() : Parcelable {
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun matches(query: String): Boolean {
+        return name?.contains(query) ?: false
     }
 
     companion object {

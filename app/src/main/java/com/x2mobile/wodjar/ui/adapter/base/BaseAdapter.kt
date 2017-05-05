@@ -16,12 +16,21 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
         return if (items != null) items!!.size else 0
     }
 
+    protected fun getItems() : MutableList<T>? {
+        return items
+    }
+
     fun getItem(position: Int): T {
         return items!![position]
     }
 
     fun getItemPosition(item: T): Int {
         return items!!.indexOf(item)
+    }
+
+    fun setItems(items: MutableList<T>) {
+        this.items = items
+        notifyDataSetChanged()
     }
 
     fun addItem(item: T, position: Int) {
@@ -53,11 +62,6 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
 
     fun clearItems() {
         items!!.clear()
-        notifyDataSetChanged()
-    }
-
-    fun setItems(items: MutableList<T>) {
-        this.items = items
         notifyDataSetChanged()
     }
 
