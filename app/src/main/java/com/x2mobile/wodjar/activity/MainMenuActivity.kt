@@ -12,7 +12,7 @@ import com.x2mobile.wodjar.databinding.MainScreenBinding
 import com.x2mobile.wodjar.fragments.NavigationDrawerFragment
 import com.x2mobile.wodjar.fragments.OptionsFragment
 import com.x2mobile.wodjar.fragments.PersonalRecordTypeFragment
-import com.x2mobile.wodjar.fragments.WorkoutTypeFragment
+import com.x2mobile.wodjar.fragments.WorkoutTypesFragment
 
 
 class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarDelegate {
@@ -39,7 +39,7 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
         val selectedFragment: Fragment?
         when (navigationType) {
             NavigationDrawerFragment.NavigationType.PR -> selectedFragment = PersonalRecordTypeFragment()
-            NavigationDrawerFragment.NavigationType.WOD -> selectedFragment = WorkoutTypeFragment()
+            NavigationDrawerFragment.NavigationType.WOD -> selectedFragment = WorkoutTypesFragment()
             NavigationDrawerFragment.NavigationType.OPTIONS -> selectedFragment = OptionsFragment()
             else -> throw RuntimeException("Navigation type: $navigationType not supported")
         }

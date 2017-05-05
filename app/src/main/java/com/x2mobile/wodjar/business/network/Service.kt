@@ -85,7 +85,7 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun getWorkouts(callback: Callback<WorkoutsResponse> = WorkoutssCallback()) {
+    fun getWorkouts(callback: Callback<WorkoutsResponse> = WorkoutsCallback()) {
         val call = api.getWorkouts()
         call.enqueue(callback)
     }

@@ -15,10 +15,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.NavigationDrawerCallback
 import com.x2mobile.wodjar.data.event.LoggedInEvent
 import org.greenrobot.eventbus.EventBus

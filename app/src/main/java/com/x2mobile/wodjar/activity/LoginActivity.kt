@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import com.x2mobile.wodjar.business.Preference
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -12,6 +11,7 @@ import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.base.BaseFormActivity
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.LoggedInEvent
 import com.x2mobile.wodjar.data.event.LoginRequestEvent

@@ -3,7 +3,6 @@ package com.x2mobile.wodjar.business
 import android.content.Context
 import android.preference.PreferenceManager
 import android.text.TextUtils
-import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.data.model.UnitType
 
 object Preference {

@@ -13,12 +13,12 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
-import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.activity.PersonalRecordActivity
 import com.x2mobile.wodjar.activity.PersonalRecordListActivity
 import com.x2mobile.wodjar.business.NavigationConstants
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.PersonalRecord

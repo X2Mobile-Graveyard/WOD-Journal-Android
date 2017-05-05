@@ -8,14 +8,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class WorkoutssCallback : Callback<WorkoutsResponse> {
+class WorkoutsCallback : Callback<WorkoutsResponse> {
 
     override fun onFailure(call: Call<WorkoutsResponse>?, throwable: Throwable?) {
         EventBus.getDefault().post(WorkoutsRequestFailureEvent(call, throwable))
     }
 
     override fun onResponse(call: Call<WorkoutsResponse>?, response: Response<WorkoutsResponse>?) {
-        EventBus.getDefault().post(WorkoutsRequestEvent(call, response))
+        EventBus.getDefault().postSticky(WorkoutsRequestEvent(call, response))
     }
 
 }

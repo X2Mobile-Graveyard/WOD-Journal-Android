@@ -21,13 +21,13 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.bumptech.glide.Glide
-import com.x2mobile.wodjar.business.Preference
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.ImageViewer
 import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.FileUtil
 import com.x2mobile.wodjar.business.NavigationConstants
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.PersonalRecord

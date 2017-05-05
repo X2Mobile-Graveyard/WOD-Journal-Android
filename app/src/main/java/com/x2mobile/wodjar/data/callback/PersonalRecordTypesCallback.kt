@@ -15,7 +15,7 @@ class PersonalRecordTypesCallback : Callback<PersonalRecordTypesResponse> {
     }
 
     override fun onResponse(call: Call<PersonalRecordTypesResponse>?, response: Response<PersonalRecordTypesResponse>?) {
-        EventBus.getDefault().post(PersonalRecordTypesRequestEvent(call, response))
+        EventBus.getDefault().postSticky(PersonalRecordTypesRequestEvent(call, response))
     }
 
 }
