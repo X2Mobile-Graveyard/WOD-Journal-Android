@@ -1,4 +1,4 @@
-package com.classlink.analytics.business
+package com.x2mobile.wodjar.business
 
 import android.content.Context
 import android.preference.PreferenceManager

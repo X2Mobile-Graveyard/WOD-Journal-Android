@@ -3,7 +3,7 @@ package com.x2mobile.wodjar.ui.binding.model
 import android.content.Context
 import android.databinding.BaseObservable
 import android.databinding.Bindable
-import com.classlink.analytics.business.Preference
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.BR
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.data.model.PersonalRecord

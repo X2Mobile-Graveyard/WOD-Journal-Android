@@ -13,7 +13,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
-import com.classlink.analytics.business.Preference
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.activity.PersonalRecordActivity

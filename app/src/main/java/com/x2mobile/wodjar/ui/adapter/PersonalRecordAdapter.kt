@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.classlink.analytics.business.Preference
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.data.model.PersonalRecord
 import com.x2mobile.wodjar.data.model.PersonalRecordCategory
