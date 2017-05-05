@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.x2mobile.wodjar.R
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.WorkoutsRequestFailureEvent
 import com.x2mobile.wodjar.data.model.WorkoutCategory
@@ -27,7 +28,9 @@ class WorkoutTypesFragment : BaseFragment() {
 
         EventBus.getDefault().register(this)
 
-        Service.getWorkouts()
+        if (Preference.isLoggedIn(context)) {
+            Service.getWorkouts()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
