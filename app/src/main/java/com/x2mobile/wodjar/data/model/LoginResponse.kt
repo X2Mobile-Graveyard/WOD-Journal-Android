@@ -8,6 +8,9 @@ class LoginResponse {
     @SerializedName("user_id")
     var userId: Int = Constants.ID_NA
 
+    @SerializedName("user_email")
+    var email: String? = null
+
     @SerializedName("auth_token")
     var authToken: String? = null
 

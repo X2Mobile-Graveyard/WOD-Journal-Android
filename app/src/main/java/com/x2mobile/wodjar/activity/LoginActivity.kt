@@ -89,8 +89,8 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
             val loginResponse = event.response!!.body()
             if (loginResponse.errors == null) {
                 Preference.setUserId(this, loginResponse.userId)
+                Preference.setDisplayName(this, loginResponse.email)
                 Preference.setToken(this, loginResponse.authToken)
-                Preference.setDisplayName(this, username.text.toString())
                 EventBus.getDefault().post(LoggedInEvent())
                 finish()
             } else {
