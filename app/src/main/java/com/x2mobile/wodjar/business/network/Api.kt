@@ -47,4 +47,7 @@ interface Api {
 
     @GET("list-wrs-by-wod/{wod_id}")
     fun getWorkoutResults(@Path("wod_id") workoutId: Int): Call<WorkoutResultsResponse>
+
+    @POST("wods/favorite/{wod_id}")
+    fun updateWorkout(@Path("wod_id") workoutId: Int, @Query("default") default: Boolean, @Query("favorite") favorite: Boolean): Call<Void>
 }

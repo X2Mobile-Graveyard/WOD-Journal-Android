@@ -78,8 +78,8 @@ class WorkoutTypesFragment : BaseFragment() {
         override fun getItem(position: Int): Fragment {
             val fragment: Fragment?
             when (position) {
-                WorkoutType.CUSTOM.ordinal -> fragment = CustomWorkoutListFragment()
-                WorkoutType.FAVORITIES.ordinal -> fragment = FavouriteWorkoutListFragment()
+                WorkoutType.CUSTOM.ordinal -> fragment = WorkoutCustomListFragment()
+                WorkoutType.FAVORITIES.ordinal -> fragment = WorkoutFavoriteListFragment()
                 else -> fragment = WorkoutListFragment()
             }
             fragment.arguments = bundleOf(WorkoutListFragment.KEY_WORKOUT_TYPE to WorkoutType.values()[position])

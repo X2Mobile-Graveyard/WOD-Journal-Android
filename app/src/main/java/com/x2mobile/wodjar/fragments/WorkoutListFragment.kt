@@ -33,8 +33,6 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
         category = arguments!![KEY_WORKOUT_TYPE] as? WorkoutType
         favorites = arguments!!.getBoolean(KEY_FAVORITES, false)
-
-        EventBus.getDefault().register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,8 +48,14 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         recyclerView.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStart() {
+        super.onStart()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
 
         EventBus.getDefault().unregister(this)
     }

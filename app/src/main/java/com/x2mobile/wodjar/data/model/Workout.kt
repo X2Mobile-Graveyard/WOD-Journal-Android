@@ -42,6 +42,9 @@ class Workout() : Parcelable {
     @SerializedName("completed")
     var completed: Boolean = false
 
+    @SerializedName("default")
+    var default: Boolean = false
+
     constructor(source: Parcel) : this() {
         id = source.readInt()
         name = source.readString()
@@ -53,6 +56,7 @@ class Workout() : Parcelable {
         video = source.readString()
         favorite = source.readInt() == 1
         completed = source.readInt() == 1
+        default = source.readInt() == 1
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -66,6 +70,7 @@ class Workout() : Parcelable {
         dest.writeString(video)
         dest.writeInt(if (favorite) 1 else 0)
         dest.writeInt(if (completed) 1 else 0)
+        dest.writeInt(if (default) 1 else 0)
     }
 
     override fun describeContents(): Int {

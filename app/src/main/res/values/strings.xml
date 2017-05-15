@@ -77,4 +77,7 @@
     <string name="description">Description:</string>
 
     <string name="log_result">Log result</string>
+
+    <string name="mark_favorite">Mark favorite</string>
+    <string name="remove_favorite">Remove from favorite</string>
 </resources>

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.x2mobile.wodjar.R
 import org.jetbrains.anko.onClick
 
-class CustomWorkoutListFragment : WorkoutListFragment() {
+class WorkoutCustomListFragment : WorkoutListFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.custom_workouts, container, false)

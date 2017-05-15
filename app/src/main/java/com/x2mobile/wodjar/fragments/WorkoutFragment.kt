@@ -6,9 +6,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -19,6 +17,7 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.WorkoutResultsRequestEvent
 import com.x2mobile.wodjar.data.event.WorkoutResultsRequestFailureEvent
+import com.x2mobile.wodjar.data.event.WorkoutsRequestEvent
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.data.model.WorkoutResult
 import com.x2mobile.wodjar.databinding.WorkoutBinding
@@ -44,6 +43,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         workout = arguments!![KEY_WORKOUT] as Workout
 
@@ -97,6 +97,36 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
         super.onDestroy()
 
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_favourite, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.mark_favorite_menu).isVisible = !workout!!.favorite
+        menu.findItem(R.id.remove_favorite_menu).isVisible = workout!!.favorite
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.mark_favorite_menu || item.itemId == R.id.remove_favorite_menu) {
+            workout!!.favorite = !workout!!.favorite
+            arguments.putParcelable(KEY_WORKOUT, workout)
+
+            activity.supportInvalidateOptionsMenu()
+
+            //Updating the cached version
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response!!.body().workouts
+            val workout = workouts?.find { it.id == workout!!.id }
+            workout!!.favorite = this@WorkoutFragment.workout!!.favorite
+
+            Service.updateWorkout(workout.id, workout.default, workout.favorite)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 
     override fun onWorkoutResultClicked(workoutResult: WorkoutResult) {

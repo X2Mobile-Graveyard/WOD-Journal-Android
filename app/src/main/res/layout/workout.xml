@@ -48,16 +48,21 @@
                     android:textColor="@drawable/button_text_state"
                     android:visible="@{!TextUtils.isEmpty(viewModel.workout.history)}" />
 
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:visible="@{!TextUtils.isEmpty(viewModel.workout.image)}" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:text="@string/description"
                     android:visible="@{!TextUtils.isEmpty(viewModel.workout.description)}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="8dp"
                     android:text="@{viewModel.workout.description}"
                     android:visible="@{!TextUtils.isEmpty(viewModel.workout.description)}" />
@@ -67,7 +72,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
                     android:visible="@{!TextUtils.isEmpty(viewModel.workout.video)}" />
 
                 <android.support.v7.widget.RecyclerView

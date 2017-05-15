@@ -100,6 +100,11 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun updateWorkout(workoutId: Int, default: Boolean, favorite: Boolean, callback: Callback<Void> = UpdateWorkoutCallback()) {
+        val call = api.updateWorkout(workoutId, default, favorite)
+        call.enqueue(callback)
+    }
+
     private class AuthorizationInterceptor(val context: Context) : Interceptor {
 
         private val AUTHORIZATION_HEADER = "Authorization"
