@@ -92,18 +92,18 @@ object Service {
 
     private class AuthorizationInterceptor(val context: Context) : Interceptor {
 
-        private val AUTHORIZATION = "Authorization"
+        private val AUTHORIZATION_HEADER = "Authorization"
         private val AUTHORIZATION_VALUE = "Token %s"
 
-        private val API_KEY = "X-Api-Key"
+        private val API_KEY_HEADER = "X-Api-Key"
         private val API_KEY_VALUE = "zz&Ci9XK7Wm8WrWXdT^jAiAmS4OT9mMNDB101Sye*rbrGUPUxj*Q1Hpk@I1i%t7F"
 
         override fun intercept(chain: Interceptor.Chain): Response {
             val requestBuilder = chain.request().newBuilder()
             if (Preference.isLoggedIn(context)) {
-                requestBuilder.addHeader(AUTHORIZATION, AUTHORIZATION_VALUE.format(Preference.getToken(context)))
+                requestBuilder.addHeader(AUTHORIZATION_HEADER, AUTHORIZATION_VALUE.format(Preference.getToken(context)))
             } else {
-                requestBuilder.addHeader(API_KEY, API_KEY_VALUE)
+                requestBuilder.addHeader(API_KEY_HEADER, API_KEY_VALUE)
             }
             return chain.proceed(requestBuilder.build())
         }
