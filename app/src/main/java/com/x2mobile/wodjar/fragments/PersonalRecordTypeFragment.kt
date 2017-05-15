@@ -22,8 +22,8 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.PersonalRecord
-import com.x2mobile.wodjar.data.model.PersonalRecordCategory
 import com.x2mobile.wodjar.data.model.PersonalRecordType
+import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.PersonalRecordTypeAdapter
 import com.x2mobile.wodjar.ui.callback.PersonalRecordTypeListener
@@ -50,14 +50,14 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
             Service.getPersonalRecordTypes()
         } else {
             val personalRecordTypeNames = resources.getStringArray(R.array.personal_record_type_names)
-            val personalRecordTypeCategories = resources.getIntArray(R.array.personal_record_type_categories)
-            assert(personalRecordTypeNames.size == personalRecordTypeCategories.size)
+            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
+            assert(personalRecordTypeNames.size == resultTypes.size)
 
             val personalRecordTypes = ArrayList<PersonalRecordType>()
 
             personalRecordTypeNames.forEachIndexed { index, name ->
                 personalRecordTypes.add(PersonalRecordType(name,
-                        PersonalRecordCategory.values()[personalRecordTypeCategories[index]]))
+                        ResultType.values()[resultTypes[index]]))
             }
 
             adapter.setItems(personalRecordTypes)

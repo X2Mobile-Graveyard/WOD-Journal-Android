@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class WorkoutsResponse {
 
-    @SerializedName("wods")
+    @SerializedName("wods", alternate = arrayOf("default_wods"))
     var workouts: List<Workout>? = null
 
 }

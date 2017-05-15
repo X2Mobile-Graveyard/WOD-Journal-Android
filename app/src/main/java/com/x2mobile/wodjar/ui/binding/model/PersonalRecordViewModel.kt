@@ -7,36 +7,36 @@ import com.x2mobile.wodjar.BR
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.PersonalRecord
-import com.x2mobile.wodjar.data.model.PersonalRecordCategory
+import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.data.model.UnitType
 
 class PersonalRecordViewModel(val context: Context, val personalRecord: PersonalRecord) : BaseObservable() {
 
     @Bindable
-    val weightEnabled: Boolean = personalRecord.category == PersonalRecordCategory.OTHER || personalRecord.category == PersonalRecordCategory.WEIGHT
+    val weightEnabled: Boolean = personalRecord.type == ResultType.OTHER || personalRecord.type == ResultType.WEIGHT
 
     @Bindable
-    var weightSelected: Boolean = personalRecord.category == PersonalRecordCategory.OTHER || personalRecord.category == PersonalRecordCategory.WEIGHT
+    var weightSelected: Boolean = personalRecord.type == ResultType.OTHER || personalRecord.type == ResultType.WEIGHT
         set(value) {
             field = value
             notifyPropertyChanged(BR.weightSelected)
         }
 
     @Bindable
-    val repsEnabled: Boolean = personalRecord.category == PersonalRecordCategory.OTHER || personalRecord.category == PersonalRecordCategory.REPETITION
+    val repsEnabled: Boolean = personalRecord.type == ResultType.OTHER || personalRecord.type == ResultType.REPETITION
 
     @Bindable
-    var repsSelected: Boolean = personalRecord.category == PersonalRecordCategory.REPETITION
+    var repsSelected: Boolean = personalRecord.type == ResultType.REPETITION
         set(value) {
             field = value
             notifyPropertyChanged(BR.repsSelected)
         }
 
     @Bindable
-    val timeEnabled: Boolean = personalRecord.category == PersonalRecordCategory.OTHER || personalRecord.category == PersonalRecordCategory.TIME
+    val timeEnabled: Boolean = personalRecord.type == ResultType.OTHER || personalRecord.type == ResultType.TIME
 
     @Bindable
-    var timeSelected: Boolean = personalRecord.category == PersonalRecordCategory.TIME
+    var timeSelected: Boolean = personalRecord.type == ResultType.TIME
         set(value) {
             field = value
             notifyPropertyChanged(BR.timeSelected)

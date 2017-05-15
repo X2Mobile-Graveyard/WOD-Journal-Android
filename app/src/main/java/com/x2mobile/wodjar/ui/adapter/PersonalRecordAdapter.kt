@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.PersonalRecord
-import com.x2mobile.wodjar.data.model.PersonalRecordCategory
+import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.ui.adapter.base.BaseAdapter
 import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
@@ -35,12 +35,12 @@ class PersonalRecordViewHolder(itemView: View, val listener: PersonalRecordListe
         itemView.onClick { listener.onPersonalRecordClicked(item) }
         val context = itemView.context
         date.text = DateFormat.getMediumDateFormat(context).format(item.date)
-        when (item.category) {
-            PersonalRecordCategory.WEIGHT -> info.text = context.getString(R.string.weight_prefix,
+        when (item.type) {
+            ResultType.WEIGHT -> info.text = context.getString(R.string.weight_prefix,
                     context.getString(if (Preference.getUnitType(context) == UnitType.METRIC) R.string.kg_suffix else R.string.lb_suffix,
                             MathUtil.convertWeight(item.resultWeight, UnitType.METRIC, Preference.getUnitType(context))))
-            PersonalRecordCategory.REPETITION -> info.text = context.getString(R.string.reps_prefix, item.resultReps)
-            PersonalRecordCategory.TIME -> info.text = context.getString(R.string.time_prefix, TimeUtil.formatTime(item.resultTime.toLong()))
+            ResultType.REPETITION -> info.text = context.getString(R.string.reps_prefix, item.resultReps)
+            ResultType.TIME -> info.text = context.getString(R.string.time_prefix, TimeUtil.formatTime(item.resultTime.toLong()))
             else -> {
                 throw NotImplementedError()
             }

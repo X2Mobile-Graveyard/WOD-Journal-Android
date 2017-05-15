@@ -73,5 +73,8 @@
     <string name="unit_type">Unit Type</string>
     <string name="imperial">Imperial</string>
 
-    <string name="favorites">FAVORITES</string>
+    <string name="history">History</string>
+    <string name="description">Description:</string>
+
+    <string name="log_result">Log result</string>
 </resources>

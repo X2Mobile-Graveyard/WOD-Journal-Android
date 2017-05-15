@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
-import com.x2mobile.wodjar.data.model.adapter.PersonalRecordCategoryAdapter
+import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
 import com.x2mobile.wodjar.data.model.base.Filterable
 import java.util.*
 
@@ -14,8 +14,8 @@ class PersonalRecordType() : Parcelable, Filterable {
     var name: String? = null
 
     @SerializedName("result_type")
-    @JsonAdapter(PersonalRecordCategoryAdapter::class)
-    var category: PersonalRecordCategory = PersonalRecordCategory.OTHER
+    @JsonAdapter(ResultTypeAdapter::class)
+    var type: ResultType = ResultType.OTHER
 
     @SerializedName("updated_at")
     var updated: Date? = null
@@ -23,22 +23,22 @@ class PersonalRecordType() : Parcelable, Filterable {
     @SerializedName("present")
     var present: Boolean = false
 
-    constructor(name: String, category: PersonalRecordCategory) : this() {
+    constructor(name: String, type: ResultType) : this() {
         this.name = name
-        this.category = category
+        this.type = type
     }
 
     constructor(source: Parcel) : this() {
         name = source.readString()
         val ordinal = source.readInt()
-        category = PersonalRecordCategory.values()[ordinal]
+        type = ResultType.values()[ordinal]
         present = source.readInt() == 1
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(name)
-        dest?.writeInt(category.ordinal)
-        dest?.writeInt(if (present) 1 else 0)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(name)
+        dest.writeInt(type.ordinal)
+        dest.writeInt(if (present) 1 else 0)
     }
 
     override fun describeContents(): Int {

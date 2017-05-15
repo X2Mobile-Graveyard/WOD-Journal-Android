@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.data.model.Workout
@@ -24,13 +23,12 @@ class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : Bas
 class WorkoutViewHolder(itemView: View, val callback: WorkoutListener) : BaseViewHolder<Workout>(itemView) {
 
     val name: TextView by lazy { itemView.findViewById(R.id.name) as TextView }
-    val favorite: ImageView by lazy { itemView.findViewById(R.id.favorite) as ImageView }
+    val status: View by lazy { itemView.findViewById(R.id.status) }
 
     override fun bindData(item: Workout) {
         itemView.onClick { callback.onWorkoutClicked(item) }
         name.text = item.name
-        favorite.setImageResource(if (item.favorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
-        favorite.onClick { callback.onWorkoutFavoriteToggle(item) }
+        status.visibility = if (item.completed) View.VISIBLE else View.GONE
     }
 
 }

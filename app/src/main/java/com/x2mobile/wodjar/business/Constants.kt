@@ -9,5 +9,7 @@ object Constants {
     const val BUCKET = "workoutoftheday-images"
     const val BUCKET_IMAGE_URL = "https://s3.eu-west-2.amazonaws.com/$BUCKET/%s"
 
+    const val YOUTUBE_API_KEY = "AIzaSyB34lB_4J82Bbv73MXQPRPOhBvvwdU77Xk"
+
     const val IMAGE_NAME = "%d_%d"
 }

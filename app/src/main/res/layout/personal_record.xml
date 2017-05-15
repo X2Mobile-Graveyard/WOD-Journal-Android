@@ -3,8 +3,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <import type="android.text.format.DateFormat" />
 
         <import type="com.x2mobile.wodjar.util.TimeUtil" />
@@ -86,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:hint="@{viewModel.weightLiftedHint}"
-                android:visibility="@{viewModel.weightSelected ? View.VISIBLE : View.GONE}">
+                android:visible="@{viewModel.weightSelected}">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/weight_lifted"
@@ -102,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:visibility="@{viewModel.repsSelected ? View.VISIBLE : View.GONE}">
+                android:visible="@{viewModel.repsSelected}">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/reps_completed"
@@ -119,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:visibility="@{viewModel.timeSelected ? View.VISIBLE : View.GONE}">
+                android:visible="@{viewModel.timeSelected}">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/time_spent"
@@ -184,7 +182,7 @@
                     android:layout_alignParentStart="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="@{viewModel.imageAvailable ? View.GONE : View.VISIBLE}">
+                    android:visible="@{viewModel.imageAvailable}">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -246,7 +244,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_margin="8dp"
                     android:src="@drawable/ic_clear"
-                    android:visibility="@{viewModel.imageAvailable ? View.VISIBLE : View.GONE}" />
+                    android:visible="@{viewModel.imageAvailable}" />
             </android.support.percent.PercentRelativeLayout>
 
             <TextView
@@ -257,7 +255,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/delete_record"
                 android:textColor="@color/red"
-                android:visibility="@{viewModel.personalRecord.id >= 0 ? View.VISIBLE : View.GONE}" />
+                android:visible="@{viewModel.personalRecord.id >= 0}" />
 
         </LinearLayout>
     </ScrollView>

@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/primary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
                     android:singleLine="true"
                     android:text="@{viewModel.title}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:visibility="@{viewModel.titleChangeStarted ? View.GONE : View.VISIBLE}"
+                    android:visible="@{!viewModel.titleChangeStarted}"
                     tools:text="@string/app_name" />
 
                 <ImageView
@@ -50,7 +50,7 @@
                     android:layout_marginStart="8dp"
                     android:onClick="@{viewModel.editClickListener}"
                     android:src="@drawable/ic_edit"
-                    android:visibility="@{viewModel.titleChangeEnabled &amp;&amp; !viewModel.titleChangeStarted ? View.VISIBLE : View.GONE}" />
+                    android:visible="@{viewModel.titleChangeEnabled &amp;&amp; !viewModel.titleChangeStarted}" />
 
             </LinearLayout>
 
@@ -70,7 +70,7 @@
                 android:singleLine="true"
                 android:text="@={viewModel.title}"
                 android:textSize="18sp"
-                android:visibility="@{viewModel.titleChangeStarted ? View.VISIBLE : View.GONE}" />
+                android:visible="@{viewModel.titleChangeStarted}" />
 
         </android.support.v7.widget.Toolbar>
 

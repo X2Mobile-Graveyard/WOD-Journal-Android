@@ -13,8 +13,9 @@ import android.view.ViewGroup
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
+import com.x2mobile.wodjar.data.event.LoggedInEvent
 import com.x2mobile.wodjar.data.event.WorkoutsRequestFailureEvent
-import com.x2mobile.wodjar.data.model.WorkoutCategory
+import com.x2mobile.wodjar.data.model.WorkoutType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -30,6 +31,8 @@ class WorkoutTypesFragment : BaseFragment() {
 
         if (Preference.isLoggedIn(context)) {
             Service.getWorkouts()
+        } else {
+            Service.getDefaultWorkouts()
         }
     }
 
@@ -59,6 +62,11 @@ class WorkoutTypesFragment : BaseFragment() {
         EventBus.getDefault().unregister(this)
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoggedIn(event: LoggedInEvent) {
+        Service.getWorkouts()
+    }
+
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutsFailure(requestFailureEvent: WorkoutsRequestFailureEvent) {
@@ -68,22 +76,22 @@ class WorkoutTypesFragment : BaseFragment() {
     class WorkoutTypesPagerAdapter(val context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
-            val fragment: Fragment = WorkoutListFragment()
-            if (position < WorkoutCategory.values().size) {
-                fragment.arguments = bundleOf(WorkoutListFragment.KEY_WORKOUT_CATEGORY to WorkoutCategory.values()[position])
-            } else {
-                fragment.arguments = bundleOf(WorkoutListFragment.KEY_FAVORITES to true)
+            val fragment: Fragment?
+            when (position) {
+                WorkoutType.CUSTOM.ordinal -> fragment = CustomWorkoutListFragment()
+                WorkoutType.FAVORITIES.ordinal -> fragment = FavouriteWorkoutListFragment()
+                else -> fragment = WorkoutListFragment()
             }
+            fragment.arguments = bundleOf(WorkoutListFragment.KEY_WORKOUT_TYPE to WorkoutType.values()[position])
             return fragment
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return if (position < WorkoutCategory.values().size) WorkoutCategory.values()[position].toString() else
-                context.getString(R.string.favorites)
+            return WorkoutType.values()[position].toString()
         }
 
         override fun getCount(): Int {
-            return WorkoutCategory.values().size + 1 // the extra one is favorites tab
+            return WorkoutType.values().size
         }
 
     }
