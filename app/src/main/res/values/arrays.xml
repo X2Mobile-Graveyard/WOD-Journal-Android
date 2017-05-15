@@ -33,25 +33,6 @@
     </array>
 
     <array name="personal_record_result_types">
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
-        <item>2</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
@@ -63,5 +44,24 @@
         <item>0</item>
         <item>0</item>
         <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
     </array>
 </resources>
