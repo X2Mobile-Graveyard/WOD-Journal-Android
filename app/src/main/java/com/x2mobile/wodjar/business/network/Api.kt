@@ -15,6 +15,9 @@ interface Api {
     @POST("users")
     fun signUp(@Body body: UserBody): Call<Void>
 
+    @PATCH("users/{id}")
+    fun updateUser(@Path("id") id: Int, @Body user: User): Call<Void>
+
     @GET("list-prs")
     fun getPersonalRecordTypes(): Call<PersonalRecordTypesResponse>
 
@@ -30,7 +33,7 @@ interface Api {
     @DELETE("personal_records/{id}")
     fun deletePersonalRecord(@Path("id") id: Int): Call<Void>
 
-    @DELETE("delete-prs")
+    @HTTP(method = "DELETE", path = "delete-prs", hasBody = true)
     fun deletePersonalRecords(@Body ids: List<Int>): Call<Void>
 
     @PUT("update-prs/{name}")

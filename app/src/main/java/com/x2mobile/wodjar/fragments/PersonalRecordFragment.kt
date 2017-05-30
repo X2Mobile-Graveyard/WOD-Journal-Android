@@ -15,19 +15,14 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.EditText
 import android.widget.RadioButton
-import com.amazonaws.auth.CognitoCachingCredentialsProvider
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3Client
-import com.amazonaws.services.s3.model.ObjectMetadata
-import com.amazonaws.services.s3.model.PutObjectRequest
 import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.ImageViewer
 import com.x2mobile.wodjar.business.Constants
-import com.x2mobile.wodjar.business.FileUtil
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.Preference
+import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.PersonalRecord
@@ -49,11 +44,6 @@ class PersonalRecordFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
     val REQUEST_CODE_STORAGE = 97
 
     val DIALOG_DATE_PICKER = "date_picker"
-
-    val amazonS3: AmazonS3Client by lazy {
-        AmazonS3Client(CognitoCachingCredentialsProvider(context.applicationContext,
-                Constants.IDENTIFY_POLL_ID, Regions.EU_WEST_2))
-    }
 
     var viewModel: PersonalRecordViewModel? = null
 
@@ -171,21 +161,16 @@ class PersonalRecordFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
                     progress = context.indeterminateProgressDialog(R.string.saving)
                     doAsync {
                         if (personalRecord!!.imageUri != null) {
-                            val data = FileUtil.prepareForUpload(context, personalRecord!!.imageUri!!)
-                            if (data != null && data.second > 0) {
-                                val metadata = ObjectMetadata()
-                                metadata.contentLength = data.second
-                                val fileName = Constants.IMAGE_NAME.format(Preference.getUserId(context), System.currentTimeMillis())
-
-                                val response = amazonS3.putObject(PutObjectRequest(Constants.BUCKET, fileName, data.first, metadata))
-                                if (response != null) {
-                                    personalRecord!!.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
-                                } else {
-                                    uiThread {
-                                        context.toast(R.string.image_upload_failed)
-                                    }
+                            val fileName = Constants.IMAGE_NAME.format(Preference.getUserId(context), System.currentTimeMillis())
+                            val response = AmazonService.upload(fileName, personalRecord!!.imageUri!!)
+                            if (response != null) {
+                                personalRecord!!.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
+                            } else {
+                                uiThread {
+                                    context.toast(R.string.image_upload_failed)
                                 }
                             }
+
                         }
 
                         if (personalRecord!!.id == Constants.ID_NA) {

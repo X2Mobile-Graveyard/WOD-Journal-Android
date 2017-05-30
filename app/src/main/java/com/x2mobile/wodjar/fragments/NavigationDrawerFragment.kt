@@ -1,5 +1,6 @@
 package com.x2mobile.wodjar.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -12,19 +13,26 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
+import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.NavigationDrawerCallback
+import com.x2mobile.wodjar.business.network.AmazonService
+import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.LoggedInEvent
+import com.x2mobile.wodjar.data.model.User
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.*
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation_header drawer.
@@ -47,6 +55,7 @@ class NavigationDrawerFragment : Fragment() {
 
     private var avatar: ImageView? = null
     private var name: TextView? = null
+    private var edit: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,10 +106,45 @@ class NavigationDrawerFragment : Fragment() {
                 true
             }
         }
+
         navigationView!!.setCheckedItem(selectedNavigationType!!.id)
         val headerView = navigationView!!.getHeaderView(0)
+
+        val editContainer = headerView.findViewById(R.id.edit_container)
+        val done = headerView.findViewById(R.id.done)
+
         name = headerView.findViewById(R.id.name) as TextView
+        name!!.onClick {
+            edit!!.setText(name!!.text)
+            edit!!.requestFocus()
+            editContainer!!.visibility = View.VISIBLE
+            name!!.visibility = View.GONE
+        }
+
+        val nameChangeHandler : () -> Unit = {
+            name!!.text = edit!!.text
+            name!!.visibility = View.VISIBLE
+            editContainer!!.visibility = View.GONE
+            Preference.setDisplayName(context, edit!!.text.toString())
+            saveProfile()
+        }
+
+        edit = headerView.findViewById(R.id.edit) as EditText
+        edit!!.onFocusChange { _, hasFocus ->
+            if (!hasFocus) {
+                nameChangeHandler.invoke()
+            }
+        }
+
+        done.onClick {
+            nameChangeHandler.invoke()
+        }
+
         avatar = headerView.findViewById(R.id.avatar) as ImageView
+        avatar!!.onClick {
+            CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
+                    .setGuidelines(CropImageView.Guidelines.ON).start(context, this)
+        }
         handleUserInfo()
     }
 
@@ -130,9 +174,37 @@ class NavigationDrawerFragment : Fragment() {
         outState!!.putInt(STATE_SELECTED_ID, selectedNavigationType!!.id)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(intent)
+            if (resultCode == Activity.RESULT_OK) {
+                Preference.setProfilePictureUrl(context, result.uri.toString())
+                setProfilePicture()
+                doAsync {
+                    val fileName = Preference.getEmail(context)
+                    val response = AmazonService.upload(fileName, result.uri)
+                    if (response != null) {
+                        Preference.setProfilePictureUrl(context, Constants.BUCKET_IMAGE_URL.format(fileName))
+                        saveProfile()
+                    }
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                context.toast(result.error.message!!)
+            }
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedIn(event: LoggedInEvent) {
         handleUserInfo()
+    }
+
+    fun saveProfile() {
+        doAsync {
+            Service.updateUser(Preference.getUserId(context), User(Preference.getEmail(context), null,
+                    Preference.getDisplayName(context), Uri.parse(Preference.getProfilePictureUrl(context))))
+        }
     }
 
     fun handleUserInfo() {

@@ -45,6 +45,11 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun updateUser(id: Int, user: User, callback: Callback<Void> = UpdateUserCallback()) {
+        val call = api.updateUser(id, user)
+        call.enqueue(callback)
+    }
+
     fun getPersonalRecordTypes(callback: Callback<PersonalRecordTypesResponse> = PersonalRecordTypesCallback()) {
         val call = api.getPersonalRecordTypes()
         call.enqueue(callback)

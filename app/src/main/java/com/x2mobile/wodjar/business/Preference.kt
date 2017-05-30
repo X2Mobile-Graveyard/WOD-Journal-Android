@@ -9,6 +9,7 @@ object Preference {
 
     private val TOKEN = "token"
     private val USER_ID = "userId"
+    private val EMAIL = "email"
     private val DISPLAY_NAME = "displayName"
     private val PROFILE_PICTURE_URL = "profilePictureUrl"
     private val IMPERIAL_UNIT_TYPE = "imperialUnitType"
@@ -31,6 +32,14 @@ object Preference {
 
     fun isLoggedIn(context: Context): Boolean {
         return !TextUtils.isEmpty(getToken(context)) && getUserId(context) > Constants.ID_NA
+    }
+
+    fun getEmail(context: Context): String {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(EMAIL, null)
+    }
+
+    fun setEmail(context: Context, email: String) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(EMAIL, email).apply()
     }
 
     fun getDisplayName(context: Context): String? {

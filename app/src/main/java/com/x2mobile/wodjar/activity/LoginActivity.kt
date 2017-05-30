@@ -44,7 +44,7 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
         login.onClick {
             if (isInputValid()) {
                 progress = indeterminateProgressDialog(R.string.logging)
-                Service.login(User(username.text.toString(), password.text.toString()))
+                Service.login(User(email.text.toString(), password.text.toString()))
             }
         }
 
@@ -89,7 +89,9 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
             val loginResponse = event.response!!.body()
             if (loginResponse.errors == null) {
                 Preference.setUserId(this, loginResponse.userId)
-                Preference.setDisplayName(this, loginResponse.email)
+                Preference.setEmail(this, loginResponse.email!!)
+                Preference.setDisplayName(this, loginResponse.name)
+                Preference.setProfilePictureUrl(this, loginResponse.imageUri.toString())
                 Preference.setToken(this, loginResponse.authToken)
                 EventBus.getDefault().post(LoggedInEvent())
                 finish()

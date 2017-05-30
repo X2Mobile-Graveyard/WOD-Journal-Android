@@ -8,8 +8,8 @@ import org.greenrobot.eventbus.EventBus
 
 open class BaseFormActivity : BaseToolbarActivity() {
 
-    protected val username: EditText by lazy {
-        findViewById(R.id.username) as EditText
+    protected val email: EditText by lazy {
+        findViewById(R.id.email) as EditText
     }
 
     protected val password: EditText by lazy {
@@ -28,8 +28,8 @@ open class BaseFormActivity : BaseToolbarActivity() {
         EventBus.getDefault().unregister(this)
     }
 
-    protected fun isInputValid(): Boolean {
-        if (!isInputValid(username)) {
+    protected open fun isInputValid(): Boolean {
+        if (!isInputValid(email)) {
             return false
         }
         if (!isInputValid(password)) {
