@@ -29,12 +29,18 @@
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin">
 
-                <ImageView
-                    android:id="@+id/image"
+                <android.support.percent.PercentRelativeLayout
+                    android:id="@+id/image_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:url="@{viewModel.workout.image}"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.workout.image)}" />
+                    android:visible="@{viewModel.workout.imageUri != null}">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:scaleType="centerCrop"
+                        app:layout_aspectRatio="178%"
+                        app:layout_widthPercent="100%" />
+                </android.support.percent.PercentRelativeLayout>
 
                 <Button
                     android:id="@+id/history"
@@ -51,7 +57,7 @@
                 <android.support.v4.widget.Space
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.workout.image)}" />
+                    android:visible="@{viewModel.workout.imageUri != null}" />
 
                 <TextView
                     android:layout_width="match_parent"

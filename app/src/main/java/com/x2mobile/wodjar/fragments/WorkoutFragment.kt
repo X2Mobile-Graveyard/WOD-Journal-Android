@@ -1,16 +1,19 @@
 package com.x2mobile.wodjar.fragments
 
 import android.databinding.DataBindingUtil
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.*
+import com.bumptech.glide.Glide
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.x2mobile.wodjar.R
+import com.x2mobile.wodjar.activity.ImageViewer
 import com.x2mobile.wodjar.activity.WorkoutResultActivity
 import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.Preference
@@ -39,7 +42,15 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     var workout: Workout? = null
 
+    var binding: WorkoutBinding? = null
+
     val adapter: WorkoutResultsAdapter by lazy { WorkoutResultsAdapter(context, this) }
+
+    val windowRect: Rect by lazy {
+        val rect = Rect()
+        activity.window.decorView.getWindowVisibleDisplayFrame(rect)
+        rect
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,13 +72,23 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<WorkoutBinding>(inflater, R.layout.workout, container, false)
-        binding.viewModel = WorkoutViewModel(workout!!)
-        return binding.root
+        binding = DataBindingUtil.inflate<WorkoutBinding>(inflater, R.layout.workout, container, false)
+        binding!!.viewModel = WorkoutViewModel(workout!!)
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding!!.image.onClick {
+            val intent = context.intentFor<ImageViewer>()
+            intent.putExtra(ImageViewer.KEY_URI, workout!!.imageUri)
+            intent.putExtra(ImageViewer.KEY_RECT, Rect(binding!!.image.left, binding!!.image.top, binding!!.image.right,
+                    binding!!.image.bottom))
+            startActivity(intent)
+        }
+
+        Glide.with(context).load(workout!!.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
 
         if (!TextUtils.isEmpty(workout!!.video)) {
             val player: YouTubePlayerSupportFragment
