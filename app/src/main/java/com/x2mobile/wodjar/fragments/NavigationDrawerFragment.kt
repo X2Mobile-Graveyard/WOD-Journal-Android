@@ -121,23 +121,21 @@ class NavigationDrawerFragment : Fragment() {
             name!!.visibility = View.GONE
         }
 
-        val nameChangeHandler : () -> Unit = {
-            name!!.text = edit!!.text
-            name!!.visibility = View.VISIBLE
-            editContainer!!.visibility = View.GONE
-            Preference.setDisplayName(context, edit!!.text.toString())
-            saveProfile()
-        }
-
         edit = headerView.findViewById(R.id.edit) as EditText
         edit!!.onFocusChange { _, hasFocus ->
             if (!hasFocus) {
-                nameChangeHandler.invoke()
+                name!!.text = edit!!.text
+                name!!.visibility = View.VISIBLE
+                editContainer!!.visibility = View.GONE
+                Preference.setDisplayName(context, edit!!.text.toString())
+                saveProfile()
             }
         }
 
         done.onClick {
-            nameChangeHandler.invoke()
+            name!!.text = edit!!.text
+            name!!.visibility = View.VISIBLE
+            editContainer!!.visibility = View.GONE
         }
 
         avatar = headerView.findViewById(R.id.avatar) as ImageView
