@@ -6,6 +6,7 @@ import com.x2mobile.wodjar.WodJarApplication
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.callback.*
 import com.x2mobile.wodjar.data.model.*
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -14,9 +15,12 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 object Service {
 
     private val ENDPOINT_URL = "https://wodjar.herokuapp.com/api/v1/"
+
+    private val SIZE_OF_CACHE = 10L * 1024 * 1024 //10 MB
 
     private val api: Api by lazy {
         val loggingInterceptor = HttpLoggingInterceptor()
@@ -25,7 +29,7 @@ object Service {
         Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
                 .client(OkHttpClient.Builder().addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE!!))
-                        .addInterceptor(loggingInterceptor).build())
+                        .addInterceptor(loggingInterceptor).cache(Cache(WodJarApplication.INSTANCE!!.cacheDir, SIZE_OF_CACHE)).build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(Api::class.java)
     }
