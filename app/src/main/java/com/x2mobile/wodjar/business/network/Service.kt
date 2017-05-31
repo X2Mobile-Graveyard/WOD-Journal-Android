@@ -104,13 +104,28 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun updateWorkout(workoutId: Int, default: Boolean, favorite: Boolean, callback: Callback<Void> = UpdateWorkoutCallback()) {
+        val call = api.updateWorkout(workoutId, default, favorite)
+        call.enqueue(callback)
+    }
+
     fun getWorkoutResults(workoutId: Int, callback: Callback<WorkoutResultsResponse> = WorkoutResultsCallback()) {
         val call = api.getWorkoutResults(workoutId)
         call.enqueue(callback)
     }
 
-    fun updateWorkout(workoutId: Int, default: Boolean, favorite: Boolean, callback: Callback<Void> = UpdateWorkoutCallback()) {
-        val call = api.updateWorkout(workoutId, default, favorite)
+    fun saveWorkoutResult(workoutResult: WorkoutResult, callback: Callback<WorkoutResult> = AddWorkoutResultCallback()) {
+        val call = api.saveWorkoutResult(workoutResult)
+        call.enqueue(callback)
+    }
+
+    fun updateWorkoutResult(workoutResult: WorkoutResult, callback: Callback<Void> = UpdateWorkoutResultCallback()) {
+        val call = api.updateWorkoutResult(workoutResult.id, workoutResult)
+        call.enqueue(callback)
+    }
+
+    fun deleteWorkoutResult(id: Int, callback: Callback<Void> = DeleteWorkoutResultCallback()) {
+        val call = api.deleteWorkoutResult(id)
         call.enqueue(callback)
     }
 

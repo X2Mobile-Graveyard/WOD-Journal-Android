@@ -1,5 +1,7 @@
 package com.x2mobile.wodjar.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Rect
 import android.os.Bundle
@@ -16,6 +18,7 @@ import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.ImageViewer
 import com.x2mobile.wodjar.activity.WorkoutResultActivity
 import com.x2mobile.wodjar.business.Constants
+import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.WorkoutResultsRequestEvent
@@ -37,6 +40,8 @@ import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 class WorkoutFragment : BaseFragment(), WorkoutResultListener {
+
+    val REQUEST_CODE_WORKOUT_RESULT = 19
 
     val TAG_YOUTUBE_PLAYER = "video_player"
 
@@ -90,6 +95,18 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
         Glide.with(context).load(workout!!.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
 
+        val history = view.findViewById(R.id.history)
+        history.onClick {
+            val fragment = HistoryFragment()
+            fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout!!.history!!)
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
+        }
+
+        val add = view.findViewById(R.id.add)
+        add.onClick {
+            startActivity(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout))
+        }
+
         if (!TextUtils.isEmpty(workout!!.video)) {
             val player: YouTubePlayerSupportFragment
             if (savedInstanceState == null) {
@@ -105,13 +122,6 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
-
-        val history = view.findViewById(R.id.history)
-        history.onClick {
-            val fragment = HistoryFragment()
-            fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout!!.history!!)
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
-        }
     }
 
     override fun onDestroy() {
@@ -150,8 +160,28 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_WORKOUT_RESULT) {
+            val workoutResult = data?.getParcelableExtra<WorkoutResult>(NavigationConstants.KEY_RESULT)
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    var position = adapter.getItemPosition(workoutResult!!)
+                    if (position >= 0) {
+                        adapter.removeItem(position)
+                    } else {
+                        position = 0
+                    }
+                    adapter.addItem(workoutResult, position)
+                }
+                NavigationConstants.RESULT_DELETED -> adapter.removeItem(workoutResult!!)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onWorkoutResultClicked(workoutResult: WorkoutResult) {
-        startActivity(context.intentFor<WorkoutResultActivity>(WorkoutResultFragment.KEY_WORKOUT_RESULT to workoutResult))
+        startActivityForResult(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_RESULT to workoutResult,
+                NavigationConstants.KEY_WORKOUT to workout), REQUEST_CODE_WORKOUT_RESULT)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -80,7 +80,7 @@ open class Result() : BaseObservable(), Parcelable {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is PersonalRecord) {
+        if (other is Result) {
             return id == other.id
         } else {
             return false

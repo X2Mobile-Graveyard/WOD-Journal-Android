@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.x2mobile.wodjar.ui.binding.model.PersonalRecordViewModel" />
+            type="com.x2mobile.wodjar.ui.binding.model.ResultViewModel" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -79,6 +79,11 @@
 
             </RadioGroup>
 
+            <FrameLayout
+                android:id="@+id/header_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:focus="@{viewModel.weightSelected}"
                     android:inputType="numberDecimal"
-                    android:text="@={viewModel.personalRecord.resultWeight}" />
+                    android:text="@={viewModel.result.resultWeight}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -109,7 +114,7 @@
                     android:focus="@{viewModel.repsSelected}"
                     android:hint="@string/reps_completed"
                     android:inputType="number"
-                    android:text="@={viewModel.personalRecord.resultReps}" />
+                    android:text="@={viewModel.result.resultReps}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -126,7 +131,7 @@
                     android:editable="false"
                     android:focus="@{viewModel.timeSelected}"
                     android:hint="@string/time_spent"
-                    android:text="@{TimeUtil.formatTime(viewModel.personalRecord.resultTime)}" />
+                    android:text="@{TimeUtil.formatTime(viewModel.result.resultTime)}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -152,7 +157,7 @@
                 <android.support.v7.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="@={viewModel.personalRecord.rx}" />
+                    android:checked="@={viewModel.result.rx}" />
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -165,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/note"
-                    android:text="@={viewModel.personalRecord.notes}" />
+                    android:text="@={viewModel.result.notes}" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -218,7 +223,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
-                        android:text="@{DateFormat.getMediumDateFormat(context).format(viewModel.personalRecord.date)}" />
+                        android:text="@{DateFormat.getMediumDateFormat(context).format(viewModel.result.date)}" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -227,7 +232,8 @@
                 android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:visible="@{viewModel.imageAvailable}">
 
                 <ImageView
                     android:id="@+id/image"
@@ -243,8 +249,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="8dp"
-                    android:src="@drawable/ic_clear"
-                    android:visible="@{viewModel.imageAvailable}" />
+                    android:src="@drawable/ic_clear" />
             </android.support.percent.PercentRelativeLayout>
 
             <TextView
@@ -255,7 +260,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/delete_record"
                 android:textColor="@color/red"
-                android:visible="@{viewModel.personalRecord.id >= 0}" />
+                android:visible="@{viewModel.result.id >= 0}" />
 
         </LinearLayout>
     </ScrollView>

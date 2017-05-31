@@ -130,7 +130,7 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
             if (personalRecordType.present) {
                 startActivity(context.intentFor<PersonalRecordListActivity>(NavigationConstants.KEY_PERSONAL_RECORD_TYPE to personalRecordType))
             } else {
-                startActivity(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD to PersonalRecord(personalRecordType)))
+                startActivity(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT to PersonalRecord(personalRecordType)))
             }
         } else {
             showLoginAlert()

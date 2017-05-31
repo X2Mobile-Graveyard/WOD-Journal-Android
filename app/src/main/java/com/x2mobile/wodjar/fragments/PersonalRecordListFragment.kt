@@ -66,7 +66,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
 
         val add = view.findViewById(R.id.add)
         add.onClick {
-            startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD
+            startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT
                     to PersonalRecord(personalRecordType!!)), REQUEST_CODE_PERSONAL_RECORD)
         }
     }
@@ -101,7 +101,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_PERSONAL_RECORD) {
-            val personalRecord = data?.getParcelableExtra<PersonalRecord>(NavigationConstants.KEY_PERSONAL_RECORD)
+            val personalRecord = data?.getParcelableExtra<PersonalRecord>(NavigationConstants.KEY_RESULT)
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     var position = adapter.getItemPosition(personalRecord!!)
@@ -119,7 +119,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
     }
 
     override fun onPersonalRecordClicked(personalRecord: PersonalRecord) {
-        startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD
+        startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT
                 to personalRecord), REQUEST_CODE_PERSONAL_RECORD)
     }
 

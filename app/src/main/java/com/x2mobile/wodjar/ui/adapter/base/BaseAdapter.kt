@@ -16,7 +16,7 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
         return items?.size ?: 0
     }
 
-    protected fun getItems() : MutableList<T>? {
+    protected fun getItems(): MutableList<T>? {
         return items
     }
 
@@ -49,7 +49,7 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
     }
 
     fun removeItem(item: T) {
-        val position = items!!.indexOf(item)
+        val position = getItemPosition(item)
         if (position >= 0) {
             removeItem(position)
         }
