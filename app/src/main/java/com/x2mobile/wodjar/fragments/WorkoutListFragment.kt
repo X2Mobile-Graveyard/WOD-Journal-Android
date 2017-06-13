@@ -95,7 +95,6 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
     companion object {
         val KEY_WORKOUT_TYPE = "type"
-        val KEY_FAVORITES = "favorites"
     }
 
 }
