@@ -45,7 +45,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     val TAG_YOUTUBE_PLAYER = "video_player"
 
-    val workout: Workout by lazy {arguments!![KEY_WORKOUT] as Workout}
+    val workout: Workout by lazy { arguments!![KEY_WORKOUT] as Workout }
 
     lateinit var binding: WorkoutBinding
 
@@ -102,7 +102,11 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
         val add = view.findViewById(R.id.add)
         add.onClick {
-            startActivity(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout))
+            if (Preference.isLoggedIn(context)) {
+                startActivity(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout))
+            } else {
+                showLoginAlert()
+            }
         }
 
         if (!TextUtils.isEmpty(workout.video)) {

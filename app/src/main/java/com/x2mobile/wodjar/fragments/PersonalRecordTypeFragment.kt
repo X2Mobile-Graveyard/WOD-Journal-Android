@@ -14,7 +14,6 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.activity.PersonalRecordActivity
 import com.x2mobile.wodjar.activity.PersonalRecordListActivity
 import com.x2mobile.wodjar.business.NavigationConstants
@@ -30,8 +29,6 @@ import com.x2mobile.wodjar.ui.callback.PersonalRecordTypeListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
@@ -188,13 +185,6 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPersonalRecordTypeDeleted(event: DeletePersonalRecordTypeRequestEvent) {
         Service.getPersonalRecordTypes()
-    }
-
-    private fun showLoginAlert() {
-        context.alert(R.string.login_to_continue) {
-            positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
-            cancelButton { }
-        }.show()
     }
 
     class DeleteTouchHelperCallback(context: Context, val callback: PersonalRecordTypeListener) : ItemTouchHelper.Callback() {
