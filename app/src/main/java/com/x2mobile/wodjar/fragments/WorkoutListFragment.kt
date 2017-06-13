@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.WorkoutActivity
 import com.x2mobile.wodjar.data.event.WorkoutsRequestEvent
@@ -27,6 +26,12 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
     val adapter: WorkoutsAdapter by lazy { WorkoutsAdapter(context, this) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.workouts, container, false)
     }
@@ -38,6 +43,25 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_search, menu)
+
+        val searchView = menu.findItem(R.id.search_menu).actionView as SearchView
+        searchView.maxWidth = Integer.MAX_VALUE
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                adapter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return true
+            }
+        })
     }
 
     override fun onStart() {

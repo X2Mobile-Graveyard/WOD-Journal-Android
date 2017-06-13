@@ -12,12 +12,13 @@ import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.ui.adapter.base.BaseAdapter
 import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
+import com.x2mobile.wodjar.ui.adapter.base.FilterableBaseAdapter
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
 import com.x2mobile.wodjar.util.MathUtil
 import com.x2mobile.wodjar.util.TimeUtil
 import org.jetbrains.anko.onClick
 
-class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : BaseAdapter<Workout, WorkoutViewHolder>() {
+class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : FilterableBaseAdapter<Workout, WorkoutViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): WorkoutViewHolder {
         return WorkoutViewHolder(LayoutInflater.from(context).inflate(R.layout.workout_item, parent, false), callback)

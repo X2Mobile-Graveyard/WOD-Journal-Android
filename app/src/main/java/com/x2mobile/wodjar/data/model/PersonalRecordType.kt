@@ -46,7 +46,7 @@ class PersonalRecordType() : Parcelable, Filterable {
     }
 
     override fun matches(query: String): Boolean {
-        return name?.contains(query) ?: false
+        return name?.contains(query, true) ?: false
     }
 
     companion object {

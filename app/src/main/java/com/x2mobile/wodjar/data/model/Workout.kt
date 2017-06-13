@@ -9,8 +9,9 @@ import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
 import com.x2mobile.wodjar.data.model.adapter.UriAdapter
 import com.x2mobile.wodjar.data.model.adapter.WorkoutTypeAdapter
+import com.x2mobile.wodjar.data.model.base.Filterable
 
-class Workout() : Parcelable {
+class Workout() : Parcelable, Filterable {
 
     @SerializedName("id")
     var id: Int = Constants.ID_NA
@@ -35,7 +36,7 @@ class Workout() : Parcelable {
     @JsonAdapter(ResultTypeAdapter::class)
     var resultType: ResultType = ResultType.OTHER
 
-    @SerializedName("image_s3")
+    @SerializedName("image")
     @JsonAdapter(UriAdapter::class)
     var imageUri: Uri? = null
 
@@ -86,6 +87,10 @@ class Workout() : Parcelable {
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun matches(query: String): Boolean {
+        return name?.contains(query, true) ?: false
     }
 
     override fun equals(other: Any?): Boolean {
