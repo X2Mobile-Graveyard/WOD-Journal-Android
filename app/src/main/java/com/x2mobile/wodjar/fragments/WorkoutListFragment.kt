@@ -23,17 +23,9 @@ import org.jetbrains.anko.toast
 
 open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
-    var category: WorkoutType? = null
-    var favorites: Boolean = false
+    val category: WorkoutType? by lazy { arguments!![KEY_WORKOUT_TYPE] as WorkoutType }
 
     val adapter: WorkoutsAdapter by lazy { WorkoutsAdapter(context, this) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        category = arguments!![KEY_WORKOUT_TYPE] as? WorkoutType
-        favorites = arguments!!.getBoolean(KEY_FAVORITES, false)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.workouts, container, false)
@@ -68,7 +60,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
     open fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
         if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
                 requestResponseEvent.response.body() != null) {
-            val workouts = requestResponseEvent.response.body().workouts!!.filter {
+            val workouts = requestResponseEvent.response.body()!!.workouts.filter {
                 it.type == category
             }
             adapter.setItems(workouts.toMutableList())

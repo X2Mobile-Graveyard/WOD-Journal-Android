@@ -45,9 +45,9 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     val TAG_YOUTUBE_PLAYER = "video_player"
 
-    var workout: Workout? = null
+    val workout: Workout by lazy {arguments!![KEY_WORKOUT] as Workout}
 
-    var binding: WorkoutBinding? = null
+    lateinit var binding: WorkoutBinding
 
     val adapter: WorkoutResultsAdapter by lazy { WorkoutResultsAdapter(context, this) }
 
@@ -61,44 +61,42 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        workout = arguments!![KEY_WORKOUT] as Workout
-
         EventBus.getDefault().register(this)
 
         if (Preference.isLoggedIn(context)) {
-            Service.getWorkoutResults(workout!!.id)
+            Service.getWorkoutResults(workout.id)
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        toolbarDelegate.title = workout!!.name!!
+        toolbarDelegate.title = workout.name!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<WorkoutBinding>(inflater, R.layout.workout, container, false)
-        binding!!.viewModel = WorkoutViewModel(workout!!)
-        return binding!!.root
+        binding.viewModel = WorkoutViewModel(context, workout)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding!!.image.onClick {
+        binding.image.onClick {
             val intent = context.intentFor<ImageViewer>()
-            intent.putExtra(ImageViewer.KEY_URI, workout!!.imageUri)
-            intent.putExtra(ImageViewer.KEY_RECT, Rect(binding!!.image.left, binding!!.image.top, binding!!.image.right,
-                    binding!!.image.bottom))
+            intent.putExtra(ImageViewer.KEY_URI, workout.imageUri)
+            intent.putExtra(ImageViewer.KEY_RECT, Rect(binding.image.left, binding.image.top, binding.image.right,
+                    binding.image.bottom))
             startActivity(intent)
         }
 
-        Glide.with(context).load(workout!!.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
+        Glide.with(context).load(workout.imageUri).override(windowRect.width(), windowRect.height()).into(binding.image)
 
         val history = view.findViewById(R.id.history)
         history.onClick {
             val fragment = HistoryFragment()
-            fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout!!.history!!)
+            fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout.history!!)
             fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
         }
 
@@ -107,7 +105,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
             startActivity(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout))
         }
 
-        if (!TextUtils.isEmpty(workout!!.video)) {
+        if (!TextUtils.isEmpty(workout.video)) {
             val player: YouTubePlayerSupportFragment
             if (savedInstanceState == null) {
                 player = YouTubePlayerSupportFragment.newInstance()
@@ -115,7 +113,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
             } else {
                 player = fragmentManager.findFragmentByTag(TAG_YOUTUBE_PLAYER) as YouTubePlayerSupportFragment
             }
-            player.initialize(Constants.YOUTUBE_API_KEY, YoutubeInitializedListener(workout!!))
+            player.initialize(Constants.YOUTUBE_API_KEY, YoutubeInitializedListener(workout))
         }
 
         val recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
@@ -137,21 +135,21 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.mark_favorite_menu).isVisible = !workout!!.favorite
-        menu.findItem(R.id.remove_favorite_menu).isVisible = workout!!.favorite
+        menu.findItem(R.id.mark_favorite_menu).isVisible = !workout.favorite
+        menu.findItem(R.id.remove_favorite_menu).isVisible = workout.favorite
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mark_favorite_menu || item.itemId == R.id.remove_favorite_menu) {
-            workout!!.favorite = !workout!!.favorite
+            workout.favorite = !workout.favorite
             arguments.putParcelable(KEY_WORKOUT, workout)
 
             activity.supportInvalidateOptionsMenu()
 
             //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response!!.body().workouts
-            val workout = workouts?.find { it.id == workout!!.id }
-            workout!!.favorite = this@WorkoutFragment.workout!!.favorite
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response!!.body()!!.workouts
+            val workout = workouts.find { it.id == workout.id }
+            workout!!.favorite = this@WorkoutFragment.workout.favorite
 
             Service.updateWorkout(workout.id, workout.default, workout.favorite)
             return true
@@ -188,8 +186,8 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     fun onWorkoutResultsResponse(requestResponseEvent: WorkoutResultsRequestEvent) {
         if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
                 requestResponseEvent.response.body() != null) {
-            val workoutResults = requestResponseEvent.response.body().workoutResults!!.toMutableList()
-            workoutResults.forEach { it.type = workout!!.resultType }
+            val workoutResults = requestResponseEvent.response.body()!!.workoutResults.toMutableList()
+            workoutResults.forEach { it.type = workout.resultType }
             adapter.setItems(workoutResults)
         } else {
             context.toast(R.string.error_occurred)

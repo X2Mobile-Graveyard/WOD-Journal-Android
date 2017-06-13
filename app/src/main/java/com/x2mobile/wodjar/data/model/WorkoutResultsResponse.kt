@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 class WorkoutResultsResponse {
 
     @SerializedName("wod_results")
-    var workoutResults: List<WorkoutResult>? = null
+    lateinit var workoutResults: List<WorkoutResult>
 
 }

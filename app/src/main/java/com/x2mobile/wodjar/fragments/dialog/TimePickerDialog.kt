@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit
 
 class TimePickerDialog : DialogFragment(), DialogInterface.OnClickListener {
 
-    var hoursPicker: NumberPicker? = null
-    var minutesPicker: NumberPicker? = null
-    var secondsPicker: NumberPicker? = null
+    lateinit var hoursPicker: NumberPicker
+    lateinit var minutesPicker: NumberPicker
+    lateinit var secondsPicker: NumberPicker
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context)
@@ -30,19 +30,19 @@ class TimePickerDialog : DialogFragment(), DialogInterface.OnClickListener {
         val seconds = time - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes)
 
         hoursPicker = view.findViewById(R.id.hours) as NumberPicker
-        hoursPicker!!.minValue = 0
-        hoursPicker!!.maxValue = 23
-        hoursPicker!!.value = hours.toInt()
+        hoursPicker.minValue = 0
+        hoursPicker.maxValue = 23
+        hoursPicker.value = hours.toInt()
 
         minutesPicker = view.findViewById(R.id.minutes) as NumberPicker
-        minutesPicker!!.minValue = 0
-        minutesPicker!!.maxValue = 59
-        minutesPicker!!.value = minutes.toInt()
+        minutesPicker.minValue = 0
+        minutesPicker.maxValue = 59
+        minutesPicker.value = minutes.toInt()
 
         secondsPicker = view.findViewById(R.id.seconds) as NumberPicker
-        secondsPicker!!.minValue = 0
-        secondsPicker!!.maxValue = 59
-        secondsPicker!!.value = seconds.toInt()
+        secondsPicker.minValue = 0
+        secondsPicker.maxValue = 59
+        secondsPicker.value = seconds.toInt()
 
         builder.setView(view)
         builder.setCancelable(false)
@@ -54,8 +54,8 @@ class TimePickerDialog : DialogFragment(), DialogInterface.OnClickListener {
     override fun onClick(dialog: DialogInterface?, which: Int) {
         when (which) {
             DialogInterface.BUTTON_POSITIVE -> {
-                val time = TimeUnit.HOURS.toSeconds(hoursPicker!!.value.toLong()) + TimeUnit.MINUTES.toSeconds(minutesPicker!!.value.toLong()) +
-                        secondsPicker!!.value.toLong()
+                val time = TimeUnit.HOURS.toSeconds(hoursPicker.value.toLong()) + TimeUnit.MINUTES.toSeconds(minutesPicker.value.toLong()) +
+                        secondsPicker.value.toLong()
                 EventBus.getDefault().post(TimeSetEvent(time.toInt()))
             }
         }

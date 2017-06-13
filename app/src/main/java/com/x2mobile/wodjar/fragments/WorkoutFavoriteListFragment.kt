@@ -12,7 +12,7 @@ class WorkoutFavoriteListFragment : WorkoutListFragment() {
     override fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
         if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
                 requestResponseEvent.response.body() != null) {
-            val workouts = requestResponseEvent.response.body().workouts!!.filter { it.favorite }
+            val workouts = requestResponseEvent.response.body()!!.workouts.filter { it.favorite }
             adapter.setItems(workouts.toMutableList())
         } else {
             context.toast(R.string.error_occurred)

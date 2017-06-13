@@ -49,13 +49,13 @@ class NavigationDrawerFragment : Fragment() {
      */
     private var mCallbacks: NavigationDrawerCallback? = null
 
-    private var selectedNavigationType: NavigationType? = null
+    private lateinit var selectedNavigationType: NavigationType
 
-    private var navigationView: NavigationView? = null
+    private lateinit var navigationView: NavigationView
 
-    private var avatar: ImageView? = null
-    private var name: TextView? = null
-    private var edit: EditText? = null
+    private lateinit var avatar: ImageView
+    private lateinit var name: TextView
+    private lateinit var edit: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,11 +63,16 @@ class NavigationDrawerFragment : Fragment() {
         EventBus.getDefault().register(this)
 
         if (savedInstanceState != null) {
-            selectedNavigationType = NavigationType.fromId(savedInstanceState.getInt(STATE_SELECTED_ID))
+            selectedNavigationType = NavigationType.fromId(savedInstanceState.getInt(STATE_SELECTED_ID))!!
         } else {
             selectedNavigationType = NavigationType.PR
-            mCallbacks!!.onNavigationItemSelected(selectedNavigationType!!)
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        mCallbacks?.onNavigationItemSelected(selectedNavigationType)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -76,10 +81,10 @@ class NavigationDrawerFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navigationView = view as NavigationView?
+        navigationView = view as NavigationView
 
-        navigationView!!.setNavigationItemSelectedListener { item ->
-            selectedNavigationType = NavigationType.fromId(item.itemId)
+        navigationView.setNavigationItemSelectedListener { item ->
+            selectedNavigationType = NavigationType.fromId(item.itemId)!!
             if (selectedNavigationType == NavigationType.FEEDBACK) {
                 var displayName = Preference.getDisplayName(context)
                 if (TextUtils.isEmpty(displayName)) {
@@ -102,44 +107,44 @@ class NavigationDrawerFragment : Fragment() {
                 handleUserInfo()
                 false
             } else {
-                mCallbacks!!.onNavigationItemSelected(selectedNavigationType!!)
+                mCallbacks?.onNavigationItemSelected(selectedNavigationType)
                 true
             }
         }
 
-        navigationView!!.setCheckedItem(selectedNavigationType!!.id)
-        val headerView = navigationView!!.getHeaderView(0)
+        navigationView.setCheckedItem(selectedNavigationType.id)
+        val headerView = navigationView.getHeaderView(0)
 
         val editContainer = headerView.findViewById(R.id.edit_container)
         val done = headerView.findViewById(R.id.done)
 
         name = headerView.findViewById(R.id.name) as TextView
-        name!!.onClick {
-            edit!!.setText(name!!.text)
-            edit!!.requestFocus()
-            editContainer!!.visibility = View.VISIBLE
-            name!!.visibility = View.GONE
+        name.onClick {
+            edit.setText(name.text)
+            edit.requestFocus()
+            editContainer.visibility = View.VISIBLE
+            name.visibility = View.GONE
         }
 
         edit = headerView.findViewById(R.id.edit) as EditText
-        edit!!.onFocusChange { _, hasFocus ->
+        edit.onFocusChange { _, hasFocus ->
             if (!hasFocus) {
-                name!!.text = edit!!.text
-                name!!.visibility = View.VISIBLE
-                editContainer!!.visibility = View.GONE
-                Preference.setDisplayName(context, edit!!.text.toString())
+                name.text = edit.text
+                name.visibility = View.VISIBLE
+                editContainer.visibility = View.GONE
+                Preference.setDisplayName(context, edit.text.toString())
                 saveProfile()
             }
         }
 
         done.onClick {
-            name!!.text = edit!!.text
-            name!!.visibility = View.VISIBLE
-            editContainer!!.visibility = View.GONE
+            name.text = edit.text
+            name.visibility = View.VISIBLE
+            editContainer.visibility = View.GONE
         }
 
         avatar = headerView.findViewById(R.id.avatar) as ImageView
-        avatar!!.onClick {
+        avatar.onClick {
             CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
                     .setGuidelines(CropImageView.Guidelines.ON).start(context, this)
         }
@@ -169,7 +174,7 @@ class NavigationDrawerFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState!!.putInt(STATE_SELECTED_ID, selectedNavigationType!!.id)
+        outState!!.putInt(STATE_SELECTED_ID, selectedNavigationType.id)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -207,13 +212,13 @@ class NavigationDrawerFragment : Fragment() {
 
     fun handleUserInfo() {
         val isLoggedIn = Preference.isLoggedIn(context)
-        navigationView!!.menu.findItem(R.id.logout).isVisible = isLoggedIn
-        navigationView!!.menu.findItem(R.id.login).isVisible = !isLoggedIn
+        navigationView.menu.findItem(R.id.logout).isVisible = isLoggedIn
+        navigationView.menu.findItem(R.id.login).isVisible = !isLoggedIn
         val displayName = Preference.getDisplayName(context)
         if (!TextUtils.isEmpty(displayName)) {
-            name!!.text = displayName
+            name.text = displayName
         } else {
-            name!!.text = getString(R.string.no_user)
+            name.text = getString(R.string.no_user)
         }
         setProfilePicture()
     }
@@ -226,7 +231,7 @@ class NavigationDrawerFragment : Fragment() {
                 .centerCrop()
                 .placeholder(R.drawable.default_avatar)
                 .dontAnimate()
-                .into(avatar!!)
+                .into(avatar)
     }
 
     enum class NavigationType constructor(@IdRes val id: Int) {

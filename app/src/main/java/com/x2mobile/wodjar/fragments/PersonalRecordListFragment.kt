@@ -133,7 +133,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
     fun onPersonalRecordsResponse(requestResponseEvent: PersonalRecordsRequestEvent) {
         if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
                 requestResponseEvent.response.body() != null) {
-            val personalRecords = requestResponseEvent.response.body().personalRecords
+            val personalRecords = requestResponseEvent.response.body()!!.personalRecords
             personalRecordIds = personalRecords!!.map { it.id }
             adapter.setItems(personalRecords.sortedBy(PersonalRecord::date).asReversed().toMutableList())
         } else {

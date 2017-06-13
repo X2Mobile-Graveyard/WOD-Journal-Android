@@ -2,14 +2,17 @@ package com.x2mobile.wodjar.fragments
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.NavigationConstants
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
+import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.data.model.WorkoutResult
 import org.greenrobot.eventbus.Subscribe
@@ -19,31 +22,26 @@ import org.jetbrains.anko.toast
 
 class WorkoutResultFragment : ResultFragment<WorkoutResult>() {
 
-    var workout: Workout? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        workout = arguments!![NavigationConstants.KEY_WORKOUT] as Workout
-
-        super.onCreate(savedInstanceState)
-    }
+    val workout: Workout by lazy { arguments!![NavigationConstants.KEY_WORKOUT] as Workout }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbarDelegate.title = workout!!.name!!
+        toolbarDelegate.title = workout.name!!
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val descriptionContainer = LayoutInflater.from(context).inflate(R.layout.workout_description, binding!!.headerContainer, true)
-        (descriptionContainer.findViewById(R.id.description) as TextView).text = workout!!.description
+        (descriptionContainer.findViewById(R.id.description) as TextView).text = if (Preference.getUnitType(context) == UnitType.IMPERIAL ||
+                TextUtils.isEmpty(workout.metricDescription)) workout.description else workout.metricDescription
     }
 
     override fun createResult(): WorkoutResult {
         val workoutResult = WorkoutResult()
-        workoutResult.workoutId = workout!!.id
-        workoutResult.default = workout!!.default
-        workoutResult.type = workout!!.resultType
+        workoutResult.workoutId = workout.id
+        workoutResult.default = workout.default
+        workoutResult.type = workout.resultType
         return workoutResult
     }
 

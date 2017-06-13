@@ -17,7 +17,9 @@ import com.x2mobile.wodjar.fragments.WorkoutTypesFragment
 
 class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarDelegate {
 
-    private var mainScreenBinding: MainScreenBinding? = null
+    private val mainScreenBinding: MainScreenBinding by lazy {
+        DataBindingUtil.setContentView<MainScreenBinding>(this, R.layout.main_screen)
+    }
 
     override var title: String
         get() = supportActionBar!!.title.toString()
@@ -28,11 +30,9 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainScreenBinding = DataBindingUtil.setContentView<MainScreenBinding>(this, R.layout.main_screen)
+        setSupportActionBar(mainScreenBinding.toolbar)
 
-        setSupportActionBar(mainScreenBinding!!.toolbar)
-
-        mainScreenBinding!!.toolbar!!.setNavigationOnClickListener { mainScreenBinding!!.drawer!!.openDrawer(GravityCompat.START) }
+        mainScreenBinding.toolbar!!.setNavigationOnClickListener { mainScreenBinding.drawer!!.openDrawer(GravityCompat.START) }
     }
 
     override fun onNavigationItemSelected(navigationType: NavigationDrawerFragment.NavigationType) {
@@ -46,7 +46,7 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
         // update the main content by replacing fragments
         supportFragmentManager.beginTransaction().replace(R.id.container, selectedFragment).commit()
 
-        mainScreenBinding?.drawer?.closeDrawer(GravityCompat.START)
+        mainScreenBinding.drawer?.closeDrawer(GravityCompat.START)
     }
 
     override fun showIndeterminateLoading(show: Boolean) {

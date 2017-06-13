@@ -48,7 +48,10 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     var binding: ResultBinding? = null
 
-    var result: T? = null
+    @Suppress("UNCHECKED_CAST")
+    val result: T by lazy {
+        arguments[NavigationConstants.KEY_RESULT] as T? ?: createResult()
+    }
 
     var progress: ProgressDialog? = null
 
@@ -63,10 +66,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        result = if (arguments?.containsKey(NavigationConstants.KEY_RESULT) ?: false) arguments[NavigationConstants.KEY_RESULT]
-                as T else createResult()
-
-        viewModel = ResultViewModel(context, result!!)
+        viewModel = ResultViewModel(context, result)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -78,15 +78,15 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Glide.with(context).load(result!!.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
+        Glide.with(context).load(result.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
 
         binding!!.timeSpent.onClick {
-            TimePickerDialog.newInstance(result!!.resultTime).show(fragmentManager, null)
+            TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
         }
 
         binding!!.timeSpent.onFocusChange { _, focus ->
             if (focus) {
-                TimePickerDialog.newInstance(result!!.resultTime).show(fragmentManager, null)
+                TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
             }
         }
 
@@ -99,7 +99,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
         }
 
         binding!!.removeImage.onClick {
-            result!!.imageUri = null
+            result.imageUri = null
             viewModel!!.notifyImageChange()
         }
 
@@ -107,20 +107,20 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
             val imageContainer = binding!!.imageContainer
 
             val intent = context.intentFor<ImageViewer>()
-            intent.putExtra(ImageViewer.KEY_URI, result!!.imageUri)
+            intent.putExtra(ImageViewer.KEY_URI, result.imageUri)
             intent.putExtra(ImageViewer.KEY_RECT, Rect(imageContainer.left, imageContainer.top, imageContainer.right, imageContainer.bottom))
             startActivity(intent)
         }
 
         binding!!.date.onClick {
             val calendar = Calendar.getInstance()
-            calendar.time = result!!.date
+            calendar.time = result.date
             DatePickerDialog.newInstance(this@ResultFragment, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show(fragmentManager, DIALOG_DATE_PICKER)
         }
 
         binding!!.deleteRecord.onClick {
-            deleteResult(result!!)
+            deleteResult(result)
             activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
             activity.finish()
         }
@@ -149,11 +149,11 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
                 if (isInputValid()) {
                     progress = context.indeterminateProgressDialog(R.string.saving)
                     doAsync {
-                        if (result!!.imageUri != null) {
+                        if (result.imageUri != null) {
                             val fileName = Constants.IMAGE_NAME.format(Preference.getUserId(context), System.currentTimeMillis())
-                            val response = AmazonService.upload(fileName, result!!.imageUri!!)
+                            val response = AmazonService.upload(fileName, result.imageUri!!)
                             if (response != null) {
-                                result!!.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
+                                result.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
                             } else {
                                 uiThread {
                                     context.toast(R.string.image_upload_failed)
@@ -162,7 +162,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
                         }
 
-                        saveResult(result!!)
+                        saveResult(result)
                     }
                 }
                 return true
@@ -173,13 +173,13 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable(NavigationConstants.KEY_RESULT, result!!)
+        outState?.putParcelable(NavigationConstants.KEY_RESULT, result)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK && intent != null) {
-            result!!.imageUri = intent.data
+            result.imageUri = intent.data
             viewModel!!.notifyImageChange()
 
             Glide.with(context).load(intent.data).override(windowRect.width(), windowRect.height()).into(binding!!.image)
@@ -202,13 +202,13 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, monthOfYear)
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        result!!.date = calendar.time
+        result.date = calendar.time
         viewModel!!.notifyDateChange()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTimeSet(event: TimeSetEvent) {
-        result!!.resultTime = event.time
+        result.resultTime = event.time
         viewModel!!.notifyTimeResultChange()
     }
 

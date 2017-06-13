@@ -20,15 +20,15 @@ class PersonalRecordFragment : ResultFragment<PersonalRecord>(), DatePickerDialo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (result!!.name == null) {
-            result!!.name = getString(R.string.personal_records)
+        if (result.name == null) {
+            result.name = getString(R.string.personal_records)
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbarDelegate.title = result!!.name!!
-        if (result!!.id == Constants.ID_NA) {
+        toolbarDelegate.title = result.name!!
+        if (result.id == Constants.ID_NA) {
             toolbarDelegate.enableTitleChange()
         }
     }
@@ -51,7 +51,7 @@ class PersonalRecordFragment : ResultFragment<PersonalRecord>(), DatePickerDialo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTitleChange(event: TitleChangedEvent) {
-        result!!.name = toolbarDelegate.title
+        result.name = toolbarDelegate.title
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -86,7 +86,7 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
     fun onLoginResponse(event: LoginRequestEvent) {
         progress?.dismiss()
         if (event.response?.isSuccessful ?: false) {
-            val loginResponse = event.response!!.body()
+            val loginResponse = event.response!!.body()!!
             if (loginResponse.errors == null) {
                 Preference.setUserId(this, loginResponse.userId)
                 Preference.setEmail(this, loginResponse.email!!)
