@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.x2mobile.wodjar.R
+import com.x2mobile.wodjar.business.Preference
+import com.x2mobile.wodjar.data.model.ResultType
+import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.ui.adapter.base.BaseAdapter
 import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
+import com.x2mobile.wodjar.util.MathUtil
+import com.x2mobile.wodjar.util.TimeUtil
 import org.jetbrains.anko.onClick
 
 class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : BaseAdapter<Workout, WorkoutViewHolder>() {
@@ -23,12 +28,26 @@ class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : Bas
 class WorkoutViewHolder(itemView: View, val callback: WorkoutListener) : BaseViewHolder<Workout>(itemView) {
 
     val name: TextView by lazy { itemView.findViewById(R.id.name) as TextView }
-    val status: View by lazy { itemView.findViewById(R.id.status) }
+    val result: TextView by lazy { itemView.findViewById(R.id.best_result) as TextView }
 
     override fun bindData(item: Workout) {
+        val context = itemView.context
         itemView.onClick { callback.onWorkoutClicked(item) }
         name.text = item.name
-        status.visibility = if (item.completed) View.VISIBLE else View.GONE
+        if (item.completed) {
+            when (item.resultType) {
+                ResultType.WEIGHT -> result.text = context.getString(R.string.weight_prefix,
+                        context.getString(if (Preference.getUnitType(context) == UnitType.METRIC) R.string.kg_suffix else R.string.lb_suffix,
+                                MathUtil.convertWeight(item.bestResult, UnitType.METRIC, Preference.getUnitType(context))))
+                ResultType.REPETITION -> result.text = context.getString(R.string.reps_prefix, item.bestResult)
+                ResultType.TIME -> result.text = context.getString(R.string.time_prefix, TimeUtil.formatTime(item.bestResult.toLong()))
+                else -> {
+                    throw NotImplementedError()
+                }
+            }
+        } else {
+            result.text = null
+        }
     }
 
 }

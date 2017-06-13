@@ -42,6 +42,9 @@ class Workout() : Parcelable {
     @SerializedName("video")
     var video: String? = null
 
+    @SerializedName("best_result")
+    var bestResult: Float = 0.0f
+
     @SerializedName("favorites")
     var favorite: Boolean = false
 
@@ -60,6 +63,7 @@ class Workout() : Parcelable {
         resultType = ResultType.values()[source.readInt()]
         imageUri = source.readParcelable(Workout::class.java.classLoader)
         video = source.readString()
+        bestResult = source.readFloat()
         favorite = source.readInt() == 1
         completed = source.readInt() == 1
         default = source.readInt() == 1
@@ -74,6 +78,7 @@ class Workout() : Parcelable {
         dest.writeInt(resultType.ordinal)
         dest.writeParcelable(imageUri, flags)
         dest.writeString(video)
+        dest.writeFloat(bestResult)
         dest.writeInt(if (favorite) 1 else 0)
         dest.writeInt(if (completed) 1 else 0)
         dest.writeInt(if (default) 1 else 0)
@@ -97,6 +102,7 @@ class Workout() : Parcelable {
         result = 31 * result + resultType.hashCode()
         result = 31 * result + (imageUri?.hashCode() ?: 0)
         result = 31 * result + (video?.hashCode() ?: 0)
+        result = 31 * result + bestResult.hashCode()
         result = 31 * result + favorite.hashCode()
         result = 31 * result + completed.hashCode()
         result = 31 * result + default.hashCode()
