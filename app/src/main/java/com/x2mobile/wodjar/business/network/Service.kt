@@ -1,6 +1,7 @@
 package com.x2mobile.wodjar.business.network
 
 import android.content.Context
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.WodJarApplication
 import com.x2mobile.wodjar.business.Preference
@@ -15,7 +16,6 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 object Service {
 
     private val ENDPOINT_URL = "https://wodjar.herokuapp.com/api/v1/"
@@ -28,8 +28,13 @@ object Service {
 
         Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
-                .client(OkHttpClient.Builder().addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE!!))
-                        .addInterceptor(loggingInterceptor).cache(Cache(WodJarApplication.INSTANCE!!.cacheDir, SIZE_OF_CACHE)).build())
+                .client(OkHttpClient.Builder()
+                        .addNetworkInterceptor(loggingInterceptor)
+                        .addNetworkInterceptor(StethoInterceptor())
+                        .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE!!))
+                        .cache(Cache(WodJarApplication.INSTANCE!!.cacheDir, SIZE_OF_CACHE))
+                        .retryOnConnectionFailure(false)
+                        .build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(Api::class.java)
     }

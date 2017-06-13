@@ -21,6 +21,9 @@ class Workout() : Parcelable {
     @SerializedName("description")
     var description: String? = null
 
+    @SerializedName("metric_description")
+    var metricDescription: String? = null
+
     @SerializedName("history")
     var history: String? = null
 
@@ -32,7 +35,7 @@ class Workout() : Parcelable {
     @JsonAdapter(ResultTypeAdapter::class)
     var resultType: ResultType = ResultType.OTHER
 
-    @SerializedName("image")
+    @SerializedName("image_s3")
     @JsonAdapter(UriAdapter::class)
     var imageUri: Uri? = null
 
@@ -88,6 +91,7 @@ class Workout() : Parcelable {
         var result = id
         result = 31 * result + (name?.hashCode() ?: 0)
         result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (metricDescription?.hashCode() ?: 0)
         result = 31 * result + (history?.hashCode() ?: 0)
         result = 31 * result + type.hashCode()
         result = 31 * result + resultType.hashCode()
@@ -95,6 +99,7 @@ class Workout() : Parcelable {
         result = 31 * result + (video?.hashCode() ?: 0)
         result = 31 * result + favorite.hashCode()
         result = 31 * result + completed.hashCode()
+        result = 31 * result + default.hashCode()
         return result
     }
 
