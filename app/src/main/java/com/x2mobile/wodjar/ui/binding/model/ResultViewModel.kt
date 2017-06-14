@@ -19,6 +19,7 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
     var weightSelected: Boolean = result.type == ResultType.OTHER || result.type == ResultType.WEIGHT
         set(value) {
             field = value
+            result.type = ResultType.WEIGHT
             notifyPropertyChanged(BR.weightSelected)
         }
 
@@ -29,6 +30,7 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
     var repsSelected: Boolean = result.type == ResultType.REPETITION
         set(value) {
             field = value
+            result.type = ResultType.REPETITION
             notifyPropertyChanged(BR.repsSelected)
         }
 
@@ -39,6 +41,7 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
     var timeSelected: Boolean = result.type == ResultType.TIME
         set(value) {
             field = value
+            result.type = ResultType.TIME
             notifyPropertyChanged(BR.timeSelected)
         }
 
