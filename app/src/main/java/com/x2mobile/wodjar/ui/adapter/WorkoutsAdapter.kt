@@ -10,7 +10,6 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.data.model.Workout
-import com.x2mobile.wodjar.ui.adapter.base.BaseAdapter
 import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.adapter.base.FilterableBaseAdapter
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
