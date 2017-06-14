@@ -14,7 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.callback.ToolbarDelegate
-import com.x2mobile.wodjar.data.event.TitleChangedEvent
+import com.x2mobile.wodjar.data.event.TitleSetEvent
 import com.x2mobile.wodjar.databinding.RootBinding
 import com.x2mobile.wodjar.ui.binding.model.RootViewModel
 import org.greenrobot.eventbus.EventBus
@@ -91,7 +91,7 @@ open class BaseToolbarActivity : AppCompatActivity(), ToolbarDelegate {
     private fun finishTitleChange() {
         if (rootViewModel!!.titleChangeStarted) {
             rootViewModel!!.titleChangeStarted = false
-            EventBus.getDefault().post(TitleChangedEvent())
+            EventBus.getDefault().post(TitleSetEvent())
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(rootLayoutBinding!!.root.windowToken, 0)
         }

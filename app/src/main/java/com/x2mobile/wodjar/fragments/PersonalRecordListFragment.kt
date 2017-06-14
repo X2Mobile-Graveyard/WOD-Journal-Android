@@ -13,7 +13,7 @@ import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.PersonalRecordsRequestEvent
 import com.x2mobile.wodjar.data.event.PersonalRecordsRequestFailureEvent
-import com.x2mobile.wodjar.data.event.TitleChangedEvent
+import com.x2mobile.wodjar.data.event.TitleSetEvent
 import com.x2mobile.wodjar.data.model.PersonalRecord
 import com.x2mobile.wodjar.data.model.PersonalRecordType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
@@ -124,7 +124,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onTitleChange(event: TitleChangedEvent) {
+    fun onTitleSet(event: TitleSetEvent) {
         personalRecordType!!.name = toolbarDelegate.title
         Service.updatePersonalRecordType(personalRecordIds!!, personalRecordType!!.name!!)
     }

@@ -50,7 +50,7 @@ class PersonalRecordFragment : ResultFragment<PersonalRecord>(), DatePickerDialo
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onTitleChange(event: TitleChangedEvent) {
+    fun onTitleSet(event: TitleSetEvent) {
         result.name = toolbarDelegate.title
     }
 
