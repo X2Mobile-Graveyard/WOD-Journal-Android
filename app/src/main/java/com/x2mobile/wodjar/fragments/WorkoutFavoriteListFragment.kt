@@ -10,8 +10,7 @@ class WorkoutFavoriteListFragment : WorkoutListFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     override fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
-        if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
-                requestResponseEvent.response.body() != null) {
+        if (requestResponseEvent.response.body() != null) {
             val workouts = requestResponseEvent.response.body()!!.workouts.filter { it.favorite }
             adapter.setItems(workouts.toMutableList())
         } else {

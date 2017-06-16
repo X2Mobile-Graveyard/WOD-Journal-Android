@@ -85,21 +85,17 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginResponse(event: LoginRequestEvent) {
         progress?.dismiss()
-        if (event.response?.isSuccessful ?: false) {
-            val loginResponse = event.response!!.body()!!
-            if (loginResponse.errors == null) {
-                Preference.setUserId(this, loginResponse.userId)
-                Preference.setEmail(this, loginResponse.email!!)
-                Preference.setDisplayName(this, loginResponse.name)
-                Preference.setProfilePictureUrl(this, loginResponse.imageUri.toString())
-                Preference.setToken(this, loginResponse.authToken)
-                EventBus.getDefault().post(LoggedInEvent())
-                finish()
-            } else {
-                toast(loginResponse.errors!!.first())
-            }
+        val loginResponse = event.response.body()!!
+        if (loginResponse.errors == null) {
+            Preference.setUserId(this, loginResponse.userId)
+            Preference.setEmail(this, loginResponse.email!!)
+            Preference.setDisplayName(this, loginResponse.name)
+            Preference.setProfilePictureUrl(this, loginResponse.imageUri.toString())
+            Preference.setToken(this, loginResponse.authToken)
+            EventBus.getDefault().post(LoggedInEvent())
+            finish()
         } else {
-            toast(R.string.error_occurred)
+            toast(loginResponse.errors!!.first())
         }
     }
 

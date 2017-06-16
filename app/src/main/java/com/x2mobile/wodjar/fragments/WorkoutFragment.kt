@@ -151,7 +151,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
             activity.supportInvalidateOptionsMenu()
 
             //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response!!.body()!!.workouts
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
             val workout = workouts.find { it.id == workout.id }
             workout!!.favorite = this@WorkoutFragment.workout.favorite
 
@@ -188,8 +188,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutResultsResponse(requestResponseEvent: WorkoutResultsRequestEvent) {
-        if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
-                requestResponseEvent.response.body() != null) {
+        if (requestResponseEvent.response.body() != null) {
             val workoutResults = requestResponseEvent.response.body()!!.workoutResults.toMutableList()
             workoutResults.forEach { it.type = workout.resultType }
             adapter.setItems(workoutResults)

@@ -57,8 +57,7 @@ class PersonalRecordFragment : ResultFragment<PersonalRecord>(), DatePickerDialo
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPersonalRecordAdded(requestResponseEvent: AddPersonalRecordRequestEvent) {
         progress?.dismiss()
-        if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
-                requestResponseEvent.response.body() != null) {
+        if (requestResponseEvent.response.body() != null) {
             activity.setResult(Activity.RESULT_OK, context.intentFor<Any>(NavigationConstants.KEY_RESULT to requestResponseEvent.response.body()))
             activity.finish()
         } else {

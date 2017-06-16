@@ -3,6 +3,7 @@ package com.x2mobile.wodjar.fragments.base
 import android.support.v4.app.Fragment
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.ToolbarDelegate
 import com.x2mobile.wodjar.business.network.exception.UnauthorizedException
 import org.greenrobot.eventbus.EventBus
@@ -15,6 +16,7 @@ open class BaseFragment : Fragment() {
 
     val toolbarDelegate: ToolbarDelegate by lazy { activity as ToolbarDelegate }
 
+
     protected fun showLoginAlert() {
         context.alert(R.string.login_to_continue) {
             positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
@@ -25,6 +27,7 @@ open class BaseFragment : Fragment() {
     protected fun handleRequestFailure(throwable: Throwable?) {
         if (throwable is UnauthorizedException) {
             EventBus.getDefault().unregister(this)
+            Preference.clear(context)
             context.toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
             activity.finish()

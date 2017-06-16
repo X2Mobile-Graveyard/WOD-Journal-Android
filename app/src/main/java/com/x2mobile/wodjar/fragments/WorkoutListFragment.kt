@@ -82,8 +82,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     open fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
-        if (requestResponseEvent.response != null && requestResponseEvent.response.isSuccessful &&
-                requestResponseEvent.response.body() != null) {
+        if (requestResponseEvent.response.body() != null) {
             val workouts = requestResponseEvent.response.body()!!.workouts.filter {
                 it.type == category
             }

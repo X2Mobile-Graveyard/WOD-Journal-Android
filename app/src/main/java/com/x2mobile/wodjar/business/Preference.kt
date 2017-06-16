@@ -63,7 +63,9 @@ object Preference {
     }
 
     fun clear(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit()
+                .remove(TOKEN).remove(USER_ID).remove(EMAIL).remove(DISPLAY_NAME).remove(PROFILE_PICTURE_URL)
+                .apply()
     }
 
 }

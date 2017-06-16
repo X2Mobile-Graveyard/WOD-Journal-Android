@@ -5,4 +5,4 @@ import com.x2mobile.wodjar.data.model.LoginResponse
 import retrofit2.Call
 import retrofit2.Response
 
-class LoginRequestEvent(call: Call<LoginResponse>?, response: Response<LoginResponse>?) : RequestResponseEvent<LoginResponse>(call, response)
+class LoginRequestEvent(call: Call<LoginResponse>?, response: Response<LoginResponse>) : RequestResponseEvent<LoginResponse>(call, response)
