@@ -96,14 +96,11 @@ class SignUpActivity : BaseFormActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSignUpResponse(event: SignUpRequestEvent) {
         progress?.dismiss()
-        if (event.response?.isSuccessful ?: false) {
-            val data = Intent()
-            data.putExtra(KEY_USER, user)
-            setResult(Activity.RESULT_OK, data)
-            finish()
-        } else {
-            toast(R.string.error_occurred)
-        }
+
+        val data = Intent()
+        data.putExtra(KEY_USER, user)
+        setResult(Activity.RESULT_OK, data)
+        finish()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
