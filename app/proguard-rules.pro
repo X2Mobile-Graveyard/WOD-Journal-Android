@@ -26,22 +26,22 @@
 
 -keepattributes Signature, *Annotation*
 
--dontwarn okhttp3.**
--dontwarn okio.**
-
--dontwarn com.squareup.okhttp.**
-
 -dontwarn android.databinding.tool.**
 
 -dontwarn org.jetbrains.anko.internals.AnkoInternals
 
+-keep class android.support.v7.widget.SearchView { *; }
+
+##---------------Begin: proguard configuration for Retrofit  ----------
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
 # Platform used when running on RoboVM on iOS. Will not be used at runtime.
 -dontnote retrofit2.Platform$IOS$MainThreadExecutor
 # Platform used when running on Java 8 VMs. Will not be used at runtime.
 -dontwarn retrofit2.Platform$Java8
+##---------------End: proguard configuration for Retrofit  ----------
 
+##---------------Begin: proguard configuration for EventBus  ----------
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
@@ -51,10 +51,18 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+##---------------End: proguard configuration for EventBus  ----------
 
 -keep class com.github.mikephil.charting.** { *; }
 
-# Gson specific classes
+##---------------Begin: proguard configuration for OkHttp  ----------
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**
+##---------------Begin: proguard configuration for OkHttp  ----------
+
+##---------------Begin: proguard configuration for Gson  ----------
 -keep class sun.misc.Unsafe { *; }
 #-keep class com.google.gson.stream.** { *; }
 
@@ -66,7 +74,6 @@
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
-
 ##---------------End: proguard configuration for Gson  ----------
 
 -keep class com.facebook.stetho.** { *; }
