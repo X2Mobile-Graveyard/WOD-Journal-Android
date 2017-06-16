@@ -38,7 +38,6 @@ open class BaseFragment : Fragment() {
             Preference.clear(context)
             context.toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
-            activity.finish()
         } else {
             context.toast(R.string.error_occurred)
         }
