@@ -24,11 +24,70 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keepattributes Signature, *Annotation*
+
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+-dontwarn com.squareup.okhttp.**
+
+-dontwarn android.databinding.tool.**
+
+-dontwarn org.jetbrains.anko.internals.AnkoInternals
+
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
 # Platform used when running on Java 8 VMs. Will not be used at runtime.
 -dontwarn retrofit2.Platform$Java8
-# Retain generic category information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy INSTANCE.
--keepattributes Exceptions
+
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+-keep class com.github.mikephil.charting.** { *; }
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
+
+# Prevent proguard from stripping interface information from TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+##---------------End: proguard configuration for Gson  ----------
+
+-keep class com.facebook.stetho.** { *; }
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+# Class names are needed in reflection
+-keepnames class com.amazonaws.**
+-keepnames class com.amazon.**
+# Request handlers defined in request.handlers
+-keep class com.amazonaws.services.**.*Handler
+# The following are referenced but aren't required to run
+-dontwarn com.fasterxml.jackson.**
+-dontwarn org.apache.commons.logging.**
+# Android 6.0 release removes support for the Apache HTTP client
+-dontwarn org.apache.http.**
+# The SDK has several references of Apache HTTP client
+-dontwarn com.amazonaws.http.**
+-dontwarn com.amazonaws.metrics.**
