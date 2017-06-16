@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 25
@@ -73,6 +74,10 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.0'
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.4.0'
     compile 'com.facebook.android:facebook-android-sdk:4.21.1'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
 
     kapt 'com.android.databinding:compiler:2.3.0'
 }
