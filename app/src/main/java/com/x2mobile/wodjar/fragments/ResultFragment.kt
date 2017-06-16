@@ -1,34 +1,27 @@
 package com.x2mobile.wodjar.fragments
 
-import android.Manifest
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.graphics.Rect
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.*
 import android.widget.EditText
 import android.widget.RadioButton
-import com.bumptech.glide.Glide
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.ImageViewer
-import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.NavigationConstants
-import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.AmazonService
+import com.x2mobile.wodjar.data.event.ImageSetEvent
 import com.x2mobile.wodjar.data.event.TimeSetEvent
 import com.x2mobile.wodjar.data.model.Result
 import com.x2mobile.wodjar.databinding.ResultBinding
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.fragments.dialog.TimePickerDialog
 import com.x2mobile.wodjar.ui.binding.model.ResultViewModel
+import com.x2mobile.wodjar.ui.helper.ImagePicker
+import com.x2mobile.wodjar.ui.helper.ImageViewer
+import com.x2mobile.wodjar.util.isUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -38,102 +31,80 @@ import java.util.*
 
 abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
-    val REQUEST_CODE_PICK_IMAGE = 13
-
-    val REQUEST_CODE_STORAGE = 97
-
     val DIALOG_DATE_PICKER = "date_picker"
-
-    var viewModel: ResultViewModel? = null
-
-    var binding: ResultBinding? = null
 
     @Suppress("UNCHECKED_CAST")
     val result: T by lazy {
-        arguments[NavigationConstants.KEY_RESULT] as T? ?: createResult()
+        savedArguments?.get(NavigationConstants.KEY_RESULT) as T? ?: arguments?.get(NavigationConstants.KEY_RESULT) as T? ?: createResult()
     }
+
+    lateinit var binding: ResultBinding
+
+    val viewModel: ResultViewModel by lazy { ResultViewModel(context, result) }
+
+    val imagePicker: ImagePicker by lazy { ImagePicker(this) }
+
+    val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
     var progress: ProgressDialog? = null
 
-    val windowRect: Rect by lazy {
-        val rect = Rect()
-        activity.window.decorView.getWindowVisibleDisplayFrame(rect)
-        rect
-    }
-
-    @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        viewModel = ResultViewModel(context, result)
+        EventBus.getDefault().register(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<ResultBinding>(inflater, R.layout.result, container, false)
-        binding!!.viewModel = viewModel
-        return binding!!.root
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Glide.with(context).load(result.imageUri).override(windowRect.width(), windowRect.height()).into(binding!!.image)
+        imageViewer.imageUri = result.imageUri
 
-        binding!!.timeSpent.onClick {
+        binding.timeSpent.onClick {
             TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
         }
 
-        binding!!.timeSpent.onFocusChange { _, focus ->
+        binding.timeSpent.onFocusChange { _, focus ->
             if (focus) {
                 TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
             }
         }
 
-        binding!!.addImage.onClick {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                addPicture()
-            } else {
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_STORAGE)
-            }
+        binding.addImage.onClick {
+            imagePicker.addPicture(this)
         }
 
-        binding!!.removeImage.onClick {
+        binding.removeImage.onClick {
             result.imageUri = null
-            viewModel!!.notifyImageChange()
+            viewModel.notifyImageChange()
         }
 
-        binding!!.image.onClick {
-            val imageContainer = binding!!.imageContainer
-
-            val intent = context.intentFor<ImageViewer>()
-            intent.putExtra(ImageViewer.KEY_URI, result.imageUri)
-            intent.putExtra(ImageViewer.KEY_RECT, Rect(imageContainer.left, imageContainer.top, imageContainer.right, imageContainer.bottom))
-            startActivity(intent)
+        binding.image.onClick {
+            imageViewer.popup(binding.imageContainer)
         }
 
-        binding!!.date.onClick {
+        binding.date.onClick {
             val calendar = Calendar.getInstance()
             calendar.time = result.date
             DatePickerDialog.newInstance(this@ResultFragment, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show(fragmentManager, DIALOG_DATE_PICKER)
         }
 
-        binding!!.deleteRecord.onClick {
+        binding.delete.onClick {
             deleteResult(result)
             activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
             activity.finish()
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
 
         EventBus.getDefault().unregister(this)
     }
@@ -149,20 +120,14 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
                 if (isInputValid()) {
                     progress = context.indeterminateProgressDialog(R.string.saving)
                     doAsync {
-                        if (result.imageUri != null) {
-                            val fileName = Constants.IMAGE_NAME.format(Preference.getUserId(context), System.currentTimeMillis())
-                            val response = AmazonService.upload(fileName, result.imageUri!!)
-                            if (response != null) {
-                                result.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
-                            } else {
-                                uiThread {
-                                    context.toast(R.string.image_upload_failed)
-                                }
-                            }
-
+                        if (result.imageUri != null && !result.imageUri!!.isUrl()) {
+                            AmazonService.upload(this, result.imageUri!!, { uri ->
+                                result.imageUri = uri
+                                saveResult(result)
+                            })
+                        } else {
+                            saveResult(result)
                         }
-
-                        saveResult(result)
                     }
                 }
                 return true
@@ -178,23 +143,19 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK && intent != null) {
-            result.imageUri = intent.data
-            viewModel!!.notifyImageChange()
-
-            Glide.with(context).load(intent.data).override(windowRect.width(), windowRect.height()).into(binding!!.image)
-        }
+        imagePicker.onActivityResult(requestCode, resultCode, intent)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                addPicture()
-            } else {
-                context.longToast(R.string.storage_permission_denied)
-            }
-        }
+        imagePicker.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onImageSet(event: ImageSetEvent) {
+        result.imageUri = event.uri
+        imageViewer.imageUri = result.imageUri
+        viewModel.notifyImageChange()
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -203,13 +164,13 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
         calendar.set(Calendar.MONTH, monthOfYear)
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         result.date = calendar.time
-        viewModel!!.notifyDateChange()
+        viewModel.notifyDateChange()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTimeSet(event: TimeSetEvent) {
         result.resultTime = event.time
-        viewModel!!.notifyTimeResultChange()
+        viewModel.notifyTimeResultChange()
     }
 
     protected abstract fun createResult(): T
@@ -219,13 +180,13 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     protected abstract fun deleteResult(result: T)
 
     private fun isInputValid(): Boolean {
-        if (!isInputValid(binding!!.weight, binding!!.weightLifted)) {
+        if (!isInputValid(binding.weight, binding.weightLifted)) {
             return false
         }
-        if (!isInputValid(binding!!.reps, binding!!.repsCompleted)) {
+        if (!isInputValid(binding.reps, binding.repsCompleted)) {
             return false
         }
-        if (!isInputValid(binding!!.time, binding!!.timeSpent)) {
+        if (!isInputValid(binding.time, binding.timeSpent)) {
             return false
         }
         return true
@@ -237,14 +198,5 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
             return false
         }
         return true
-    }
-
-    private fun addPicture() {
-        val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
-        pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        pickIntent.type = "image/*"
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(Intent.createChooser(pickIntent, getString(R.string.add_picture)).putExtra(Intent.EXTRA_INITIAL_INTENTS,
-                arrayOf(takePhotoIntent)), REQUEST_CODE_PICK_IMAGE)
     }
 }

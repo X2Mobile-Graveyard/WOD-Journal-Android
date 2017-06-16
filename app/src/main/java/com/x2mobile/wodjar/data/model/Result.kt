@@ -8,8 +8,11 @@ import android.os.Parcelable
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 import com.x2mobile.wodjar.business.Constants
+import com.x2mobile.wodjar.data.model.adapter.FloatResultAdapter
+import com.x2mobile.wodjar.data.model.adapter.IntResultAdapter
 import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
 import com.x2mobile.wodjar.data.model.adapter.UriAdapter
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 open class Result() : BaseObservable(), Parcelable {
@@ -23,19 +26,30 @@ open class Result() : BaseObservable(), Parcelable {
 
     @Bindable
     @SerializedName("result_weight")
+    @JsonAdapter(FloatResultAdapter::class)
     var resultWeight: Float = 0f
 
     @Bindable
     @SerializedName("result_rounds")
+    @JsonAdapter(IntResultAdapter::class)
     var resultReps: Int = 0
 
     @Bindable
     @SerializedName("result_time")
+    @JsonAdapter(IntResultAdapter::class)
     var resultTime: Int = 0
 
     @SerializedName("result_type")
     @JsonAdapter(ResultTypeAdapter::class)
     var type: ResultType = ResultType.OTHER
+
+    val result: Float
+        get() = when (type) {
+            ResultType.WEIGHT -> resultWeight
+            ResultType.REPETITION -> resultReps.toFloat()
+            ResultType.TIME -> resultTime.toFloat()
+            else -> throw UnsupportedOperationException()
+        }
 
     @Bindable
     @SerializedName("notes")
@@ -112,4 +126,24 @@ open class Result() : BaseObservable(), Parcelable {
         }
     }
 
+}
+
+inline fun <T : Result, R : Comparable<R>> Iterable<T>.best(selector: (T) -> R): T? {
+    val iterator = iterator()
+    if (!iterator.hasNext()) return null
+    var bestElem = iterator.next()
+    var bestValue = selector(bestElem)
+    while (iterator.hasNext()) {
+        val element = iterator.next()
+        val value = selector(element)
+        val better = when (element.type) {
+            ResultType.TIME -> bestValue > value
+            else -> bestValue < value
+        }
+        if (better) {
+            bestElem = element
+            bestValue = value
+        }
+    }
+    return bestElem
 }

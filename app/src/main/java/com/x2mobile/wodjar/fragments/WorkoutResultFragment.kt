@@ -61,7 +61,10 @@ class WorkoutResultFragment : ResultFragment<WorkoutResult>() {
     fun onWorkoutResultAdded(requestResponseEvent: AddWorkoutResultRequestEvent) {
         progress?.dismiss()
         if (requestResponseEvent.response.body() != null) {
-            activity.setResult(Activity.RESULT_OK, context.intentFor<Any>(NavigationConstants.KEY_RESULT to requestResponseEvent.response.body()))
+            val result = requestResponseEvent.response.body()!!
+            result.type = workout.resultType
+
+            activity.setResult(Activity.RESULT_OK, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
             activity.finish()
         } else {
             context.toast(R.string.error_occurred)

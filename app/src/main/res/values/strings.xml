@@ -17,6 +17,7 @@
     <string name="time_prefix">Time %s</string>
 
     <string name="personal_records">Personal Records</string>
+    <string name="workout">Workout</string>
     <string name="workouts">Workouts</string>
 
     <string name="set">Set</string>
@@ -72,6 +73,7 @@
     <string name="feedback_body">Username: %1$s\nApp version: %2$s\nDevice info: %3$s - %4$d</string>
 
     <string name="options">Options</string>
+    <string name="edit">Edit</string>
 
     <string name="unit_type">Unit Type</string>
     <string name="imperial">Imperial</string>

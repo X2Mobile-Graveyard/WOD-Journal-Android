@@ -48,8 +48,17 @@ interface Api {
     @GET("list-wods")
     fun getWorkouts(): Call<WorkoutsResponse>
 
+    @POST("wods")
+    fun saveWorkout(@Body workout: Workout): Call<Workout>
+
+    @PATCH("wods/{wod_id}")
+    fun updateWorkout(@Path("wod_id") workoutId: Int, @Body workout: Workout): Call<Void>
+
     @POST("wods/favorite/{wod_id}")
     fun updateWorkout(@Path("wod_id") workoutId: Int, @Query("default") default: Boolean, @Query("favorite") favorite: Boolean): Call<Void>
+
+    @DELETE("wods/{wod_id}")
+    fun deleteWorkout(@Path("wod_id") workoutId: Int): Call<Void>
 
     @GET("list-wrs-by-wod/{wod_id}")
     fun getWorkoutResults(@Path("wod_id") workoutId: Int): Call<WorkoutResultsResponse>

@@ -1,5 +1,6 @@
 package com.x2mobile.wodjar.fragments.base
 
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
@@ -16,6 +17,13 @@ open class BaseFragment : Fragment() {
 
     val toolbarDelegate: ToolbarDelegate by lazy { activity as ToolbarDelegate }
 
+    var savedArguments: Bundle? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        savedArguments = savedInstanceState
+    }
 
     protected fun showLoginAlert() {
         context.alert(R.string.login_to_continue) {

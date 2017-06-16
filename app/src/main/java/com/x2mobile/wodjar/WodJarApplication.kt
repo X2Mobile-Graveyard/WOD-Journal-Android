@@ -20,6 +20,6 @@ class WodJarApplication : Application() {
 
     companion object {
 
-        var INSTANCE: Context? = null
+        lateinit var INSTANCE: Context
     }
 }

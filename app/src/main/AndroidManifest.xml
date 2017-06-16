@@ -3,8 +3,8 @@
     package="com.x2mobile.wodjar">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".WodJarApplication"
@@ -25,6 +25,8 @@
         <activity android:name=".activity.PersonalRecordActivity" />
         <activity android:name=".activity.PersonalRecordListActivity" />
         <activity android:name=".activity.WorkoutActivity" />
+        <activity android:name=".activity.WorkoutEditActivity" />
+        <activity android:name=".activity.WorkoutCustomActivity" />
         <activity android:name=".activity.WorkoutResultActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.SignUpActivity" />

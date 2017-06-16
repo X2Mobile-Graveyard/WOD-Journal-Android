@@ -2,6 +2,7 @@ package com.x2mobile.wodjar.business.network
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.google.gson.GsonBuilder
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.WodJarApplication
 import com.x2mobile.wodjar.business.Preference
@@ -31,11 +32,11 @@ object Service {
                 .client(OkHttpClient.Builder()
                         .addNetworkInterceptor(loggingInterceptor)
                         .addNetworkInterceptor(StethoInterceptor())
-                        .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE!!))
-                        .cache(Cache(WodJarApplication.INSTANCE!!.cacheDir, SIZE_OF_CACHE))
+                        .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE))
+                        .cache(Cache(WodJarApplication.INSTANCE.cacheDir, SIZE_OF_CACHE))
                         .retryOnConnectionFailure(false)
                         .build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
                 .build().create(Api::class.java)
     }
 
@@ -109,8 +110,23 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun saveWorkout(workout: Workout, callback: Callback<Workout> = AddWorkoutCallback()) {
+        val call = api.saveWorkout(workout)
+        call.enqueue(callback)
+    }
+
+    fun updateWorkout(workout: Workout, callback: Callback<Void> = UpdateWorkoutCallback()) {
+        val call = api.updateWorkout(workout.id, workout)
+        call.enqueue(callback)
+    }
+
     fun updateWorkout(workoutId: Int, default: Boolean, favorite: Boolean, callback: Callback<Void> = UpdateWorkoutCallback()) {
         val call = api.updateWorkout(workoutId, default, favorite)
+        call.enqueue(callback)
+    }
+
+    fun deleteWorkout(workoutId: Int, callback: Callback<Void> = DeleteWorkoutCallback()) {
+        val call = api.deleteWorkout(workoutId)
         call.enqueue(callback)
     }
 

@@ -31,7 +31,8 @@
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visible="@{viewModel.result.id == 0}">
 
                 <android.support.v4.widget.Space
                     android:layout_width="0dp"
@@ -43,7 +44,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="@={viewModel.weightSelected}"
-                    android:enabled="@{viewModel.weightEnabled}"
                     android:text="@string/weight" />
 
                 <android.support.v4.widget.Space
@@ -56,7 +56,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="@={viewModel.repsSelected}"
-                    android:enabled="@{viewModel.repsEnabled}"
                     android:text="@string/reps" />
 
                 <android.support.v4.widget.Space
@@ -69,7 +68,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="@={viewModel.timeSelected}"
-                    android:enabled="@{viewModel.timeEnabled}"
                     android:text="@string/time" />
 
                 <android.support.v4.widget.Space
@@ -79,6 +77,11 @@
 
             </RadioGroup>
 
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="@dimen/activity_vertical_margin"
+                android:visible="@{viewModel.result.id == 0}" />
+
             <FrameLayout
                 android:id="@+id/header_container"
                 android:layout_width="match_parent"
@@ -87,7 +90,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:hint="@{viewModel.weightLiftedHint}"
                 android:visible="@{viewModel.weightSelected}">
 
@@ -104,7 +106,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:visible="@{viewModel.repsSelected}">
 
                 <android.support.design.widget.TextInputEditText
@@ -121,7 +122,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:visible="@{viewModel.timeSelected}">
 
                 <android.support.design.widget.TextInputEditText
@@ -253,7 +253,7 @@
             </android.support.percent.PercentRelativeLayout>
 
             <TextView
-                android:id="@+id/delete_record"
+                android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

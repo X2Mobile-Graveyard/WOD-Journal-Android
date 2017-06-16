@@ -8,6 +8,7 @@ import android.support.v7.widget.SearchView
 import android.view.*
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.WorkoutActivity
+import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.data.event.WorkoutsRequestEvent
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.data.model.WorkoutType
@@ -77,7 +78,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
     }
 
     override fun onWorkoutClicked(workout: Workout) {
-        startActivity(context.intentFor<WorkoutActivity>(WorkoutFragment.KEY_WORKOUT to workout))
+        startActivity(context.intentFor<WorkoutActivity>(NavigationConstants.KEY_WORKOUT to workout))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

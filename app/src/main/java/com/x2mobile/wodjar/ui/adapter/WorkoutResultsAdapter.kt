@@ -14,7 +14,6 @@ import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.callback.WorkoutResultListener
 import com.x2mobile.wodjar.util.TimeUtil
 import org.jetbrains.anko.onClick
-import java.lang.UnsupportedOperationException
 
 class WorkoutResultsAdapter(val context: Context, val callback: WorkoutResultListener) : BaseAdapter<WorkoutResult, WorkoutResultsViewHolder>() {
 
@@ -22,6 +21,9 @@ class WorkoutResultsAdapter(val context: Context, val callback: WorkoutResultLis
         return WorkoutResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.workout_result_item, parent, false), callback)
     }
 
+    public override fun getItems(): MutableList<WorkoutResult>? {
+        return super.getItems()
+    }
 }
 
 class WorkoutResultsViewHolder(itemView: View, val callback: WorkoutResultListener) : BaseViewHolder<WorkoutResult>(itemView) {
@@ -33,10 +35,8 @@ class WorkoutResultsViewHolder(itemView: View, val callback: WorkoutResultListen
         itemView.onClick { callback.onWorkoutResultClicked(item) }
         date.text = DateFormat.getMediumDateFormat(itemView.context).format(item.date)
         result.text = when (item.type) {
-            ResultType.WEIGHT -> item.resultWeight.toString()
-            ResultType.REPETITION -> item.resultReps.toString()
-            ResultType.TIME -> TimeUtil.formatTime(item.resultTime.toLong())
-            else -> throw UnsupportedOperationException()
+            ResultType.TIME -> TimeUtil.formatTime(item.result.toLong())
+            else -> item.result.toString()
         }
     }
 

@@ -3,19 +3,16 @@ package com.x2mobile.wodjar.fragments
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.*
-import com.bumptech.glide.Glide
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.ImageViewer
 import com.x2mobile.wodjar.activity.WorkoutResultActivity
 import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.NavigationConstants
@@ -26,11 +23,13 @@ import com.x2mobile.wodjar.data.event.WorkoutResultsRequestFailureEvent
 import com.x2mobile.wodjar.data.event.WorkoutsRequestEvent
 import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.data.model.WorkoutResult
+import com.x2mobile.wodjar.data.model.best
 import com.x2mobile.wodjar.databinding.WorkoutBinding
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.WorkoutResultsAdapter
 import com.x2mobile.wodjar.ui.binding.model.WorkoutViewModel
 import com.x2mobile.wodjar.ui.callback.WorkoutResultListener
+import com.x2mobile.wodjar.ui.helper.ImageViewer
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -39,23 +38,21 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
-class WorkoutFragment : BaseFragment(), WorkoutResultListener {
+open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     val REQUEST_CODE_WORKOUT_RESULT = 19
 
+    val REQUEST_CODE_EDIT_WORKOUT = 33
+
     val TAG_YOUTUBE_PLAYER = "video_player"
 
-    val workout: Workout by lazy { arguments!![KEY_WORKOUT] as Workout }
+    val workout: Workout by lazy { arguments!![NavigationConstants.KEY_WORKOUT] as Workout }
 
     lateinit var binding: WorkoutBinding
 
     val adapter: WorkoutResultsAdapter by lazy { WorkoutResultsAdapter(context, this) }
 
-    val windowRect: Rect by lazy {
-        val rect = Rect()
-        activity.window.decorView.getWindowVisibleDisplayFrame(rect)
-        rect
-    }
+    val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,15 +80,11 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.image.onClick {
-            val intent = context.intentFor<ImageViewer>()
-            intent.putExtra(ImageViewer.KEY_URI, workout.imageUri)
-            intent.putExtra(ImageViewer.KEY_RECT, Rect(binding.image.left, binding.image.top, binding.image.right,
-                    binding.image.bottom))
-            startActivity(intent)
-        }
+        imageViewer.imageUri = workout.imageUri
 
-        Glide.with(context).load(workout.imageUri).override(windowRect.width(), windowRect.height()).into(binding.image)
+        binding.image.onClick {
+            imageViewer.popup(binding.imageContainer)
+        }
 
         val history = view.findViewById(R.id.history)
         history.onClick {
@@ -103,7 +96,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
         val add = view.findViewById(R.id.add)
         add.onClick {
             if (Preference.isLoggedIn(context)) {
-                startActivity(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout))
+                startActivityForResult(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout), REQUEST_CODE_WORKOUT_RESULT)
             } else {
                 showLoginAlert()
             }
@@ -146,7 +139,7 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mark_favorite_menu || item.itemId == R.id.remove_favorite_menu) {
             workout.favorite = !workout.favorite
-            arguments.putParcelable(KEY_WORKOUT, workout)
+            arguments.putParcelable(NavigationConstants.KEY_WORKOUT, workout)
 
             activity.supportInvalidateOptionsMenu()
 
@@ -159,7 +152,6 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
             return true
         }
         return super.onOptionsItemSelected(item)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -177,6 +169,11 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
                 }
                 NavigationConstants.RESULT_DELETED -> adapter.removeItem(workoutResult!!)
             }
+
+            //Updating the cached version
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
+            val workout = workouts.find { it.id == workoutResult?.workoutId }
+            workout?.bestResult = adapter.getItems()?.best { it.result }?.result ?: 0f
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -201,10 +198,6 @@ class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutResultsFailure(requestFailureEvent: WorkoutResultsRequestFailureEvent) {
         handleRequestFailure(requestFailureEvent.throwable)
-    }
-
-    companion object {
-        val KEY_WORKOUT = "workout"
     }
 
     class YoutubeInitializedListener(val workout: Workout) : YouTubePlayer.OnInitializedListener {
