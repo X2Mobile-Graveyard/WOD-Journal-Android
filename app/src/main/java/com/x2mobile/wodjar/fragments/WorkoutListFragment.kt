@@ -1,6 +1,7 @@
 package com.x2mobile.wodjar.fragments
 
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -50,7 +51,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_search, menu)
 
-        val searchView = menu.findItem(R.id.search_menu).actionView as SearchView
+        val searchView = MenuItemCompat.getActionView(menu.findItem(R.id.search_menu)) as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
