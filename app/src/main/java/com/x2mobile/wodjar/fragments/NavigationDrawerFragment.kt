@@ -22,7 +22,6 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
-import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.NavigationDrawerCallback
 import com.x2mobile.wodjar.business.network.AmazonService
