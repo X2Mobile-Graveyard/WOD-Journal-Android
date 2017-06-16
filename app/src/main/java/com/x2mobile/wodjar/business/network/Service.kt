@@ -24,18 +24,22 @@ object Service {
     private val SIZE_OF_CACHE = 10L * 1024 * 1024 //10 MB
 
     private val api: Api by lazy {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        val okHttpBuilder = OkHttpClient.Builder()
+                .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE))
+                .cache(Cache(WodJarApplication.INSTANCE.cacheDir, SIZE_OF_CACHE))
+                .retryOnConnectionFailure(false)
+
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            okHttpBuilder.addNetworkInterceptor(loggingInterceptor)
+            okHttpBuilder.addNetworkInterceptor(StethoInterceptor())
+        }
 
         Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
-                .client(OkHttpClient.Builder()
-                        .addNetworkInterceptor(loggingInterceptor)
-                        .addNetworkInterceptor(StethoInterceptor())
-                        .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE))
-                        .cache(Cache(WodJarApplication.INSTANCE.cacheDir, SIZE_OF_CACHE))
-                        .retryOnConnectionFailure(false)
-                        .build())
+                .client(okHttpBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().serializeNulls().create()))
                 .build().create(Api::class.java)
     }
