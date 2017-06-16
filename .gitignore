@@ -69,5 +69,3 @@ volley/volley.iml
 *.DS_Store
 */.DS_Store
 */gradlew~
-
-BuildData
