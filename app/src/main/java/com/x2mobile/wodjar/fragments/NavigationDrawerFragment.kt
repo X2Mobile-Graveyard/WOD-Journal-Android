@@ -185,12 +185,10 @@ class NavigationDrawerFragment : Fragment() {
                 Preference.setProfilePictureUrl(context, result.uri.toString())
                 setProfilePicture()
                 doAsync {
-                    val fileName = Preference.getEmail(context)
-                    val response = AmazonService.upload(fileName, result.uri)
-                    if (response != null) {
-                        Preference.setProfilePictureUrl(context, Constants.BUCKET_IMAGE_URL.format(fileName))
+                    AmazonService.upload(this, result.uri, Preference.getEmail(context), { uri ->
+                        Preference.setProfilePictureUrl(context, uri.toString())
                         saveProfile()
-                    }
+                    })
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 context.toast(result.error.message!!)

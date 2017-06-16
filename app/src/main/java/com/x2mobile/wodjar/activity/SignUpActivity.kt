@@ -12,7 +12,6 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.base.BaseFormActivity
-import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.SignUpRequestEvent
@@ -58,13 +57,9 @@ class SignUpActivity : BaseFormActivity() {
                 user = User(email.text.toString(), password.text.toString(), name.text.toString())
                 doAsync {
                     if (imageUri != null) {
-                        val fileName = email.text.toString()
-                        val response = AmazonService.upload(fileName, imageUri!!)
-                        if (response != null) {
-                            user!!.imageUri = Uri.parse(Constants.BUCKET_IMAGE_URL.format(fileName))
-                        } else {
-                            user!!.imageUri = null
-                        }
+                        AmazonService.upload(this, imageUri!!, email.text.toString(), { uri ->
+                            user!!.imageUri = uri
+                        })
                     }
 
                     Service.signUp(user!!)
