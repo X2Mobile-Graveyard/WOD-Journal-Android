@@ -67,6 +67,13 @@
                 android:text="@string/login"
                 android:textColor="@drawable/button_text_state" />
 
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin" />
+
             <Button
                 android:id="@+id/register"
                 android:layout_width="match_parent"
@@ -76,12 +83,6 @@
                 android:minHeight="36dp"
                 android:text="@string/register"
                 android:textColor="@drawable/button_text_state" />
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebook_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin" />
         </LinearLayout>
 
         <android.support.v4.widget.Space
