@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="personal_record_type_names">
+        <item>1 km Run</item>
+        <item>1 marathon Run</item>
+        <item>1/2 marathon Run</item>
+        <item>10 km Run</item>
+        <item>100 m Run</item>
+        <item>1000 m Row</item>
+        <item>2000 m Row</item>
+        <item>3 km Run</item>
+        <item>5 km Run</item>
+        <item>500 m Row</item>
+        <item>5000 m Row</item>
         <item>Back Squat</item>
         <item>Front Squat</item>
         <item>Bench Press</item>
@@ -19,39 +30,9 @@
         <item>Turkish Get-up</item>
         <item>Weighted Pull-up</item>
         <item>Weighted Ring-Dip</item>
-        <item>500 m Row</item>
-        <item>1000 m Row</item>
-        <item>2000 m Row</item>
-        <item>5000 m Row</item>
-        <item>100 m Run</item>
-        <item>1 km Run</item>
-        <item>3 km Run</item>
-        <item>5 km Run</item>
-        <item>10 km Run</item>
-        <item>1/2 marathon Run</item>
-        <item>1 marathon Run</item>
     </array>
 
     <array name="personal_record_result_types">
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
         <item>2</item>
         <item>2</item>
         <item>2</item>
@@ -63,5 +44,24 @@
         <item>2</item>
         <item>2</item>
         <item>2</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
     </array>
 </resources>

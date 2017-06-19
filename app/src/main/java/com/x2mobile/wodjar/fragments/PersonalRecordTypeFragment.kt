@@ -149,8 +149,7 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onRecordTypesResponse(requestResponseEvent: PersonalRecordTypesRequestEvent) {
         if (requestResponseEvent.response.body() != null) {
-            adapter.setItems(requestResponseEvent.response.body()!!.personalRecordTypes!!.sortedBy(PersonalRecordType::updated)
-                    .asReversed().toMutableList())
+            adapter.setItems(requestResponseEvent.response.body()!!.personalRecordTypes!!.sortedBy(PersonalRecordType::name).toMutableList())
         } else {
             context.toast(R.string.error_occurred)
         }
