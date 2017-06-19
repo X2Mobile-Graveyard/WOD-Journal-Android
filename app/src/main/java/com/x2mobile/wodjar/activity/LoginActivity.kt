@@ -13,6 +13,7 @@ import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.base.BaseFormActivity
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
+import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.data.event.LoggedInEvent
 import com.x2mobile.wodjar.data.event.LoginRequestEvent
 import com.x2mobile.wodjar.data.event.LoginRequestFailureEvent
@@ -85,24 +86,25 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginResponse(event: LoginRequestEvent) {
         progress?.dismiss()
+
         val loginResponse = event.response.body()!!
-        if (loginResponse.errors == null) {
-            Preference.setUserId(this, loginResponse.userId)
-            Preference.setEmail(this, loginResponse.email!!)
-            Preference.setDisplayName(this, loginResponse.name)
-            Preference.setProfilePictureUrl(this, loginResponse.imageUri.toString())
-            Preference.setToken(this, loginResponse.authToken)
-            EventBus.getDefault().post(LoggedInEvent())
-            finish()
-        } else {
-            toast(loginResponse.errors!!.first())
-        }
+        Preference.setUserId(this, loginResponse.userId)
+        Preference.setEmail(this, loginResponse.email!!)
+        Preference.setDisplayName(this, loginResponse.name)
+        Preference.setProfilePictureUrl(this, loginResponse.imageUri.toString())
+        Preference.setToken(this, loginResponse.authToken)
+        EventBus.getDefault().post(LoggedInEvent())
+        finish()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginFailed(event: LoginRequestFailureEvent) {
         progress?.dismiss()
-        toast(R.string.error_occurred)
+        if (event.throwable is ServerException) {
+            toast(event.throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
+        } else {
+            toast(R.string.error_occurred)
+        }
     }
 
 }

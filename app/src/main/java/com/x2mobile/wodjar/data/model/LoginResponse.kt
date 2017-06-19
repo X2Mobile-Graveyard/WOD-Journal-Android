@@ -24,7 +24,4 @@ class LoginResponse {
     @SerializedName("auth_token")
     var authToken: String? = null
 
-    @SerializedName("errors")
-    var errors: List<String>? = null
-
 }

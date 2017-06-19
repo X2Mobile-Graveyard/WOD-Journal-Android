@@ -14,6 +14,7 @@ import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.base.BaseFormActivity
 import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.business.network.Service
+import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.data.event.SignUpRequestEvent
 import com.x2mobile.wodjar.data.event.SignUpRequestFailureEvent
 import com.x2mobile.wodjar.data.model.User
@@ -101,7 +102,11 @@ class SignUpActivity : BaseFormActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSignUpFailed(event: SignUpRequestFailureEvent) {
         progress?.dismiss()
-        toast(R.string.error_occurred)
+        if (event.throwable is ServerException) {
+            toast(event.throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
+        } else {
+            toast(R.string.error_occurred)
+        }
     }
 
     companion object {

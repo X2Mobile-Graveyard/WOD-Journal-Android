@@ -6,6 +6,7 @@ import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.ToolbarDelegate
+import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.business.network.exception.UnauthorizedException
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.alert
@@ -38,6 +39,8 @@ open class BaseFragment : Fragment() {
             Preference.clear(context)
             context.toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
+        } else if (throwable is ServerException) {
+            context.toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
         } else {
             context.toast(R.string.error_occurred)
         }
