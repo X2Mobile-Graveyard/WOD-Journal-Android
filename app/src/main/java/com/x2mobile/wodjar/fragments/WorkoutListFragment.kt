@@ -87,7 +87,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         if (requestResponseEvent.response.body() != null) {
             val workouts = requestResponseEvent.response.body()!!.workouts.filter {
                 it.type == category
-            }
+            }.sortedBy(Workout::name)
             adapter.setItems(workouts.toMutableList())
         } else {
             context.toast(R.string.error_occurred)
