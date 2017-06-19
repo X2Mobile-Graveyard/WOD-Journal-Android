@@ -119,10 +119,12 @@ class NavigationDrawerFragment : Fragment() {
 
         name = headerView.findViewById(R.id.name) as TextView
         name.onClick {
-            edit.setText(name.text)
-            edit.requestFocus()
-            editContainer.visibility = View.VISIBLE
-            name.visibility = View.GONE
+            if (Preference.isLoggedIn(context)) {
+                edit.setText(name.text)
+                edit.requestFocus()
+                editContainer.visibility = View.VISIBLE
+                name.visibility = View.GONE
+            }
         }
 
         edit = headerView.findViewById(R.id.edit) as EditText
@@ -144,8 +146,10 @@ class NavigationDrawerFragment : Fragment() {
 
         avatar = headerView.findViewById(R.id.avatar) as ImageView
         avatar.onClick {
-            CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
-                    .setGuidelines(CropImageView.Guidelines.ON).start(context, this)
+            if (Preference.isLoggedIn(context)) {
+                CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
+                        .setGuidelines(CropImageView.Guidelines.ON).start(context, this)
+            }
         }
         handleUserInfo()
     }
