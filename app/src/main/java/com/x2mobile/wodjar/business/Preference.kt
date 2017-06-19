@@ -12,7 +12,7 @@ object Preference {
     private val EMAIL = "email"
     private val DISPLAY_NAME = "displayName"
     private val PROFILE_PICTURE_URL = "profilePictureUrl"
-    private val IMPERIAL_UNIT_TYPE = "imperialUnitType"
+    private val UNIT_TYPE = "unitType"
 
     fun getToken(context: Context): String? {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(TOKEN, null)
@@ -59,7 +59,7 @@ object Preference {
     }
 
     fun getUnitType(context: Context): UnitType {
-        return if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(IMPERIAL_UNIT_TYPE, false)) UnitType.IMPERIAL else UnitType.METRIC
+        return UnitType.values()[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(UNIT_TYPE, "0"))]
     }
 
     fun clear(context: Context) {

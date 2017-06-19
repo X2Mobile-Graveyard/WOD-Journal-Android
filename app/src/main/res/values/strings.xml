@@ -89,4 +89,6 @@
     <string name="select_image">Select image</string>
 
     <string name="password_limit">At least 6 characters</string>
+
+    <string name="general_settings">General Settings</string>
 </resources>
