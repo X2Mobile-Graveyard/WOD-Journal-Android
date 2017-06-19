@@ -8,6 +8,7 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.callback.ToolbarDelegate
 import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.business.network.exception.UnauthorizedException
+import com.x2mobile.wodjar.data.event.LoggedOutEvent
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.cancelButton
@@ -35,8 +36,9 @@ open class BaseFragment : Fragment() {
 
     protected fun handleRequestFailure(throwable: Throwable?) {
         if (throwable is UnauthorizedException) {
-            EventBus.getDefault().unregister(this)
             Preference.clear(context)
+            EventBus.getDefault().removeAllStickyEvents()
+            EventBus.getDefault().post(LoggedOutEvent())
             context.toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
         } else if (throwable is ServerException) {

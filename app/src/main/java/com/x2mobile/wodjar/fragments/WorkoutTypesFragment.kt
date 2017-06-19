@@ -14,6 +14,7 @@ import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.LoggedInEvent
+import com.x2mobile.wodjar.data.event.LoggedOutEvent
 import com.x2mobile.wodjar.data.event.WorkoutsRequestFailureEvent
 import com.x2mobile.wodjar.data.model.WorkoutType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
@@ -64,6 +65,11 @@ class WorkoutTypesFragment : BaseFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedIn(event: LoggedInEvent) {
+        Service.getWorkouts()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoggedOut(event: LoggedOutEvent) {
         Service.getWorkouts()
     }
 

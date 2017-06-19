@@ -27,6 +27,7 @@ import com.x2mobile.wodjar.business.callback.NavigationDrawerCallback
 import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.LoggedInEvent
+import com.x2mobile.wodjar.data.event.LoggedOutEvent
 import com.x2mobile.wodjar.data.model.User
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -101,8 +102,9 @@ class NavigationDrawerFragment : Fragment() {
                 startActivity(context.intentFor<LoginActivity>())
                 false
             } else if (selectedNavigationType == NavigationType.LOGOUT) {
-                EventBus.getDefault().removeAllStickyEvents()
                 Preference.clear(context)
+                EventBus.getDefault().removeAllStickyEvents()
+                EventBus.getDefault().post(LoggedOutEvent())
                 handleUserInfo()
                 false
             } else {

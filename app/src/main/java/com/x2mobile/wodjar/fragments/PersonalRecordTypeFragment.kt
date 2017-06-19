@@ -44,22 +44,7 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
 
         EventBus.getDefault().register(this)
 
-        if (Preference.isLoggedIn(context)) {
-            Service.getPersonalRecordTypes()
-        } else {
-            val personalRecordTypeNames = resources.getStringArray(R.array.personal_record_type_names)
-            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
-            assert(personalRecordTypeNames.size == resultTypes.size)
-
-            val personalRecordTypes = ArrayList<PersonalRecordType>()
-
-            personalRecordTypeNames.forEachIndexed { index, name ->
-                personalRecordTypes.add(PersonalRecordType(name,
-                        ResultType.values()[resultTypes[index]]))
-            }
-
-            adapter.setItems(personalRecordTypes)
-        }
+        retrievePersonalRecordTypes()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -146,6 +131,11 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
         Service.getPersonalRecordTypes()
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoggedOut(event: LoggedOutEvent) {
+        retrievePersonalRecordTypes()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onRecordTypesResponse(requestResponseEvent: PersonalRecordTypesRequestEvent) {
         if (requestResponseEvent.response.body() != null) {
@@ -184,6 +174,25 @@ class PersonalRecordTypeFragment : BaseFragment(), PersonalRecordTypeListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPersonalRecordTypeDeleted(event: DeletePersonalRecordTypeRequestEvent) {
         Service.getPersonalRecordTypes()
+    }
+
+    private fun retrievePersonalRecordTypes() {
+        if (Preference.isLoggedIn(context)) {
+            Service.getPersonalRecordTypes()
+        } else {
+            val personalRecordTypeNames = resources.getStringArray(R.array.personal_record_type_names)
+            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
+            assert(personalRecordTypeNames.size == resultTypes.size)
+
+            val personalRecordTypes = ArrayList<PersonalRecordType>()
+
+            personalRecordTypeNames.forEachIndexed { index, name ->
+                personalRecordTypes.add(PersonalRecordType(name,
+                        ResultType.values()[resultTypes[index]]))
+            }
+
+            adapter.setItems(personalRecordTypes)
+        }
     }
 
     class DeleteTouchHelperCallback(context: Context, val callback: PersonalRecordTypeListener) : ItemTouchHelper.Callback() {
