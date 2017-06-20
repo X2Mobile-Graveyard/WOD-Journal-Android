@@ -83,15 +83,16 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    open fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
+    fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
         if (requestResponseEvent.response.body() != null) {
-            val workouts = requestResponseEvent.response.body()!!.workouts.filter {
-                it.type == category
-            }.sortedBy(Workout::name)
-            adapter.setItems(workouts.toMutableList())
+            adapter.setItems(filterWorkouts(requestResponseEvent.response.body()!!.workouts).toMutableList())
         } else {
             context.toast(R.string.error_occurred)
         }
+    }
+
+    open fun filterWorkouts(workouts: List<Workout>): List<Workout> {
+        return workouts.filter { it.type == category }.sortedBy(Workout::name)
     }
 
     companion object {
