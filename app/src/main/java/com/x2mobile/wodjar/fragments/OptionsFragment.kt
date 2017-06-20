@@ -1,21 +1,24 @@
 package com.x2mobile.wodjar.fragments
 
 import android.os.Bundle
-import android.support.v7.preference.PreferenceFragmentCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import com.x2mobile.wodjar.BuildConfig
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.business.callback.ToolbarDelegate
+import com.x2mobile.wodjar.fragments.base.BaseFragment
 
-class OptionsFragment : PreferenceFragmentCompat() {
+class OptionsFragment : BaseFragment() {
 
-    val toolbarDelegate: ToolbarDelegate by lazy { activity as ToolbarDelegate }
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.options, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        toolbarDelegate.title = getString(R.string.options)
+        val buildNumber = view.findViewById(R.id.build_number) as TextView
+        buildNumber.text = getString(R.string.version_info, BuildConfig.VERSION_NAME, BuildConfig.BUILD_NUMBER)
     }
 }
