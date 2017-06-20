@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/general_settings">
-
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/unit_type_names"
-            android:entryValues="@array/unit_types"
-            android:key="unitType"
-            android:summary="%s"
-            android:title="@string/unit_type" />
-    </PreferenceCategory>
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/unit_type_names"
+        android:entryValues="@array/unit_types"
+        android:key="unitType"
+        android:summary="%s"
+        android:title="@string/unit_type" />
 
 </PreferenceScreen>
