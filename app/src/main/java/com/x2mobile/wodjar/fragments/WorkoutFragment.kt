@@ -132,8 +132,9 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.mark_favorite_menu).isVisible = !workout.favorite
-        menu.findItem(R.id.remove_favorite_menu).isVisible = workout.favorite
+        //disabling favorities for now
+        //menu.findItem(R.id.mark_favorite_menu).isVisible = !workout.favorite
+        //menu.findItem(R.id.remove_favorite_menu).isVisible = workout.favorite
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

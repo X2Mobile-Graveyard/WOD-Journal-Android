@@ -98,7 +98,7 @@ class WorkoutTypesFragment : BaseFragment() {
         }
 
         override fun getCount(): Int {
-            return WorkoutType.values().size
+            return WorkoutType.values().size - 1//disabling favorities for now
         }
 
     }
