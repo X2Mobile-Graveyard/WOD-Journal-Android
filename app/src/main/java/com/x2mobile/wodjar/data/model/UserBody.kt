@@ -1,3 +1,5 @@
 package com.x2mobile.wodjar.data.model
 
-data class UserBody(val user: User)
+import com.google.gson.annotations.SerializedName
+
+data class UserBody(@SerializedName("user") val user: User)
