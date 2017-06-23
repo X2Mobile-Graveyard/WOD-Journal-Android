@@ -187,7 +187,8 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWorkoutResultsResponse(requestResponseEvent: WorkoutResultsRequestEvent) {
         if (requestResponseEvent.response.body() != null) {
-            val workoutResults = requestResponseEvent.response.body()!!.workoutResults.toMutableList()
+            val workoutResults = requestResponseEvent.response.body()!!.workoutResults
+                    .sortedBy(WorkoutResult::date).toMutableList()
             workoutResults.forEach { it.type = workout.resultType }
             adapter.setItems(workoutResults)
         } else {
