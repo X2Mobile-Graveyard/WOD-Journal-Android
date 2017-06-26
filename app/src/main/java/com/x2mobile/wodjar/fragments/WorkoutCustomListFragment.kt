@@ -11,7 +11,6 @@ import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.Workout
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.onClick
 
 class WorkoutCustomListFragment : WorkoutListFragment() {
 
@@ -23,7 +22,7 @@ class WorkoutCustomListFragment : WorkoutListFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val add = view.findViewById(R.id.add)
-        add.onClick {
+        add.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 startActivity(context.intentFor<WorkoutEditActivity>())
             } else {

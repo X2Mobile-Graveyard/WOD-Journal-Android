@@ -35,7 +35,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
@@ -82,19 +81,19 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
         imageViewer.imageUri = workout.imageUri
 
-        binding.image.onClick {
+        binding.image.setOnClickListener {
             imageViewer.popup(binding.imageContainer)
         }
 
         val history = view.findViewById(R.id.history)
-        history.onClick {
+        history.setOnClickListener {
             val fragment = HistoryFragment()
             fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout.history!!)
             fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
         }
 
         val add = view.findViewById(R.id.add)
-        add.onClick {
+        add.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 startActivityForResult(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_WORKOUT to workout), REQUEST_CODE_WORKOUT_RESULT)
             } else {

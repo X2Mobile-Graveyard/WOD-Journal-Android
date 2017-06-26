@@ -13,7 +13,6 @@ import com.x2mobile.wodjar.ui.adapter.base.BaseAdapter
 import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.callback.WorkoutResultListener
 import com.x2mobile.wodjar.util.TimeUtil
-import org.jetbrains.anko.onClick
 
 class WorkoutResultsAdapter(val context: Context, val callback: WorkoutResultListener) : BaseAdapter<WorkoutResult, WorkoutResultsViewHolder>() {
 
@@ -32,7 +31,7 @@ class WorkoutResultsViewHolder(itemView: View, val callback: WorkoutResultListen
     val result: TextView by lazy { itemView.findViewById(R.id.result) as TextView }
 
     override fun bindData(item: WorkoutResult) {
-        itemView.onClick { callback.onWorkoutResultClicked(item) }
+        itemView.setOnClickListener { callback.onWorkoutResultClicked(item) }
         date.text = DateFormat.getMediumDateFormat(itemView.context).format(item.date)
         result.text = when (item.type) {
             ResultType.TIME -> TimeUtil.formatTime(item.result.toLong())

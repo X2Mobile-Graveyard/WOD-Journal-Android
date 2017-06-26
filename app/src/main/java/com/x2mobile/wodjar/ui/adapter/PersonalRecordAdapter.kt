@@ -16,7 +16,6 @@ import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.callback.PersonalRecordListener
 import com.x2mobile.wodjar.util.MathUtil
 import com.x2mobile.wodjar.util.TimeUtil
-import org.jetbrains.anko.onClick
 
 class PersonalRecordAdapter(val context: Context, val listener: PersonalRecordListener) : BaseAdapter<PersonalRecord, PersonalRecordViewHolder>() {
 
@@ -32,7 +31,7 @@ class PersonalRecordViewHolder(itemView: View, val listener: PersonalRecordListe
     val rx: View by lazy { itemView.findViewById(R.id.rx) }
 
     override fun bindData(item: PersonalRecord) {
-        itemView.onClick { listener.onPersonalRecordClicked(item) }
+        itemView.setOnClickListener { listener.onPersonalRecordClicked(item) }
         val context = itemView.context
         date.text = DateFormat.getMediumDateFormat(context).format(item.date)
         when (item.type) {

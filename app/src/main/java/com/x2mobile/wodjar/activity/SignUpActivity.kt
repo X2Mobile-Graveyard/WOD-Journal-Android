@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 class SignUpActivity : BaseFormActivity() {
@@ -46,13 +45,13 @@ class SignUpActivity : BaseFormActivity() {
         setContentView(R.layout.signup)
         title = getString(R.string.register)
 
-        image.onClick {
+        image.setOnClickListener {
             CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
                     .setGuidelines(CropImageView.Guidelines.ON).start(this)
         }
 
         val register = findViewById(R.id.register)
-        register.onClick {
+        register.setOnClickListener {
             if (isInputValid()) {
                 progress = indeterminateProgressDialog(R.string.registering)
                 user = User(email.text.toString(), password.text.toString(), name.text.toString())

@@ -120,7 +120,7 @@ class NavigationDrawerFragment : Fragment() {
         val done = headerView.findViewById(R.id.done)
 
         name = headerView.findViewById(R.id.name) as TextView
-        name.onClick {
+        name.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 edit.setText(name.text)
                 edit.requestFocus()
@@ -130,7 +130,7 @@ class NavigationDrawerFragment : Fragment() {
         }
 
         edit = headerView.findViewById(R.id.edit) as EditText
-        edit.onFocusChange { _, hasFocus ->
+        edit.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 name.text = edit.text
                 name.visibility = View.VISIBLE
@@ -140,14 +140,14 @@ class NavigationDrawerFragment : Fragment() {
             }
         }
 
-        done.onClick {
+        done.setOnClickListener {
             name.text = edit.text
             name.visibility = View.VISIBLE
             editContainer.visibility = View.GONE
         }
 
         avatar = headerView.findViewById(R.id.avatar) as ImageView
-        avatar.onClick {
+        avatar.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
                         .setGuidelines(CropImageView.Guidelines.ON).start(context, this)

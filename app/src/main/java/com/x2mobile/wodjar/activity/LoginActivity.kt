@@ -23,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
@@ -42,7 +41,7 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
         title = getString(R.string.login)
 
         val login = findViewById(R.id.login)
-        login.onClick {
+        login.setOnClickListener {
             if (isInputValid()) {
                 progress = indeterminateProgressDialog(R.string.logging)
                 Service.login(User(email.text.toString(), password.text.toString()))
@@ -50,7 +49,7 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
         }
 
         val register = findViewById(R.id.register)
-        register.onClick {
+        register.setOnClickListener {
             startActivityForResult(intentFor<SignUpActivity>(), REQUEST_CODE_REGISTER)
         }
 

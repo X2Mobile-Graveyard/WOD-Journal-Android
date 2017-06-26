@@ -23,7 +23,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
@@ -65,7 +64,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
         recyclerView.adapter = adapter
 
         val add = view.findViewById(R.id.add)
-        add.onClick {
+        add.setOnClickListener {
             startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT
                     to PersonalRecord(personalRecordType!!)), REQUEST_CODE_PERSONAL_RECORD)
         }

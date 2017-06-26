@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.x2mobile.wodjar.R
-import org.jetbrains.anko.onClick
 
 
 class ImageViewer : AppCompatActivity() {
@@ -73,7 +72,7 @@ class ImageViewer : AppCompatActivity() {
                 })
                 .into(image)
 
-        image.onClick { finish() }
+        image.setOnClickListener { finish() }
     }
 
     companion object {

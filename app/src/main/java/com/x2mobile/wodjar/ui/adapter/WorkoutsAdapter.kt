@@ -15,7 +15,6 @@ import com.x2mobile.wodjar.ui.adapter.base.FilterableBaseAdapter
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
 import com.x2mobile.wodjar.util.MathUtil
 import com.x2mobile.wodjar.util.TimeUtil
-import org.jetbrains.anko.onClick
 
 class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : FilterableBaseAdapter<Workout, WorkoutViewHolder>() {
 
@@ -32,7 +31,7 @@ class WorkoutViewHolder(itemView: View, val callback: WorkoutListener) : BaseVie
 
     override fun bindData(item: Workout) {
         val context = itemView.context
-        itemView.onClick { callback.onWorkoutClicked(item) }
+        itemView.setOnClickListener { callback.onWorkoutClicked(item) }
         name.text = item.name
         if (item.completed) {
             when (item.resultType) {

@@ -67,20 +67,20 @@ class WorkoutEditFragment : BaseFragment() {
 
         imageViewer.imageUri = workout.imageUri
 
-        binding.addImage.onClick {
+        binding.addImage.setOnClickListener {
             imagePicker.addPicture(this)
         }
 
-        binding.removeImage.onClick {
+        binding.removeImage.setOnClickListener {
             workout.imageUri = null
             viewModel.notifyImageChange()
         }
 
-        binding.image.onClick {
+        binding.image.setOnClickListener {
             imageViewer.popup(binding.imageContainer)
         }
 
-        binding.delete.onClick {
+        binding.delete.setOnClickListener {
             //Updating the cached version
             val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
             workouts.removeIf { it.id == workout.id }

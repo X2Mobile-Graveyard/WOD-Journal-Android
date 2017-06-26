@@ -66,37 +66,37 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
         imageViewer.imageUri = result.imageUri
 
-        binding.timeSpent.onClick {
+        binding.timeSpent.setOnClickListener {
             TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
         }
 
-        binding.timeSpent.onFocusChange { _, focus ->
+        binding.timeSpent.setOnFocusChangeListener { _, focus ->
             if (focus) {
                 TimePickerDialog.newInstance(result.resultTime).show(fragmentManager, null)
             }
         }
 
-        binding.addImage.onClick {
+        binding.addImage.setOnClickListener {
             imagePicker.addPicture(this)
         }
 
-        binding.removeImage.onClick {
+        binding.removeImage.setOnClickListener {
             result.imageUri = null
             viewModel.notifyImageChange()
         }
 
-        binding.image.onClick {
+        binding.image.setOnClickListener {
             imageViewer.popup(binding.imageContainer)
         }
 
-        binding.date.onClick {
+        binding.date.setOnClickListener {
             val calendar = Calendar.getInstance()
             calendar.time = result.date
             DatePickerDialog.newInstance(this@ResultFragment, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show(fragmentManager, DIALOG_DATE_PICKER)
         }
 
-        binding.delete.onClick {
+        binding.delete.setOnClickListener {
             deleteResult(result)
             activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
             activity.finish()
