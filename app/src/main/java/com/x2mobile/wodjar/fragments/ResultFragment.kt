@@ -8,24 +8,34 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.EditText
 import android.widget.RadioButton
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.NavigationConstants
+import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.data.event.ImageSetEvent
 import com.x2mobile.wodjar.data.event.TimeSetEvent
 import com.x2mobile.wodjar.data.model.Result
+import com.x2mobile.wodjar.data.model.ResultType
+import com.x2mobile.wodjar.data.model.UnitType
 import com.x2mobile.wodjar.databinding.ResultBinding
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.fragments.dialog.TimePickerDialog
 import com.x2mobile.wodjar.ui.binding.model.ResultViewModel
 import com.x2mobile.wodjar.ui.helper.ImagePicker
 import com.x2mobile.wodjar.ui.helper.ImageViewer
+import com.x2mobile.wodjar.ui.helper.ShareHelper
+import com.x2mobile.wodjar.util.MathUtil
+import com.x2mobile.wodjar.util.TimeUtil
 import com.x2mobile.wodjar.util.isUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.intentFor
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 
@@ -45,6 +55,8 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     val imagePicker: ImagePicker by lazy { ImagePicker(this) }
 
     val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
+
+    val shareHelper: ShareHelper by lazy { ShareHelper(this) }
 
     var progress: ProgressDialog? = null
 
@@ -111,7 +123,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_done, menu)
+        inflater.inflate(R.menu.menu_result, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -131,6 +143,10 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
                     }
                 }
                 return true
+            }
+
+            R.id.share_menu -> {
+                shareHelper.share(prepareShareText(result), (binding.image.drawable as? GlideBitmapDrawable)?.bitmap)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -178,6 +194,16 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     protected abstract fun saveResult(result: T)
 
     protected abstract fun deleteResult(result: T)
+
+    protected open fun prepareShareText(result: T): String {
+        return when (result.type) {
+            ResultType.WEIGHT -> getString(R.string.weight_prefix, getString(if (Preference.getUnitType(context) == UnitType.METRIC)
+                R.string.kg_suffix else R.string.lb_suffix, MathUtil.convertWeight(result.resultWeight, UnitType.METRIC, Preference.getUnitType(context))))
+            ResultType.REPETITION -> getString(R.string.reps_prefix, result.resultReps)
+            ResultType.TIME -> getString(R.string.time_prefix, TimeUtil.formatTime(result.resultTime.toLong()))
+            else -> throw UnsupportedOperationException()
+        }
+    }
 
     private fun isInputValid(): Boolean {
         if (!isInputValid(binding.weight, binding.weightLifted)) {

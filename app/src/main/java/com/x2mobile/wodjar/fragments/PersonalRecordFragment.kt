@@ -49,6 +49,10 @@ class PersonalRecordFragment : ResultFragment<PersonalRecord>(), DatePickerDialo
         Service.deletePersonalRecord(result.id)
     }
 
+    override fun prepareShareText(result: PersonalRecord): String {
+        return result.name + "\n\n" + super.prepareShareText(result)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTitleSet(event: TitleSetEvent) {
         result.name = toolbarDelegate.title

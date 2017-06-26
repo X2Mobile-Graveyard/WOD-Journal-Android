@@ -32,7 +32,7 @@ class WorkoutResultFragment : ResultFragment<WorkoutResult>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val descriptionContainer = LayoutInflater.from(context).inflate(R.layout.workout_description, binding!!.headerContainer, true)
+        val descriptionContainer = LayoutInflater.from(context).inflate(R.layout.workout_description, binding.headerContainer, true)
         (descriptionContainer.findViewById(R.id.description) as TextView).text = if (Preference.getUnitType(context) == UnitType.IMPERIAL ||
                 TextUtils.isEmpty(workout.metricDescription)) workout.description else workout.metricDescription
     }
@@ -55,6 +55,10 @@ class WorkoutResultFragment : ResultFragment<WorkoutResult>() {
 
     override fun deleteResult(result: WorkoutResult) {
         Service.deleteWorkoutResult(result.id)
+    }
+
+    override fun prepareShareText(result: WorkoutResult): String {
+        return workout.description + "\n\n" + super.prepareShareText(result)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

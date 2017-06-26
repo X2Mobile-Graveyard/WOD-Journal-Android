@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
+def FACEBOOK_APP_ID = "692928100868197"
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -14,7 +16,10 @@ android {
         versionCode 1
         versionName "1.0"
 
+        manifestPlaceholders = [facebookAppId: FACEBOOK_APP_ID]
+
         buildConfigField "int", "BUILD_NUMBER", System.getenv("BUILD_NUMBER") ?: "0"
+        resValue "string", "facebook_app_id", FACEBOOK_APP_ID
 
         resConfig "en"
     }
