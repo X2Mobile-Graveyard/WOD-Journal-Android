@@ -24,12 +24,12 @@ class ShareHelper(val fragment: Fragment) {
 
         val textLayout = StaticLayout(text, paint, SHARE_IMAGE_WIDTH, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
 
-        val image = Bitmap.createBitmap(SHARE_IMAGE_WIDTH, textLayout.height, Bitmap.Config.RGB_565)
+        val overlay = Bitmap.createBitmap(SHARE_IMAGE_WIDTH, textLayout.height, Bitmap.Config.RGB_565)
         val canvas = Canvas(image)
         canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC)
         textLayout.draw(canvas)
 
-        val photo = SharePhoto.Builder().setBitmap(image).setUserGenerated(true).build()
+        val photo = SharePhoto.Builder().setBitmap(overlay).setUserGenerated(true).build()
         val contentBuilder = ShareMediaContent.Builder().addMedium(photo)
         if (image != null) {
             contentBuilder.addMedium(SharePhoto.Builder().setBitmap(image).setUserGenerated(true).build())
