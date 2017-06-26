@@ -14,10 +14,10 @@ class WodJarApplication : Application() {
         super.onCreate()
         INSTANCE = this
 
+        EventBus.builder().throwSubscriberException(BuildConfig.DEBUG).installDefaultEventBus()
+
         val core = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
         Fabric.with(this, Crashlytics.Builder().core(core).build())
-
-        EventBus.builder().throwSubscriberException(BuildConfig.DEBUG).installDefaultEventBus()
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
