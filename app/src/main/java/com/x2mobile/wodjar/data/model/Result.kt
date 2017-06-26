@@ -24,7 +24,7 @@ open class Result() : BaseObservable(), Parcelable {
     @SerializedName("rx")
     var rx: Boolean = false
 
-    @Bindable
+
     @SerializedName("result_weight")
     @JsonAdapter(FloatResultAdapter::class)
     var resultWeight: Float = 0f

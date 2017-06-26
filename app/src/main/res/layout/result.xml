@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:focus="@{viewModel.weightSelected}"
                     android:inputType="numberDecimal"
-                    android:text="@={viewModel.result.resultWeight}" />
+                    android:text="@={viewModel.resultWeight}" />
 
             </android.support.design.widget.TextInputLayout>
 

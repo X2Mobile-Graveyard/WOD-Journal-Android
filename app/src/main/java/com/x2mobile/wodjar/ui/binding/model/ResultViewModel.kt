@@ -9,6 +9,7 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.Result
 import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.data.model.UnitType
+import com.x2mobile.wodjar.util.MathUtil
 
 class ResultViewModel(val context: Context, val result: Result) : BaseObservable() {
 
@@ -45,15 +46,21 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
             notifyPropertyChanged(BR.timeSelected)
         }
 
-    @Bindable
-    fun isImageAvailable(): Boolean {
-        return result.imageUri != null
-    }
+    var resultWeight: Float = MathUtil.convertWeight(result.resultWeight, UnitType.METRIC, Preference.getUnitType(context))
+        set(value) {
+            field = value
+            result.resultWeight = MathUtil.convertWeight(value, Preference.getUnitType(context), UnitType.METRIC)
+        }
 
     @Bindable
     fun getWeightLiftedHint(): String {
         return context.getString(R.string.weight_lifted, context.getString(if (Preference.getUnitType(context) ==
                 UnitType.METRIC) R.string.kg else R.string.lb))
+    }
+
+    @Bindable
+    fun isImageAvailable(): Boolean {
+        return result.imageUri != null
     }
 
     fun notifyImageChange() {
