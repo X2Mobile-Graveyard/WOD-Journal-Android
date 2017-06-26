@@ -32,7 +32,9 @@ import com.x2mobile.wodjar.data.model.User
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.toast
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation_header drawer.
