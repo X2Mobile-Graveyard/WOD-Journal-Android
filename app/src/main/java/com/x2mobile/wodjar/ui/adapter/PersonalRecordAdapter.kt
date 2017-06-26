@@ -16,6 +16,7 @@ import com.x2mobile.wodjar.ui.adapter.base.BaseViewHolder
 import com.x2mobile.wodjar.ui.callback.PersonalRecordListener
 import com.x2mobile.wodjar.util.MathUtil
 import com.x2mobile.wodjar.util.TimeUtil
+import java.lang.UnsupportedOperationException
 
 class PersonalRecordAdapter(val context: Context, val listener: PersonalRecordListener) : BaseAdapter<PersonalRecord, PersonalRecordViewHolder>() {
 
@@ -40,9 +41,7 @@ class PersonalRecordViewHolder(itemView: View, val listener: PersonalRecordListe
                             MathUtil.convertWeight(item.resultWeight, UnitType.METRIC, Preference.getUnitType(context))))
             ResultType.REPETITION -> info.text = context.getString(R.string.reps_prefix, item.resultReps)
             ResultType.TIME -> info.text = context.getString(R.string.time_prefix, TimeUtil.formatTime(item.resultTime.toLong()))
-            else -> {
-                throw NotImplementedError()
-            }
+            else -> throw UnsupportedOperationException()
         }
         rx.visibility = if (item.rx) View.VISIBLE else View.GONE
     }
