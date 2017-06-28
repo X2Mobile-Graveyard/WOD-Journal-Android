@@ -42,20 +42,23 @@ interface Api {
     @DELETE("delete-prs-by-name/{name}")
     fun deletePersonalRecords(@Path("name") name: String): Call<Void>
 
-    @GET("default-wods")
-    fun getDefaultWorkouts(): Call<WorkoutsResponse>
+    @GET("list-default-wods/{workoutType}")
+    fun getDefaultWorkouts(@Path("workoutType") workoutType: Int): Call<MutableList<Workout>>
 
-    @GET("list-wods")
-    fun getWorkouts(): Call<WorkoutsResponse>
+    @GET("default-wods/{id}/{workoutType}")
+    fun getDefaultWorkout(@Path("id") id: Int, @Path("workoutType") workoutType: Int): Call<Workout>
+
+    @GET("list-wods/{workoutType}")
+    fun getWorkouts(@Path("workoutType") workoutType: Int): Call<MutableList<Workout>>
+
+    @GET("wods/{id}/{workoutType}")
+    fun getWorkout(@Path("id") id: Int, @Path("workoutType") workoutType: Int): Call<Workout>
 
     @POST("wods")
     fun saveWorkout(@Body workout: Workout): Call<Workout>
 
     @PATCH("wods/{wod_id}")
     fun updateWorkout(@Path("wod_id") workoutId: Int, @Body workout: Workout): Call<Void>
-
-    @POST("wods/favorite/{wod_id}")
-    fun updateWorkout(@Path("wod_id") workoutId: Int, @Query("default") default: Boolean, @Query("favorite") favorite: Boolean): Call<Void>
 
     @DELETE("wods/{wod_id}")
     fun deleteWorkout(@Path("wod_id") workoutId: Int): Call<Void>

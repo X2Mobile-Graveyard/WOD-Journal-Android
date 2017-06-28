@@ -10,21 +10,16 @@ import android.view.*
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.WorkoutActivity
 import com.x2mobile.wodjar.business.NavigationConstants
-import com.x2mobile.wodjar.data.event.WorkoutsRequestEvent
+import com.x2mobile.wodjar.data.event.base.RequestResponseEvent
 import com.x2mobile.wodjar.data.model.Workout
-import com.x2mobile.wodjar.data.model.WorkoutType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.WorkoutsAdapter
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
 open class WorkoutListFragment : BaseFragment(), WorkoutListener {
-
-    val category: WorkoutType? by lazy { arguments!![KEY_WORKOUT_TYPE] as WorkoutType }
 
     val adapter: WorkoutsAdapter by lazy { WorkoutsAdapter(context, this) }
 
@@ -66,14 +61,14 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         EventBus.getDefault().register(this)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
 
         EventBus.getDefault().unregister(this)
     }
@@ -82,21 +77,16 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         startActivity(context.intentFor<WorkoutActivity>(NavigationConstants.KEY_WORKOUT to workout))
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutsResponse(requestResponseEvent: WorkoutsRequestEvent) {
+    open fun sortWorkouts(workouts: List<Workout>): List<Workout> {
+        return workouts.sortedBy(Workout::name)
+    }
+
+    protected fun handleWorkoutsResponse(requestResponseEvent: RequestResponseEvent<MutableList<Workout>>) {
         if (requestResponseEvent.response.body() != null) {
-            adapter.setItems(filterWorkouts(requestResponseEvent.response.body()!!.workouts).toMutableList())
+            adapter.setItems(sortWorkouts(requestResponseEvent.response.body()!!).toMutableList())
         } else {
             context.toast(R.string.error_occurred)
         }
-    }
-
-    open fun filterWorkouts(workouts: List<Workout>): List<Workout> {
-        return workouts.filter { it.type == category }.sortedBy(Workout::name)
-    }
-
-    companion object {
-        val KEY_WORKOUT_TYPE = "type"
     }
 
 }

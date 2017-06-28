@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object Service {
 
-    private val ENDPOINT_URL = "https://wodjar.herokuapp.com/api/v1/"
+    private val ENDPOINT_URL = "https://wodjar-production.herokuapp.com/api/v1/"
 
     private val SIZE_OF_CACHE = 10L * 1024 * 1024 //10 MB
 
@@ -104,13 +104,23 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun getDefaultWorkouts(callback: Callback<WorkoutsResponse> = WorkoutsCallback()) {
-        val call = api.getDefaultWorkouts()
+    fun getDefaultWorkouts(workoutType: WorkoutType, callback: Callback<MutableList<Workout>> = WorkoutsCallback(workoutType)) {
+        val call = api.getDefaultWorkouts(workoutType.ordinal)
         call.enqueue(callback)
     }
 
-    fun getWorkouts(callback: Callback<WorkoutsResponse> = WorkoutsCallback()) {
-        val call = api.getWorkouts()
+    fun getDefaultWorkout(id: Int, workoutType: WorkoutType, callback: Callback<Workout> = WorkoutCallback()) {
+        val call = api.getDefaultWorkout(id, workoutType.ordinal)
+        call.enqueue(callback)
+    }
+
+    fun getWorkouts(workoutType: WorkoutType, callback: Callback<MutableList<Workout>> = WorkoutsCallback(workoutType)) {
+        val call = api.getWorkouts(workoutType.ordinal)
+        call.enqueue(callback)
+    }
+
+    fun getWorkout(id: Int, workoutType: WorkoutType, callback: Callback<Workout> = WorkoutCallback()) {
+        val call = api.getWorkout(id, workoutType.ordinal)
         call.enqueue(callback)
     }
 
@@ -121,11 +131,6 @@ object Service {
 
     fun updateWorkout(workout: Workout, callback: Callback<Void> = UpdateWorkoutCallback()) {
         val call = api.updateWorkout(workout.id, workout)
-        call.enqueue(callback)
-    }
-
-    fun updateWorkout(workoutId: Int, default: Boolean, favorite: Boolean, callback: Callback<Void> = UpdateWorkoutCallback()) {
-        val call = api.updateWorkout(workoutId, default, favorite)
         call.enqueue(callback)
     }
 

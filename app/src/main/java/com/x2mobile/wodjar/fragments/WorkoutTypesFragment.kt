@@ -21,20 +21,23 @@ import com.x2mobile.wodjar.fragments.base.BaseFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.support.v4.onPageChangeListener
+import java.lang.UnsupportedOperationException
 
 class WorkoutTypesFragment : BaseFragment() {
+
+    val KEY_SELECTED_TAB = "selected_tab"
+
+    lateinit var selectedTab: WorkoutTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         EventBus.getDefault().register(this)
 
-        if (Preference.isLoggedIn(context)) {
-            Service.getWorkouts()
-        } else {
-            Service.getDefaultWorkouts()
-        }
+        selectedTab = savedInstanceState?.getSerializable(KEY_SELECTED_TAB) as? WorkoutTab ?: WorkoutTab.CUSTOM
+
+        fetchWorkouts(selectedTab.workoutType)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,6 +55,12 @@ class WorkoutTypesFragment : BaseFragment() {
 
         val viewPager = view.findViewById(R.id.view_pager) as ViewPager
         viewPager.adapter = WorkoutTypesPagerAdapter(context, childFragmentManager)
+        viewPager.onPageChangeListener {
+            onPageSelected { position ->
+                selectedTab = WorkoutTab.values()[position]
+                fetchWorkouts(selectedTab.workoutType)
+            }
+        }
 
         val tabLayout = view.findViewById(R.id.tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
@@ -63,14 +72,19 @@ class WorkoutTypesFragment : BaseFragment() {
         EventBus.getDefault().unregister(this)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(KEY_SELECTED_TAB, selectedTab)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedIn(event: LoggedInEvent) {
-        Service.getWorkouts()
+        Service.getWorkouts(selectedTab.workoutType)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedOut(event: LoggedOutEvent) {
-        Service.getWorkouts()
+        Service.getDefaultWorkouts(selectedTab.workoutType)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -79,27 +93,41 @@ class WorkoutTypesFragment : BaseFragment() {
         handleRequestFailure(requestFailureEvent.throwable)
     }
 
+    fun fetchWorkouts(type: WorkoutType) {
+        if (Preference.isLoggedIn(context)) {
+            Service.getWorkouts(type)
+        } else {
+            if (type != WorkoutType.CUSTOM) {
+                Service.getDefaultWorkouts(type)
+            }
+        }
+    }
+
     class WorkoutTypesPagerAdapter(val context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
-            val fragment: Fragment?
-            when (position) {
-                WorkoutType.OPENS.ordinal -> fragment = WorkoutOpensListFragment()
-                WorkoutType.CUSTOM.ordinal -> fragment = WorkoutCustomListFragment()
-                WorkoutType.FAVORITIES.ordinal -> fragment = WorkoutFavoriteListFragment()
-                else -> fragment = WorkoutListFragment()
+            return when (position) {
+                WorkoutTab.CUSTOM.ordinal -> WorkoutCustomListFragment()
+                WorkoutTab.GIRLS.ordinal -> WorkoutGirlsListFragment()
+                WorkoutTab.HEROES.ordinal -> WorkoutHeroesListFragment()
+                WorkoutTab.CHALLENGES.ordinal -> WorkoutChallengesListFragment()
+                WorkoutTab.OPENS.ordinal -> WorkoutOpensListFragment()
+                else -> throw UnsupportedOperationException()
             }
-            fragment.arguments = bundleOf(WorkoutListFragment.KEY_WORKOUT_TYPE to WorkoutType.values()[position])
-            return fragment
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return WorkoutType.values()[position].toString()
+            return WorkoutTab.values()[position].toString()
         }
 
         override fun getCount(): Int {
-            return WorkoutType.values().size - 1//disabling favorities for now
+            return WorkoutTab.values().size
         }
 
+    }
+
+    enum class WorkoutTab(val workoutType: WorkoutType) {
+        CUSTOM(WorkoutType.CUSTOM), GIRLS(WorkoutType.GIRLS), HEROES(WorkoutType.HEROES),
+        CHALLENGES(WorkoutType.CHALLENGES), OPENS(WorkoutType.OPENS)
     }
 }

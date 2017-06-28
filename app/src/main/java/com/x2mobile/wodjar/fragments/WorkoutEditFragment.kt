@@ -85,7 +85,7 @@ class WorkoutEditFragment : BaseFragment() {
 
         binding.delete.setOnClickListener {
             //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
             workouts.removeIf { it.id == workout.id }
 
             Service.deleteWorkout(workout.id)
@@ -162,7 +162,7 @@ class WorkoutEditFragment : BaseFragment() {
         if (requestResponseEvent.response.body() != null) {
 
             //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
             workouts.add(requestResponseEvent.response.body()!!)
 
             activity.finish()
@@ -176,7 +176,7 @@ class WorkoutEditFragment : BaseFragment() {
         progress?.dismiss()
 
         //Updating the cached version
-        val workouts = EventBus.getDefault().getStickyEvent(WorkoutsRequestEvent::class.java).response.body()!!.workouts
+        val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
         val cachedWorkout = workouts.find { it.id == workout.id }
         cachedWorkout?.name = workout.name
         cachedWorkout?.description = workout.description

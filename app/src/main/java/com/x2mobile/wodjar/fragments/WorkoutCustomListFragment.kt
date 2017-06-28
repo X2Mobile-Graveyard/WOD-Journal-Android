@@ -9,7 +9,10 @@ import com.x2mobile.wodjar.activity.WorkoutCustomActivity
 import com.x2mobile.wodjar.activity.WorkoutEditActivity
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.Preference
+import com.x2mobile.wodjar.data.event.WorkoutCustomsRequestEvent
 import com.x2mobile.wodjar.data.model.Workout
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
 
 class WorkoutCustomListFragment : WorkoutListFragment() {
@@ -33,5 +36,10 @@ class WorkoutCustomListFragment : WorkoutListFragment() {
 
     override fun onWorkoutClicked(workout: Workout) {
         startActivity(context.intentFor<WorkoutCustomActivity>(NavigationConstants.KEY_WORKOUT to workout))
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onWorkoutsResponse(requestResponseEvent: WorkoutCustomsRequestEvent) {
+        handleWorkoutsResponse(requestResponseEvent)
     }
 }

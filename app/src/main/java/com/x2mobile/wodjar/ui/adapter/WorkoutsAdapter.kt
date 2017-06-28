@@ -1,6 +1,7 @@
 package com.x2mobile.wodjar.ui.adapter
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,13 +28,16 @@ class WorkoutsAdapter(val context: Context, val callback: WorkoutListener) : Fil
 class WorkoutViewHolder(itemView: View, val callback: WorkoutListener) : BaseViewHolder<Workout>(itemView) {
 
     val name: TextView by lazy { itemView.findViewById(R.id.name) as TextView }
+    val description: TextView by lazy { itemView.findViewById(R.id.description) as TextView }
     val result: TextView by lazy { itemView.findViewById(R.id.best_result) as TextView }
 
     override fun bindData(item: Workout) {
         val context = itemView.context
         itemView.setOnClickListener { callback.onWorkoutClicked(item) }
         name.text = item.name
-        if (item.completed) {
+        description.text = if (Preference.getUnitType(context) == UnitType.IMPERIAL ||
+                TextUtils.isEmpty(item.metricDescription)) item.description else item.metricDescription
+        if (item.bestResult > 0) {
             when (item.resultType) {
                 ResultType.WEIGHT -> result.text = context.getString(R.string.weight_prefix,
                         context.getString(if (Preference.getUnitType(context) == UnitType.METRIC) R.string.kg_suffix else R.string.lb_suffix,
