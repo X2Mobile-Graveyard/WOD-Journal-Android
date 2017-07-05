@@ -8,47 +8,43 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.PersonalRecordActivity
+import com.x2mobile.wodjar.activity.PersonalRecordResultActivity
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.network.Service
-import com.x2mobile.wodjar.data.event.PersonalRecordsRequestEvent
-import com.x2mobile.wodjar.data.event.PersonalRecordsRequestFailureEvent
+import com.x2mobile.wodjar.data.event.PersonalRecordResultsRequestEvent
+import com.x2mobile.wodjar.data.event.PersonalRecordResultsRequestFailureEvent
 import com.x2mobile.wodjar.data.event.TitleSetEvent
 import com.x2mobile.wodjar.data.model.PersonalRecord
-import com.x2mobile.wodjar.data.model.PersonalRecordType
+import com.x2mobile.wodjar.data.model.PersonalRecordResult
 import com.x2mobile.wodjar.fragments.base.BaseFragment
-import com.x2mobile.wodjar.ui.adapter.PersonalRecordAdapter
-import com.x2mobile.wodjar.ui.callback.PersonalRecordListener
+import com.x2mobile.wodjar.ui.adapter.PersonalRecordResultAdapter
+import com.x2mobile.wodjar.ui.callback.PersonalRecordResultListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
-class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
+class PersonalRecordResultsFragment : BaseFragment(), PersonalRecordResultListener {
 
     val REQUEST_CODE_PERSONAL_RECORD = 9
 
-    var personalRecordType: PersonalRecordType? = null
+    val personalRecord: PersonalRecord by lazy { arguments!!.get(NavigationConstants.KEY_PERSONAL_RECORD) as PersonalRecord }
 
-    var personalRecordIds: List<Int>? = null
-
-    val adapter: PersonalRecordAdapter by lazy { PersonalRecordAdapter(context, this) }
+    val adapter: PersonalRecordResultAdapter by lazy { PersonalRecordResultAdapter(context, this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        personalRecordType = arguments!!.get(NavigationConstants.KEY_PERSONAL_RECORD_TYPE) as PersonalRecordType
-
-        Service.getPersonalRecords(personalRecordType!!.name!!)
+        Service.getPersonalRecordResults(personalRecord.id)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         toolbarDelegate.enableTitleChange()
-        toolbarDelegate.title = personalRecordType!!.name!!
+        toolbarDelegate.title = personalRecord.name!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,8 +61,8 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
 
         val add = view.findViewById(R.id.add)
         add.setOnClickListener {
-            startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT
-                    to PersonalRecord(personalRecordType!!)), REQUEST_CODE_PERSONAL_RECORD)
+            startActivityForResult(context.intentFor<PersonalRecordResultActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord),
+                    REQUEST_CODE_PERSONAL_RECORD)
         }
     }
 
@@ -91,7 +87,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
         when (item.itemId) {
             R.id.delete_menu -> {
                 adapter.clearItems()
-                Service.deletePersonalRecords(personalRecordIds!!)
+                Service.deletePersonalRecordResults(personalRecord.id)
                 return true
             }
         }
@@ -100,40 +96,39 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_PERSONAL_RECORD) {
-            val personalRecord = data?.getParcelableExtra<PersonalRecord>(NavigationConstants.KEY_RESULT)
+            val personalRecordResult = data?.getParcelableExtra<PersonalRecordResult>(NavigationConstants.KEY_RESULT)
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    var position = adapter.getItemPosition(personalRecord!!)
+                    var position = adapter.getItemPosition(personalRecordResult!!)
                     if (position >= 0) {
                         adapter.removeItem(position)
                     } else {
                         position = 0
                     }
-                    adapter.addItem(personalRecord, position)
+                    adapter.addItem(personalRecordResult, position)
                 }
-                NavigationConstants.RESULT_DELETED -> adapter.removeItem(personalRecord!!)
+                NavigationConstants.RESULT_DELETED -> adapter.removeItem(personalRecordResult!!)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onPersonalRecordClicked(personalRecord: PersonalRecord) {
-        startActivityForResult(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_RESULT
-                to personalRecord), REQUEST_CODE_PERSONAL_RECORD)
+    override fun onPersonalRecordResultClicked(personalRecordResult: PersonalRecordResult) {
+        startActivityForResult(context.intentFor<PersonalRecordResultActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord,
+                NavigationConstants.KEY_RESULT to personalRecordResult), REQUEST_CODE_PERSONAL_RECORD)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTitleSet(event: TitleSetEvent) {
-        personalRecordType!!.name = toolbarDelegate.title
-        Service.updatePersonalRecordType(personalRecordIds!!, personalRecordType!!.name!!)
+        personalRecord.name = toolbarDelegate.title
+        Service.updatePersonalRecord(personalRecord)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordsResponse(requestResponseEvent: PersonalRecordsRequestEvent) {
+    fun onPersonalRecordResultsResponse(requestResponseEvent: PersonalRecordResultsRequestEvent) {
         if (requestResponseEvent.response.body() != null) {
-            val personalRecords = requestResponseEvent.response.body()!!.personalRecords
-            personalRecordIds = personalRecords!!.map { it.id }
-            adapter.setItems(personalRecords.sortedBy(PersonalRecord::date).asReversed().toMutableList())
+            val personalRecords = requestResponseEvent.response.body()!!
+            adapter.setItems(personalRecords.sortedBy(PersonalRecordResult::date).asReversed().toMutableList())
         } else {
             context.toast(R.string.error_occurred)
         }
@@ -141,7 +136,7 @@ class PersonalRecordListFragment : BaseFragment(), PersonalRecordListener {
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordsFailure(requestFailureEvent: PersonalRecordsRequestFailureEvent) {
+    fun onPersonalRecordResultsFailure(requestFailureEvent: PersonalRecordResultsRequestFailureEvent) {
         handleRequestFailure(requestFailureEvent.throwable)
     }
 

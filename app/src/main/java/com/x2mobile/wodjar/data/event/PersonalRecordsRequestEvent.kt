@@ -1,8 +1,8 @@
 package com.x2mobile.wodjar.data.event
 
 import com.x2mobile.wodjar.data.event.base.RequestResponseEvent
-import com.x2mobile.wodjar.data.model.PersonalRecordsResponse
+import com.x2mobile.wodjar.data.model.PersonalRecord
 import retrofit2.Call
 import retrofit2.Response
 
-class PersonalRecordsRequestEvent(call: Call<PersonalRecordsResponse>?, response: Response<PersonalRecordsResponse>) : RequestResponseEvent<PersonalRecordsResponse>(call, response)
+class PersonalRecordsRequestEvent(call: Call<List<PersonalRecord>>?, response: Response<List<PersonalRecord>>) : RequestResponseEvent<List<PersonalRecord>>(call, response)

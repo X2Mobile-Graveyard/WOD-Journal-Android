@@ -4,4 +4,4 @@ import com.x2mobile.wodjar.data.event.base.RequestResponseEvent
 import retrofit2.Call
 import retrofit2.Response
 
-class UpdatePersonalRecordTypeRequestEvent(call: Call<Void>?, response: Response<Void>) : RequestResponseEvent<Void>(call, response)
+class DeletePersonalRecordResultsRequestEvent(call: Call<Void>?, response: Response<Void>) : RequestResponseEvent<Void>(call, response)

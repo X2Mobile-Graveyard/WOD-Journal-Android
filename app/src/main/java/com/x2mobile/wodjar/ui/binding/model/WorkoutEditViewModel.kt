@@ -16,7 +16,7 @@ class WorkoutEditViewModel(val workout: Workout) : BaseObservable() {
         }
 
     @Bindable
-    var weightSelected: Boolean = workout.resultType == ResultType.WEIGHT || workout.resultType == ResultType.OTHER
+    var weightSelected: Boolean = workout.resultType == ResultType.WEIGHT
         set(value) {
             field = value
             workout.resultType = ResultType.WEIGHT

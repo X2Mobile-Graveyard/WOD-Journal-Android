@@ -14,18 +14,12 @@ import com.x2mobile.wodjar.util.MathUtil
 class ResultViewModel(val context: Context, val result: Result) : BaseObservable() {
 
     @Bindable
-    val weightEnabled: Boolean = result.type == ResultType.OTHER || result.type == ResultType.WEIGHT
-
-    @Bindable
-    var weightSelected: Boolean = result.type == ResultType.OTHER || result.type == ResultType.WEIGHT
+    var weightSelected: Boolean = result.type == ResultType.WEIGHT
         set(value) {
             field = value
             result.type = ResultType.WEIGHT
             notifyPropertyChanged(BR.weightSelected)
         }
-
-    @Bindable
-    val repsEnabled: Boolean = result.type == ResultType.OTHER || result.type == ResultType.REPETITION
 
     @Bindable
     var repsSelected: Boolean = result.type == ResultType.REPETITION
@@ -34,9 +28,6 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
             result.type = ResultType.REPETITION
             notifyPropertyChanged(BR.repsSelected)
         }
-
-    @Bindable
-    val timeEnabled: Boolean = result.type == ResultType.OTHER || result.type == ResultType.TIME
 
     @Bindable
     var timeSelected: Boolean = result.type == ResultType.TIME

@@ -34,7 +34,7 @@ class Workout() : Parcelable, Filterable {
 
     @SerializedName("category")
     @JsonAdapter(ResultTypeAdapter::class)
-    var resultType: ResultType = ResultType.OTHER
+    var resultType: ResultType = ResultType.WEIGHT
 
     @SerializedName("image")
     @JsonAdapter(UriAdapter::class)

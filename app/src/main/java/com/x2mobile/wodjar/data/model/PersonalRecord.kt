@@ -2,31 +2,65 @@ package com.x2mobile.wodjar.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.x2mobile.wodjar.business.Constants
+import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
+import com.x2mobile.wodjar.data.model.base.Filterable
+import java.util.*
 
-class PersonalRecord : Result, Parcelable {
+class PersonalRecord() : Parcelable, Filterable {
+
+    @SerializedName("id")
+    var id: Int = Constants.ID_NA
 
     @SerializedName("name")
     var name: String? = null
 
-    constructor() : super()
+    @SerializedName("result_type")
+    @JsonAdapter(ResultTypeAdapter::class)
+    var type: ResultType = ResultType.WEIGHT
 
-    constructor(personalRecordType: PersonalRecordType) : super() {
-        name = personalRecordType.name
-        type = personalRecordType.type
+    @SerializedName("present")
+    var present: Boolean = false
+
+    @SerializedName("best_result")
+    var bestResult: Float = 0.0f
+
+    @SerializedName("updated_at")
+    var updated: Date? = null
+
+    constructor(name: String) : this(name, ResultType.WEIGHT)
+
+    constructor(name: String, type: ResultType) : this() {
+        this.name = name
+        this.type = type
     }
 
-    constructor(source: Parcel) : super(source) {
+    constructor(source: Parcel) : this() {
+        id = source.readInt()
         name = source.readString()
+        type = ResultType.values()[source.readInt()]
+        present = source.readInt() == 0
+        bestResult = source.readFloat()
+        updated = source.readSerializable() as Date
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        super.writeToParcel(dest, flags)
+        dest.writeInt(id)
         dest.writeString(name)
+        dest.writeInt(type.ordinal)
+        dest.writeInt(if (present) 1 else 0)
+        dest.writeFloat(bestResult)
+        dest.writeSerializable(updated)
     }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun matches(query: String): Boolean {
+        return name?.contains(query, true) ?: false
     }
 
     companion object {
@@ -40,4 +74,5 @@ class PersonalRecord : Result, Parcelable {
             }
         }
     }
+
 }

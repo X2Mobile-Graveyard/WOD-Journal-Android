@@ -12,7 +12,6 @@ import com.x2mobile.wodjar.data.model.adapter.FloatResultAdapter
 import com.x2mobile.wodjar.data.model.adapter.IntResultAdapter
 import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
 import com.x2mobile.wodjar.data.model.adapter.UriAdapter
-import java.lang.UnsupportedOperationException
 import java.util.*
 
 open class Result() : BaseObservable(), Parcelable {
@@ -23,7 +22,6 @@ open class Result() : BaseObservable(), Parcelable {
     @Bindable
     @SerializedName("rx")
     var rx: Boolean = false
-
 
     @SerializedName("result_weight")
     @JsonAdapter(FloatResultAdapter::class)
@@ -41,14 +39,13 @@ open class Result() : BaseObservable(), Parcelable {
 
     @SerializedName("result_type")
     @JsonAdapter(ResultTypeAdapter::class)
-    var type: ResultType = ResultType.OTHER
+    var type: ResultType = ResultType.WEIGHT
 
     val result: Float
         get() = when (type) {
             ResultType.WEIGHT -> resultWeight
             ResultType.REPETITION -> resultReps.toFloat()
             ResultType.TIME -> resultTime.toFloat()
-            else -> throw UnsupportedOperationException()
         }
 
     @Bindable

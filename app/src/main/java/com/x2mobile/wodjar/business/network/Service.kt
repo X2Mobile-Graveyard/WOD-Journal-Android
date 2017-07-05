@@ -64,13 +64,8 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun getPersonalRecordTypes(callback: Callback<PersonalRecordTypesResponse> = PersonalRecordTypesCallback()) {
-        val call = api.getPersonalRecordTypes()
-        call.enqueue(callback)
-    }
-
-    fun getPersonalRecords(name: String, callback: Callback<PersonalRecordsResponse> = PersonalRecordsCallback()) {
-        val call = api.getPersonalRecords(name)
+    fun getPersonalRecords(callback: Callback<List<PersonalRecord>> = PersonalRecordsCallback()) {
+        val call = api.getPersonalRecords()
         call.enqueue(callback)
     }
 
@@ -80,7 +75,7 @@ object Service {
     }
 
     fun updatePersonalRecord(personalRecord: PersonalRecord, callback: Callback<Void> = UpdatePersonalRecordCallback()) {
-        val call = api.updatePersonalRecord(personalRecord)
+        val call = api.updatePersonalRecord(personalRecord.id, personalRecord)
         call.enqueue(callback)
     }
 
@@ -89,18 +84,28 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun deletePersonalRecords(ids: List<Int>, callback: Callback<Void> = DeletePersonalRecordsCallback()) {
-        val call = api.deletePersonalRecords(ids)
+    fun getPersonalRecordResults(personalRecordId: Int, callback: Callback<List<PersonalRecordResult>> = PersonalRecordResultsCallback()) {
+        val call = api.getPersonalRecordResults(personalRecordId)
         call.enqueue(callback)
     }
 
-    fun updatePersonalRecordType(ids: List<Int>, name: String, callback: Callback<Void> = UpdatePersonalRecordTypeCallback()) {
-        val call = api.updatePersonalRecords(ids, name)
+    fun savePersonalRecordResult(personalRecordResult: PersonalRecordResult, callback: Callback<PersonalRecordResult> = AddPersonalRecordResultCallback()) {
+        val call = api.savePersonalRecordResult(personalRecordResult.personalRecordId, personalRecordResult)
         call.enqueue(callback)
     }
 
-    fun deletePersonalRecordType(name: String, callback: Callback<Void> = DeletePersonalRecordTypeCallback()) {
-        val call = api.deletePersonalRecords(name)
+    fun updatePersonalRecordResult(personalRecordResult: PersonalRecordResult, callback: Callback<Void> = UpdatePersonalRecordResultCallback()) {
+        val call = api.updatePersonalRecordResult(personalRecordResult.id, personalRecordResult)
+        call.enqueue(callback)
+    }
+
+    fun deletePersonalRecordResult(id: Int, callback: Callback<Void> = DeletePersonalRecordResultCallback()) {
+        val call = api.deletePersonalRecordResult(id)
+        call.enqueue(callback)
+    }
+
+    fun deletePersonalRecordResults(personalRecordId: Int, callback: Callback<Void> = DeletePersonalRecordResultsCallback()) {
+        val call = api.deletePersonalRecordResults(personalRecordId)
         call.enqueue(callback)
     }
 

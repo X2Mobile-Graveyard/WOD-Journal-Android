@@ -19,28 +19,31 @@ interface Api {
     fun updateUser(@Path("id") id: Int, @Body user: User): Call<Void>
 
     @GET("list-prs")
-    fun getPersonalRecordTypes(): Call<PersonalRecordTypesResponse>
-
-    @GET("list-prs-by-name/{name}")
-    fun getPersonalRecords(@Path("name") name: String): Call<PersonalRecordsResponse>
+    fun getPersonalRecords(): Call<List<PersonalRecord>>
 
     @POST("personal_records")
     fun savePersonalRecord(@Body personalRecord: PersonalRecord): Call<PersonalRecord>
 
     @PATCH("personal_records/{id}")
-    fun updatePersonalRecord(@Body personalRecord: PersonalRecord, @Path("id") id: Int = personalRecord.id): Call<Void>
+    fun updatePersonalRecord(@Path("id") id: Int, @Body personalRecord: PersonalRecord): Call<Void>
 
     @DELETE("personal_records/{id}")
     fun deletePersonalRecord(@Path("id") id: Int): Call<Void>
 
-    @HTTP(method = "DELETE", path = "delete-prs", hasBody = true)
-    fun deletePersonalRecords(@Body ids: List<Int>): Call<Void>
+    @GET("pr-results/{pr_id}")
+    fun getPersonalRecordResults(@Path("pr_id") personalRecordId: Int): Call<List<PersonalRecordResult>>
 
-    @PUT("update-prs/{name}")
-    fun updatePersonalRecords(@Body ids: List<Int>, @Path("name") name: String): Call<Void>
+    @POST("pr-results/{pr_id}")
+    fun savePersonalRecordResult(@Path("pr_id") personalRecordId: Int, @Body personalRecordResult: PersonalRecordResult): Call<PersonalRecordResult>
 
-    @DELETE("delete-prs-by-name/{name}")
-    fun deletePersonalRecords(@Path("name") name: String): Call<Void>
+    @PATCH("pr_results/{id}")
+    fun updatePersonalRecordResult(@Path("id") id: Int, @Body personalRecordResult: PersonalRecordResult): Call<Void>
+
+    @DELETE("pr_results/{id}")
+    fun deletePersonalRecordResult(@Path("id") id: Int): Call<Void>
+
+    @DELETE("delete-prrs/{pr_id}")
+    fun deletePersonalRecordResults(@Path("pr_id") personalRecordId: Int): Call<Void>
 
     @GET("list-default-wods/{workoutType}")
     fun getDefaultWorkouts(@Path("workoutType") workoutType: Int): Call<MutableList<Workout>>
