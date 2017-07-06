@@ -25,7 +25,7 @@ class ShareHelper(val fragment: Fragment) {
         val textLayout = StaticLayout(text, paint, SHARE_IMAGE_WIDTH, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
 
         val overlay = Bitmap.createBitmap(SHARE_IMAGE_WIDTH, textLayout.height, Bitmap.Config.RGB_565)
-        val canvas = Canvas(image)
+        val canvas = Canvas(overlay)
         canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC)
         textLayout.draw(canvas)
 
