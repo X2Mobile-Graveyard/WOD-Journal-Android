@@ -107,7 +107,7 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
         binding.history.setOnClickListener {
             val fragment = HistoryFragment()
             fragment.arguments = bundleOf(HistoryFragment.KEY_HISTORY to workout.history!!)
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragment, null).addToBackStack(null).commit()
         }
 
         binding.add.setOnClickListener {
