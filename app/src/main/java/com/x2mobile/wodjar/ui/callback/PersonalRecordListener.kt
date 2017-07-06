@@ -4,5 +4,4 @@ import com.x2mobile.wodjar.data.model.PersonalRecord
 
 interface PersonalRecordListener {
     fun onPersonalRecordClicked(personalRecord: PersonalRecord)
-    fun onPersonalRecordRemoved(position: Int)
 }

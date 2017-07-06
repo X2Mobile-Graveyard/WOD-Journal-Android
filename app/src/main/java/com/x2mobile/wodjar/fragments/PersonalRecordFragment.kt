@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.PersonalRecordResultActivity
@@ -19,13 +20,15 @@ import com.x2mobile.wodjar.data.model.PersonalRecordResult
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.PersonalRecordResultAdapter
 import com.x2mobile.wodjar.ui.callback.PersonalRecordResultListener
+import com.x2mobile.wodjar.ui.helper.DeleteListener
+import com.x2mobile.wodjar.ui.helper.DeleteTouchHelperCallback
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
-class PersonalRecordFragment : BaseFragment(), PersonalRecordResultListener {
+class PersonalRecordFragment : BaseFragment(), PersonalRecordResultListener, DeleteListener {
 
     val REQUEST_CODE_PERSONAL_RECORD = 9
 
@@ -58,6 +61,8 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordResultListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.adapter = adapter
+
+        ItemTouchHelper(DeleteTouchHelperCallback(context, this)).attachToRecyclerView(recyclerView)
 
         val add = view.findViewById(R.id.add)
         add.setOnClickListener {
@@ -116,6 +121,12 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordResultListener {
     override fun onPersonalRecordResultClicked(personalRecordResult: PersonalRecordResult) {
         startActivityForResult(context.intentFor<PersonalRecordResultActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord,
                 NavigationConstants.KEY_RESULT to personalRecordResult), REQUEST_CODE_PERSONAL_RECORD)
+    }
+
+    override fun onItemRemoved(position: Int) {
+        val result = adapter.getItem(position)
+        adapter.removeItem(position)
+        Service.deletePersonalRecordResult(result.id)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

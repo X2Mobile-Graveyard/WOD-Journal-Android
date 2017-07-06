@@ -1,12 +1,6 @@
 package com.x2mobile.wodjar.fragments
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -15,8 +9,8 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import com.x2mobile.wodjar.R
-import com.x2mobile.wodjar.activity.PersonalRecordResultActivity
 import com.x2mobile.wodjar.activity.PersonalRecordActivity
+import com.x2mobile.wodjar.activity.PersonalRecordResultActivity
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
@@ -26,14 +20,15 @@ import com.x2mobile.wodjar.data.model.ResultType
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.adapter.PersonalRecordsAdapter
 import com.x2mobile.wodjar.ui.callback.PersonalRecordListener
+import com.x2mobile.wodjar.ui.helper.DeleteListener
+import com.x2mobile.wodjar.ui.helper.DeleteTouchHelperCallback
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 
-
-class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener {
+class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteListener {
 
     val adapter by lazy { PersonalRecordsAdapter(context, this) }
 
@@ -119,7 +114,7 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener {
         }
     }
 
-    override fun onPersonalRecordRemoved(position: Int) {
+    override fun onItemRemoved(position: Int) {
         val personalRecord = adapter.getItem(position)
         adapter.removeItem(position)
         Service.deletePersonalRecord(personalRecord.id)
@@ -194,55 +189,6 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener {
             Service.getPersonalRecords()
         } else {
             Service.getDefaultPersonalRecords()
-        }
-    }
-
-    class DeleteTouchHelperCallback(context: Context, val callback: PersonalRecordListener) : ItemTouchHelper.Callback() {
-
-        var deleteIcon: Drawable? = null
-
-        val backgroundPaint: Paint = Paint()
-
-        init {
-            deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
-
-            backgroundPaint.style = Paint.Style.FILL
-            backgroundPaint.color = Color.RED
-        }
-
-        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.END)
-        }
-
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-            return false
-        }
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            callback.onPersonalRecordRemoved(viewHolder.adapterPosition)
-        }
-
-        override fun onChildDraw(canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                 dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-            super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            val itemView = viewHolder.itemView
-
-            canvas.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat(), backgroundPaint)
-
-            if (dX >= deleteIcon!!.intrinsicWidth * 1.5f) {
-                val left = itemView.left + (dX - deleteIcon!!.intrinsicWidth) / 2
-                val bottom = Math.round((itemView.height - deleteIcon!!.intrinsicHeight) / 2f)
-                deleteIcon!!.setBounds(Math.round(left), itemView.top + bottom, Math.round(left) + deleteIcon!!.intrinsicWidth, itemView.bottom - bottom)
-                deleteIcon!!.draw(canvas)
-            }
-        }
-
-        override fun isItemViewSwipeEnabled(): Boolean {
-            return true
-        }
-
-        override fun isLongPressDragEnabled(): Boolean {
-            return false
         }
     }
 
