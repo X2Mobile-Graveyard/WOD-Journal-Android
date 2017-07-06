@@ -109,11 +109,6 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun deletePersonalRecordResults(personalRecordId: Int, callback: Callback<Void> = DeletePersonalRecordResultsCallback()) {
-        val call = api.deletePersonalRecordResults(personalRecordId)
-        call.enqueue(callback)
-    }
-
     fun getDefaultWorkouts(workoutType: WorkoutType, callback: Callback<MutableList<Workout>> = WorkoutsCallback(workoutType)) {
         val call = api.getDefaultWorkouts(workoutType.ordinal)
         call.enqueue(callback)

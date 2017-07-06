@@ -45,9 +45,6 @@ interface Api {
     @DELETE("pr_results/{id}")
     fun deletePersonalRecordResult(@Path("id") id: Int): Call<Void>
 
-    @DELETE("delete-prrs/{pr_id}")
-    fun deletePersonalRecordResults(@Path("pr_id") personalRecordId: Int): Call<Void>
-
     @GET("list-default-wods/{workoutType}")
     fun getDefaultWorkouts(@Path("workoutType") workoutType: Int): Call<MutableList<Workout>>
 
