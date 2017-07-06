@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 
 class WorkoutEditFragment : BaseFragment() {
 
@@ -167,7 +167,7 @@ class WorkoutEditFragment : BaseFragment() {
 
             activity.finish()
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 

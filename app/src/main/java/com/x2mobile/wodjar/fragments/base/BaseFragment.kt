@@ -10,10 +10,10 @@ import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.business.network.exception.UnauthorizedException
 import com.x2mobile.wodjar.data.event.LoggedOutEvent
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.support.v4.toast
 
 open class BaseFragment : Fragment() {
 
@@ -28,14 +28,14 @@ open class BaseFragment : Fragment() {
     }
 
     protected fun showLoginAlert() {
-        context.alert(R.string.login_to_continue) {
+        alert(R.string.login_to_continue) {
             positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
             cancelButton { }
         }.show()
     }
 
     protected fun confirmDeleteAlert(delete: () -> Unit) {
-        context.alert(R.string.delete_confirmation) {
+        alert(R.string.delete_confirmation) {
             positiveButton(getString(R.string.delete)) { delete.invoke() }
             cancelButton { }
         }.show()
@@ -46,12 +46,12 @@ open class BaseFragment : Fragment() {
             Preference.clear(context)
             EventBus.getDefault().removeAllStickyEvents()
             EventBus.getDefault().post(LoggedOutEvent())
-            context.toast(R.string.login_expired)
+            toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
         } else if (throwable is ServerException) {
-            context.toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
+            toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 

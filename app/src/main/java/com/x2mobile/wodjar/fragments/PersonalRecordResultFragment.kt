@@ -13,7 +13,7 @@ import com.x2mobile.wodjar.data.model.PersonalRecordResult
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 
 class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), DatePickerDialog.OnDateSetListener {
 
@@ -75,7 +75,7 @@ class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), Dat
             activity.setResult(Activity.RESULT_OK, context.intentFor<Any>(NavigationConstants.KEY_RESULT to requestResponseEvent.response.body()))
             activity.finish()
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 

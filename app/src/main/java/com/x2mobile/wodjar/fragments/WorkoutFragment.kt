@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 import kotlin.reflect.KClass
 
 open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
@@ -166,7 +166,7 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
             workoutResults.forEach { it.type = workout.resultType }
             adapter.setItems(workoutResults)
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 
@@ -181,7 +181,7 @@ open class WorkoutFragment : BaseFragment(), WorkoutResultListener {
 
             arguments.putParcelable(NavigationConstants.KEY_WORKOUT, workout)
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 

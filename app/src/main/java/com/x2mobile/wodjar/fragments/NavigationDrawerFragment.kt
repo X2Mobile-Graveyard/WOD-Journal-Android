@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation_header drawer.
@@ -198,7 +198,7 @@ class NavigationDrawerFragment : Fragment() {
                     })
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                context.toast(result.error.message!!)
+                toast(result.error.message!!)
             }
         }
     }

@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 
 class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteListener {
 
@@ -129,7 +129,7 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
         if (requestResponseEvent.response.body() != null) {
             adapter.setItems(requestResponseEvent.response.body()!!.sortedBy(PersonalRecord::name).toMutableList())
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 

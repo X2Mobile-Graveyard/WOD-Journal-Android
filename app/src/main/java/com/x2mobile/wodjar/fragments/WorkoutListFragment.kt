@@ -17,7 +17,7 @@ import com.x2mobile.wodjar.ui.adapter.WorkoutsAdapter
 import com.x2mobile.wodjar.ui.callback.WorkoutListener
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.toast
 
 open class WorkoutListFragment : BaseFragment(), WorkoutListener {
 
@@ -85,7 +85,7 @@ open class WorkoutListFragment : BaseFragment(), WorkoutListener {
         if (requestResponseEvent.response.body() != null) {
             adapter.setItems(sortWorkouts(requestResponseEvent.response.body()!!).toMutableList())
         } else {
-            context.toast(R.string.error_occurred)
+            toast(R.string.error_occurred)
         }
     }
 
