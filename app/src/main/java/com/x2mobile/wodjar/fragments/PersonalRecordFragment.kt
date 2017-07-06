@@ -165,11 +165,6 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordAdded(event: AddPersonalRecordRequestEvent) {
-        Service.getPersonalRecords()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPersonalRecordUpdated(event: UpdatePersonalRecordRequestEvent) {
         Service.getPersonalRecords()
     }

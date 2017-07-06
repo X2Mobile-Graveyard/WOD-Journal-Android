@@ -2,10 +2,12 @@ package com.x2mobile.wodjar.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import com.x2mobile.wodjar.business.Constants
 
 class PersonalRecordResult : Result, Parcelable {
 
+    @SerializedName("personal_record_id")
     var personalRecordId: Int = Constants.ID_NA
 
     constructor() : super()

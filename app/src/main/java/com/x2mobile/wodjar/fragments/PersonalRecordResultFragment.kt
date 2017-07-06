@@ -45,7 +45,7 @@ class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), Dat
     override fun saveResult(result: PersonalRecordResult) {
         if (result.id == Constants.ID_NA) {
             if (personalRecord.id == Constants.ID_NA) {
-                Service.savePersonalRecord(personalRecord)
+                Service.savePersonalRecordResult(personalRecord.name!!, result)
             } else {
                 Service.savePersonalRecordResult(result)
             }
@@ -66,21 +66,6 @@ class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), Dat
     fun onTitleSet(event: TitleSetEvent) {
         //This can happen only when new personal record is created
         personalRecord.name = toolbarDelegate.title
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordAdded(requestResponseEvent: AddPersonalRecordRequestEvent) {
-        if (requestResponseEvent.response.body() != null) {
-            val addedPersonalRecord = requestResponseEvent.response.body()!!
-
-            personalRecord.id = addedPersonalRecord.id
-            result.personalRecordId = addedPersonalRecord.id
-
-            Service.savePersonalRecordResult(result)
-        } else {
-            progress?.dismiss()
-            context.toast(R.string.error_occurred)
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -105,12 +90,6 @@ class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), Dat
     fun onPersonalRecordResultDeleted(requestResponseEvent: DeletePersonalRecordResultRequestEvent) {
         progress?.dismiss()
         activity.finish()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordAddFailed(requestFailureEvent: AddPersonalRecordRequestFailureEvent) {
-        progress?.dismiss()
-        handleRequestFailure(requestFailureEvent.throwable)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

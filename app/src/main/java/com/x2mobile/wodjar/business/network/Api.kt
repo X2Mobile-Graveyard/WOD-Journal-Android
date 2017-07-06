@@ -24,9 +24,6 @@ interface Api {
     @GET("list-prs")
     fun getPersonalRecords(): Call<List<PersonalRecord>>
 
-    @POST("personal_records")
-    fun savePersonalRecord(@Body personalRecord: PersonalRecord): Call<PersonalRecord>
-
     @PATCH("personal_records/{id}")
     fun updatePersonalRecord(@Path("id") id: Int, @Body personalRecord: PersonalRecord): Call<Void>
 
@@ -35,6 +32,9 @@ interface Api {
 
     @GET("pr-results/{pr_id}")
     fun getPersonalRecordResults(@Path("pr_id") personalRecordId: Int): Call<List<PersonalRecordResult>>
+
+    @POST("create-pr-result/{pr_name}")
+    fun savePersonalRecordResult(@Path("pr_name") personalRecordName: String, @Body personalRecordResult: PersonalRecordResult): Call<PersonalRecordResult>
 
     @POST("pr-results/{pr_id}")
     fun savePersonalRecordResult(@Path("pr_id") personalRecordId: Int, @Body personalRecordResult: PersonalRecordResult): Call<PersonalRecordResult>

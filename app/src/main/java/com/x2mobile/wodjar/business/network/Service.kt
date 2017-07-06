@@ -74,11 +74,6 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun savePersonalRecord(personalRecord: PersonalRecord, callback: Callback<PersonalRecord> = AddPersonalRecordCallback()) {
-        val call = api.savePersonalRecord(personalRecord)
-        call.enqueue(callback)
-    }
-
     fun updatePersonalRecord(personalRecord: PersonalRecord, callback: Callback<Void> = UpdatePersonalRecordCallback()) {
         val call = api.updatePersonalRecord(personalRecord.id, personalRecord)
         call.enqueue(callback)
@@ -91,6 +86,11 @@ object Service {
 
     fun getPersonalRecordResults(personalRecordId: Int, callback: Callback<List<PersonalRecordResult>> = PersonalRecordResultsCallback()) {
         val call = api.getPersonalRecordResults(personalRecordId)
+        call.enqueue(callback)
+    }
+
+    fun savePersonalRecordResult(personalRecordName: String, personalRecordResult: PersonalRecordResult, callback: Callback<PersonalRecordResult> = AddPersonalRecordResultCallback()) {
+        val call = api.savePersonalRecordResult(personalRecordName, personalRecordResult)
         call.enqueue(callback)
     }
 
