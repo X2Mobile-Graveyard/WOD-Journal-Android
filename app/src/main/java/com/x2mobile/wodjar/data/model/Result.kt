@@ -14,10 +14,12 @@ import com.x2mobile.wodjar.data.model.adapter.ResultTypeAdapter
 import com.x2mobile.wodjar.data.model.adapter.UriAdapter
 import java.util.*
 
-open class Result() : BaseObservable(), Parcelable {
+abstract class Result() : BaseObservable(), Parcelable {
 
     @SerializedName("id")
     var id: Int = Constants.ID_NA
+
+    abstract var parentId: Int
 
     @Bindable
     @SerializedName("rx")
@@ -109,18 +111,6 @@ open class Result() : BaseObservable(), Parcelable {
         result = 31 * result + (imageUri?.hashCode() ?: 0)
         result = 31 * result + (date?.hashCode() ?: 0)
         return result
-    }
-
-    companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Result> = object : Parcelable.Creator<Result> {
-            override fun createFromParcel(source: Parcel): Result {
-                return Result(source)
-            }
-
-            override fun newArray(size: Int): Array<Result?> {
-                return arrayOfNulls(size)
-            }
-        }
     }
 
 }

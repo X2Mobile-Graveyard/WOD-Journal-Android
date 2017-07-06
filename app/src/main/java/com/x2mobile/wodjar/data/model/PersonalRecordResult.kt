@@ -7,6 +7,10 @@ import com.x2mobile.wodjar.business.Constants
 
 class PersonalRecordResult : Result, Parcelable {
 
+    override var parentId: Int
+        get() = personalRecordId
+        set(value) {}
+
     @SerializedName("personal_record_id")
     var personalRecordId: Int = Constants.ID_NA
 

@@ -7,6 +7,10 @@ import com.x2mobile.wodjar.business.Constants
 
 class WorkoutResult : Result, Parcelable {
 
+    override var parentId: Int
+        get() = workoutId
+        set(value) {}
+
     @SerializedName("wod_id")
     var workoutId: Int = Constants.ID_NA
 

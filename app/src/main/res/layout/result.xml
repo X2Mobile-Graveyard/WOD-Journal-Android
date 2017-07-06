@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visible="@{viewModel.result.id &lt; 0}">
+                android:visible="@{viewModel.result.parentId &lt; 0}">
 
                 <android.support.v4.widget.Space
                     android:layout_width="0dp"
@@ -80,7 +80,7 @@
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="@dimen/activity_vertical_margin"
-                android:visible="@{viewModel.result.id &lt; 0}" />
+                android:visible="@{viewModel.result.parentId &lt; 0}" />
 
             <FrameLayout
                 android:id="@+id/header_container"
