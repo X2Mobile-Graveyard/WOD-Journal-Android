@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.x2mobile.wodjar.activity.ImageViewer
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.support.v4.intentFor
 
 class ImageViewer(val fragment: Fragment, val image: ImageView) {
 
@@ -24,7 +24,7 @@ class ImageViewer(val fragment: Fragment, val image: ImageView) {
         }
 
     fun popup(imageContainer: View) {
-        val intent = fragment.context.intentFor<ImageViewer>()
+        val intent = fragment.intentFor<ImageViewer>()
         intent.putExtra(ImageViewer.KEY_URI, imageUri)
         intent.putExtra(ImageViewer.KEY_RECT, Rect(imageContainer.left, imageContainer.top, imageContainer.right, imageContainer.bottom))
         fragment.startActivity(intent)
