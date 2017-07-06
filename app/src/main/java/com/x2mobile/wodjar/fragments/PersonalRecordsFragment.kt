@@ -60,6 +60,15 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
         recyclerView.adapter = adapter
 
         ItemTouchHelper(DeleteTouchHelperCallback(context, this)).attachToRecyclerView(recyclerView)
+
+        val add = view.findViewById(R.id.add)
+        add.setOnClickListener {
+            if (Preference.isLoggedIn(context)) {
+                startActivity(context.intentFor<PersonalRecordResultActivity>())
+            } else {
+                showLoginAlert()
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -70,7 +79,7 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_personal_records, menu)
+        inflater.inflate(R.menu.menu_search, menu)
 
         val searchView = MenuItemCompat.getActionView(menu.findItem(R.id.search_menu)) as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
@@ -85,21 +94,6 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
                 return true
             }
         })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.add_menu -> {
-                if (Preference.isLoggedIn(context)) {
-                    startActivity(context.intentFor<PersonalRecordResultActivity>())
-                } else {
-                    showLoginAlert()
-                }
-                return true
-            }
-            R.id.search_menu -> return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onPersonalRecordClicked(personalRecord: PersonalRecord) {
