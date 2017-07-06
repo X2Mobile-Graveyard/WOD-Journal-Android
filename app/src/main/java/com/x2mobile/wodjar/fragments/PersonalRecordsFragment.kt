@@ -48,7 +48,7 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.personal_record_type, container, false);
+        return inflater.inflate(R.layout.personal_record, container, false);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
