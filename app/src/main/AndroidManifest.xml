@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.PersonalRecordResultActivity" />
-        <activity android:name=".activity.PersonalRecordResultsActivity" />
+        <activity android:name=".activity.PersonalRecordActivity" />
         <activity android:name=".activity.WorkoutActivity" />
         <activity android:name=".activity.WorkoutEditActivity" />
         <activity android:name=".activity.WorkoutCustomActivity" />

@@ -11,7 +11,7 @@ import com.x2mobile.wodjar.business.callback.ToolbarDelegate
 import com.x2mobile.wodjar.databinding.MainScreenBinding
 import com.x2mobile.wodjar.fragments.NavigationDrawerFragment
 import com.x2mobile.wodjar.fragments.OptionsFragment
-import com.x2mobile.wodjar.fragments.PersonalRecordFragment
+import com.x2mobile.wodjar.fragments.PersonalRecordsFragment
 import com.x2mobile.wodjar.fragments.WorkoutTypesFragment
 
 
@@ -38,7 +38,7 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
     override fun onNavigationItemSelected(navigationType: NavigationDrawerFragment.NavigationType) {
         val selectedFragment: Fragment?
         when (navigationType) {
-            NavigationDrawerFragment.NavigationType.PR -> selectedFragment = PersonalRecordFragment()
+            NavigationDrawerFragment.NavigationType.PR -> selectedFragment = PersonalRecordsFragment()
             NavigationDrawerFragment.NavigationType.WOD -> selectedFragment = WorkoutTypesFragment()
             NavigationDrawerFragment.NavigationType.OPTIONS -> selectedFragment = OptionsFragment()
             else -> throw RuntimeException("Navigation type: $navigationType not supported")
