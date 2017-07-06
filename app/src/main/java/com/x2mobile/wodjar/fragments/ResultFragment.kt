@@ -102,12 +102,6 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
             DatePickerDialog.newInstance(this@ResultFragment, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show(fragmentManager, DIALOG_DATE_PICKER)
         }
-
-        binding.delete.setOnClickListener {
-            deleteResult(result)
-            activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
-            activity.finish()
-        }
     }
 
     override fun onDestroy() {
@@ -119,6 +113,11 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_result, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.delete_menu).isVisible = result.id >= 0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -142,6 +141,12 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
             R.id.share_menu -> {
                 shareHelper.share(prepareShareText(result), (binding.image.drawable as? GlideBitmapDrawable)?.bitmap)
+            }
+
+            R.id.delete_menu -> {
+                deleteResult(result)
+                activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
+                activity.finish()
             }
         }
         return super.onOptionsItemSelected(item)
