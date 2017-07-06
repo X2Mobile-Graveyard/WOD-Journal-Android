@@ -91,8 +91,10 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordResultListener, Del
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete_menu -> {
-                Service.deletePersonalRecord(personalRecord.id)
-                activity.finish()
+                confirmDeleteAlert {
+                    Service.deletePersonalRecord(personalRecord.id)
+                    activity.finish()
+                }
                 return true
             }
         }

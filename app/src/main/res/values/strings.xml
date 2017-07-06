@@ -64,6 +64,7 @@
     <string name="delete">Delete</string>
     <string name="deleting">Deleting…</string>
     <string name="delete_record">Delete Record</string>
+    <string name="delete_confirmation">Are you sure you want to delete it?</string>
 
     <string name="no_user">No user</string>
 

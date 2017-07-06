@@ -34,6 +34,13 @@ open class BaseFragment : Fragment() {
         }.show()
     }
 
+    protected fun confirmDeleteAlert(delete: () -> Unit) {
+        context.alert(R.string.delete_confirmation) {
+            positiveButton(getString(R.string.delete)) { delete.invoke() }
+            cancelButton { }
+        }.show()
+    }
+
     protected fun handleRequestFailure(throwable: Throwable?) {
         if (throwable is UnauthorizedException) {
             Preference.clear(context)

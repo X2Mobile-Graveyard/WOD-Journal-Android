@@ -144,9 +144,11 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
             }
 
             R.id.delete_menu -> {
-                deleteResult(result)
-                activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
-                activity.finish()
+                confirmDeleteAlert {
+                    deleteResult(result)
+                    activity.setResult(NavigationConstants.RESULT_DELETED, context.intentFor<Any>(NavigationConstants.KEY_RESULT to result))
+                    activity.finish()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
