@@ -8,10 +8,10 @@ import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Response
 
-class PersonalRecordsCallback : BaseCallback<List<PersonalRecord>>() {
+class PersonalRecordsCallback(val default: Boolean = true) : BaseCallback<List<PersonalRecord>>() {
 
     override fun onFailure(call: Call<List<PersonalRecord>>?, throwable: Throwable?) {
-        EventBus.getDefault().post(PersonalRecordsRequestFailureEvent(call, throwable))
+        EventBus.getDefault().post(PersonalRecordsRequestFailureEvent(call, throwable, default))
     }
 
     override fun onSuccess(call: Call<List<PersonalRecord>>?, response: Response<List<PersonalRecord>>) {

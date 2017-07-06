@@ -18,6 +18,9 @@ interface Api {
     @PATCH("users/{id}")
     fun updateUser(@Path("id") id: Int, @Body user: User): Call<Void>
 
+    @GET("default-prs")
+    fun getDefaultPersonalRecords(): Call<List<PersonalRecord>>
+
     @GET("list-prs")
     fun getPersonalRecords(): Call<List<PersonalRecord>>
 

@@ -144,6 +144,26 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordListener {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPersonalRecordsFailure(requestFailureEvent: PersonalRecordsRequestFailureEvent) {
+        if (requestFailureEvent.default) {
+            val personalRecordNames = resources.getStringArray(R.array.personal_record_type_names)
+            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
+            assert(personalRecordNames.size == resultTypes.size)
+
+            val personalRecords = ArrayList<PersonalRecord>()
+
+            personalRecordNames.forEachIndexed { index, name ->
+                personalRecords.add(PersonalRecord(name, ResultType.values()[resultTypes[index]]))
+            }
+
+            adapter.setItems(personalRecords)
+        } else {
+            handleRequestFailure(requestFailureEvent.throwable)
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPersonalRecordAdded(event: AddPersonalRecordRequestEvent) {
         Service.getPersonalRecords()
@@ -169,27 +189,11 @@ class PersonalRecordFragment : BaseFragment(), PersonalRecordListener {
         Service.getPersonalRecords()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordsFailure(requestFailureEvent: PersonalRecordsRequestFailureEvent) {
-        handleRequestFailure(requestFailureEvent.throwable)
-    }
-
     private fun retrievePersonalRecords() {
         if (Preference.isLoggedIn(context)) {
             Service.getPersonalRecords()
         } else {
-            val personalRecordNames = resources.getStringArray(R.array.personal_record_type_names)
-            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
-            assert(personalRecordNames.size == resultTypes.size)
-
-            val personalRecords = ArrayList<PersonalRecord>()
-
-            personalRecordNames.forEachIndexed { index, name ->
-                personalRecords.add(PersonalRecord(name, ResultType.values()[resultTypes[index]]))
-            }
-
-            adapter.setItems(personalRecords)
+            Service.getDefaultPersonalRecords()
         }
     }
 

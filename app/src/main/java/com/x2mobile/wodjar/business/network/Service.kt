@@ -64,7 +64,12 @@ object Service {
         call.enqueue(callback)
     }
 
-    fun getPersonalRecords(callback: Callback<List<PersonalRecord>> = PersonalRecordsCallback()) {
+    fun getDefaultPersonalRecords(callback: Callback<List<PersonalRecord>> = PersonalRecordsCallback()) {
+        val call = api.getDefaultPersonalRecords()
+        call.enqueue(callback)
+    }
+
+    fun getPersonalRecords(callback: Callback<List<PersonalRecord>> = PersonalRecordsCallback(false)) {
         val call = api.getPersonalRecords()
         call.enqueue(callback)
     }
