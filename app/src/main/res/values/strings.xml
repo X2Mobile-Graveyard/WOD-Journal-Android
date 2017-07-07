@@ -14,15 +14,15 @@
     <string name="reps_prefix">Rounds/Reps %d</string>
     <string name="time_prefix">Time %s</string>
 
-    <string name="personal_records">Personal Records</string>
-    <string name="personal_record">Personal Record</string>
-    <string name="workout">Workout</string>
-    <string name="workouts">Workouts</string>
+    <string name="personal_records">PRs</string>
+    <string name="personal_record">PR</string>
+    <string name="workout">WOD</string>
+    <string name="workouts">WODs</string>
 
-    <string name="workout_custom">Workout custom</string>
-    <string name="workout_result">Workout result</string>
-    <string name="create_workout">Create workout</string>
-    <string name="modify_workout">Modify workout</string>
+    <string name="workout_custom">WOD custom</string>
+    <string name="workout_result">WOD result</string>
+    <string name="create_workout">Create WOD</string>
+    <string name="modify_workout">Modify WOD</string>
 
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
@@ -68,7 +68,6 @@
 
     <string name="delete">Delete</string>
     <string name="deleting">Deleting…</string>
-    <string name="delete_record">Delete Record</string>
     <string name="delete_confirmation">Are you sure you want to delete it?</string>
 
     <string name="no_user">No user</string>
