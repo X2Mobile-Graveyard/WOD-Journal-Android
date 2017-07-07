@@ -22,7 +22,7 @@ class WorkoutCustomListFragment : WorkoutBaseListFragment<WorkoutCustom>() {
     override val adapter: WorkoutsCustomAdapter by lazy { WorkoutsCustomAdapter(context, this) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.custom_workouts, container, false)
+        return inflater.inflate(R.layout.workouts_custom, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
