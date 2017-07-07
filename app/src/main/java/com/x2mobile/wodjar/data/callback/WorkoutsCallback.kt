@@ -16,7 +16,7 @@ class WorkoutsCallback(val workoutType: WorkoutType) : BaseCallback<MutableList<
             WorkoutType.HEROES -> WorkoutHeroesRequestEvent(call, response)
             WorkoutType.CHALLENGES -> WorkoutChallengesRequestEvent(call, response)
             WorkoutType.OPENS -> WorkoutOpensRequestEvent(call, response)
-            WorkoutType.CUSTOM -> WorkoutCustomsRequestEvent(call, response)
+            else -> throw UnsupportedOperationException()
         })
     }
 

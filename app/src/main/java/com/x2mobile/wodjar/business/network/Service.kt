@@ -124,17 +124,27 @@ object Service {
         call.enqueue(callback)
     }
 
+    fun getWorkoutsCustom(callback: Callback<MutableList<WorkoutCustom>> = WorkoutsCustomCallback()) {
+        val call = api.getWorkoutsCustom()
+        call.enqueue(callback)
+    }
+
     fun getWorkout(id: Int, workoutType: WorkoutType, callback: Callback<Workout> = WorkoutCallback()) {
         val call = api.getWorkout(id, workoutType.ordinal)
         call.enqueue(callback)
     }
 
-    fun saveWorkout(workout: Workout, callback: Callback<Workout> = AddWorkoutCallback()) {
+    fun getWorkoutCustom(id: Int, callback: Callback<WorkoutCustom> = WorkoutCustomCallback()) {
+        val call = api.getWorkoutCustom(id)
+        call.enqueue(callback)
+    }
+
+    fun saveWorkout(workout: WorkoutCustom, callback: Callback<WorkoutCustom> = AddWorkoutCallback()) {
         val call = api.saveWorkout(workout)
         call.enqueue(callback)
     }
 
-    fun updateWorkout(workout: Workout, callback: Callback<Void> = UpdateWorkoutCallback()) {
+    fun updateWorkout(workout: WorkoutCustom, callback: Callback<Void> = UpdateWorkoutCallback()) {
         val call = api.updateWorkout(workout.id, workout)
         call.enqueue(callback)
     }

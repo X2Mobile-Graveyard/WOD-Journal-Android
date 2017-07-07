@@ -7,13 +7,14 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.business.NavigationConstants
 import com.x2mobile.wodjar.business.network.AmazonService
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
-import com.x2mobile.wodjar.data.model.Workout
+import com.x2mobile.wodjar.data.model.WorkoutCustom
 import com.x2mobile.wodjar.databinding.WorkoutEditBinding
 import com.x2mobile.wodjar.fragments.base.BaseFragment
 import com.x2mobile.wodjar.ui.binding.model.WorkoutEditViewModel
@@ -27,12 +28,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.support.v4.toast
+import java.util.*
 
-class WorkoutEditFragment : BaseFragment() {
+class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
-    val workout: Workout by lazy {
-        savedArguments?.get(NavigationConstants.KEY_WORKOUT) as Workout? ?: arguments?.get(NavigationConstants.KEY_WORKOUT) as Workout? ?:
-                Workout().apply { name = getString(R.string.workout) }
+    val DIALOG_DATE_PICKER = "date_picker"
+
+    val workout: WorkoutCustom by lazy {
+        savedArguments?.get(NavigationConstants.KEY_WORKOUT) as WorkoutCustom? ?:
+                arguments?.get(NavigationConstants.KEY_WORKOUT) as WorkoutCustom? ?: WorkoutCustom()
     }
 
     lateinit var binding: WorkoutEditBinding
@@ -55,8 +59,7 @@ class WorkoutEditFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        toolbarDelegate.enableTitleChange()
-        toolbarDelegate.title = workout.name!!
+        toolbarDelegate.title = if (workout.id < 0) getString(R.string.create_workout) else getString(R.string.modify_workout)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -83,15 +86,11 @@ class WorkoutEditFragment : BaseFragment() {
             imageViewer.popup(binding.imageContainer)
         }
 
-        binding.delete.setOnClickListener {
-            //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
-            workouts.removeIf { it.id == workout.id }
-
-            Service.deleteWorkout(workout.id)
-
-            activity.setResult(NavigationConstants.RESULT_DELETED)
-            activity.finish()
+        binding.date.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            calendar.time = workout.date
+            DatePickerDialog.newInstance(this@WorkoutEditFragment, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show(fragmentManager, DIALOG_DATE_PICKER)
         }
     }
 
@@ -118,13 +117,17 @@ class WorkoutEditFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_done, menu)
+        inflater.inflate(R.menu.menu_workout, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.delete_menu).isVisible = workout.id >= 0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.done_menu -> {
-                workout.name = toolbarDelegate.title
                 if (isInputValid()) {
                     progress = context.indeterminateProgressDialog(R.string.saving)
                     doAsync {
@@ -140,6 +143,17 @@ class WorkoutEditFragment : BaseFragment() {
                 }
                 return true
             }
+
+            R.id.delete_menu -> {
+                //Updating the cached version
+                val workouts = EventBus.getDefault().getStickyEvent(WorkoutsCustomRequestEvent::class.java).response.body()!!
+                workouts.removeIf { it.id == workout.id }
+
+                Service.deleteWorkout(workout.id)
+
+                activity.setResult(NavigationConstants.RESULT_DELETED)
+                activity.finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -151,9 +165,13 @@ class WorkoutEditFragment : BaseFragment() {
         viewModel.notifyImageChange()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onTitleSet(event: TitleSetEvent) {
-        workout.name = toolbarDelegate.title
+    override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, monthOfYear)
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        workout.date = calendar.time
+        viewModel.notifyDateChange()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -162,7 +180,7 @@ class WorkoutEditFragment : BaseFragment() {
         if (requestResponseEvent.response.body() != null) {
 
             //Updating the cached version
-            val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
+            val workouts = EventBus.getDefault().getStickyEvent(WorkoutsCustomRequestEvent::class.java).response.body()!!
             workouts.add(requestResponseEvent.response.body()!!)
 
             activity.finish()
@@ -176,10 +194,10 @@ class WorkoutEditFragment : BaseFragment() {
         progress?.dismiss()
 
         //Updating the cached version
-        val workouts = EventBus.getDefault().getStickyEvent(WorkoutCustomsRequestEvent::class.java).response.body()!!
+        val workouts = EventBus.getDefault().getStickyEvent(WorkoutsCustomRequestEvent::class.java).response.body()!!
         val cachedWorkout = workouts.find { it.id == workout.id }
-        cachedWorkout?.name = workout.name
         cachedWorkout?.description = workout.description
+        cachedWorkout?.date = workout.date
         cachedWorkout?.imageUri = workout.imageUri
 
         activity.setResult(Activity.RESULT_OK, context.intentFor<Any>(NavigationConstants.KEY_WORKOUT to workout))
@@ -198,7 +216,7 @@ class WorkoutEditFragment : BaseFragment() {
         handleRequestFailure(requestFailureEvent.throwable)
     }
 
-    fun saveWorkout(workout: Workout) {
+    fun saveWorkout(workout: WorkoutCustom) {
         if (workout.id != Constants.ID_NA) {
             Service.updateWorkout(workout)
         } else {

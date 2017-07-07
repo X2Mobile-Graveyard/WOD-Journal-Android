@@ -95,7 +95,11 @@ class WorkoutTypesFragment : BaseFragment() {
 
     fun fetchWorkouts(type: WorkoutType) {
         if (Preference.isLoggedIn(context)) {
-            Service.getWorkouts(type)
+            if (type == WorkoutType.CUSTOM) {
+                Service.getWorkoutsCustom()
+            } else {
+                Service.getWorkouts(type)
+            }
         } else {
             if (type != WorkoutType.CUSTOM) {
                 Service.getDefaultWorkouts(type)

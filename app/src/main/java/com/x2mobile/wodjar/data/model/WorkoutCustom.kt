@@ -4,41 +4,41 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.x2mobile.wodjar.data.model.base.BaseWorkout
-import com.x2mobile.wodjar.data.model.base.Filterable
+import java.util.*
 
-class Workout : BaseWorkout, Filterable {
+class WorkoutCustom : BaseWorkout {
 
-    @SerializedName("name")
-    var name: String? = null
+    @SerializedName("date")
+    var date: Date = Date()
 
     constructor() : super()
 
     constructor(source: Parcel) : super(source) {
-        name = source.readString()
+        date = source.readSerializable() as Date
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         super.writeToParcel(dest, flags)
-        dest.writeString(name)
+        dest.writeSerializable(date)
     }
 
     override fun matches(query: String): Boolean {
-        return name?.contains(query, true) ?: false
+        return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + date.hashCode()
         return result
     }
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Workout> = object : Parcelable.Creator<Workout> {
-            override fun createFromParcel(source: Parcel): Workout {
-                return Workout(source)
+        @JvmField val CREATOR: Parcelable.Creator<WorkoutCustom> = object : Parcelable.Creator<WorkoutCustom> {
+            override fun createFromParcel(source: Parcel): WorkoutCustom {
+                return WorkoutCustom(source)
             }
 
-            override fun newArray(size: Int): Array<Workout?> {
+            override fun newArray(size: Int): Array<WorkoutCustom?> {
                 return arrayOfNulls(size)
             }
         }

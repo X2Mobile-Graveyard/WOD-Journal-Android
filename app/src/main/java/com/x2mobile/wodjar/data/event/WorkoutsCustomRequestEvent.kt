@@ -5,4 +5,5 @@ import com.x2mobile.wodjar.data.model.WorkoutCustom
 import retrofit2.Call
 import retrofit2.Response
 
-class AddWorkoutRequestEvent(call: Call<WorkoutCustom>?, response: Response<WorkoutCustom>) : RequestResponseEvent<WorkoutCustom>(call, response)
+class WorkoutsCustomRequestEvent(call: Call<MutableList<WorkoutCustom>>?, response: Response<MutableList<WorkoutCustom>>) :
+        RequestResponseEvent<MutableList<WorkoutCustom>>(call, response)

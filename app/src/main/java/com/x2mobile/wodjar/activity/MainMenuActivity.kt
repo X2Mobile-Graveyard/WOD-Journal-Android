@@ -41,7 +41,7 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
             NavigationDrawerFragment.NavigationType.PR -> selectedFragment = PersonalRecordsFragment()
             NavigationDrawerFragment.NavigationType.WOD -> selectedFragment = WorkoutTypesFragment()
             NavigationDrawerFragment.NavigationType.OPTIONS -> selectedFragment = OptionsFragment()
-            else -> throw RuntimeException("Navigation type: $navigationType not supported")
+            else -> throw UnsupportedOperationException("Navigation type: $navigationType not supported")
         }
         // update the main content by replacing fragments
         supportFragmentManager.beginTransaction().replace(R.id.container, selectedFragment).commit()

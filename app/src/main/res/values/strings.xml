@@ -19,6 +19,11 @@
     <string name="workout">Workout</string>
     <string name="workouts">Workouts</string>
 
+    <string name="workout_custom">Workout custom</string>
+    <string name="workout_result">Workout result</string>
+    <string name="create_workout">Create workout</string>
+    <string name="modify_workout">Modify workout</string>
+
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
 

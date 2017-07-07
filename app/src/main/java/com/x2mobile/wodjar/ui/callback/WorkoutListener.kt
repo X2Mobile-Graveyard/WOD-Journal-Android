@@ -1,7 +1,7 @@
 package com.x2mobile.wodjar.ui.callback
 
-import com.x2mobile.wodjar.data.model.Workout
+import com.x2mobile.wodjar.data.model.base.BaseWorkout
 
-interface WorkoutListener {
-    fun onWorkoutClicked(workout: Workout)
+interface WorkoutListener<in T : BaseWorkout> {
+    fun onWorkoutClicked(workout: T)
 }

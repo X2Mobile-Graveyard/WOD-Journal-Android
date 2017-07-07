@@ -54,14 +54,20 @@ interface Api {
     @GET("list-wods/{workoutType}")
     fun getWorkouts(@Path("workoutType") workoutType: Int): Call<MutableList<Workout>>
 
+    @GET("list-custom-wods")
+    fun getWorkoutsCustom(): Call<MutableList<WorkoutCustom>>
+
     @GET("wods/{id}/{workoutType}")
     fun getWorkout(@Path("id") id: Int, @Path("workoutType") workoutType: Int): Call<Workout>
 
+    @GET("custom-wods/{id}")
+    fun getWorkoutCustom(@Path("id") id: Int): Call<WorkoutCustom>
+
     @POST("wods")
-    fun saveWorkout(@Body workout: Workout): Call<Workout>
+    fun saveWorkout(@Body workout: WorkoutCustom): Call<WorkoutCustom>
 
     @PATCH("wods/{wod_id}")
-    fun updateWorkout(@Path("wod_id") workoutId: Int, @Body workout: Workout): Call<Void>
+    fun updateWorkout(@Path("wod_id") workoutId: Int, @Body workout: WorkoutCustom): Call<Void>
 
     @DELETE("wods/{wod_id}")
     fun deleteWorkout(@Path("wod_id") workoutId: Int): Call<Void>

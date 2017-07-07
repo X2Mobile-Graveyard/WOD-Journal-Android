@@ -13,8 +13,8 @@ import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.business.network.Service
 import com.x2mobile.wodjar.data.event.*
 import com.x2mobile.wodjar.data.model.UnitType
-import com.x2mobile.wodjar.data.model.Workout
 import com.x2mobile.wodjar.data.model.WorkoutResult
+import com.x2mobile.wodjar.data.model.base.BaseWorkout
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.intentFor
@@ -22,11 +22,11 @@ import org.jetbrains.anko.support.v4.toast
 
 class WorkoutResultFragment : ResultFragment<WorkoutResult>() {
 
-    val workout: Workout by lazy { arguments!![NavigationConstants.KEY_WORKOUT] as Workout }
+    val workout: BaseWorkout by lazy { arguments!![NavigationConstants.KEY_WORKOUT] as BaseWorkout }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbarDelegate.title = workout.name!!
+        toolbarDelegate.title = arguments!![NavigationConstants.KEY_TITLE] as String
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

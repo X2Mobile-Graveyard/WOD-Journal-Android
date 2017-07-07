@@ -6,9 +6,9 @@ import android.databinding.Bindable
 import android.text.TextUtils
 import com.x2mobile.wodjar.business.Preference
 import com.x2mobile.wodjar.data.model.UnitType
-import com.x2mobile.wodjar.data.model.Workout
+import com.x2mobile.wodjar.data.model.base.BaseWorkout
 
-class WorkoutViewModel(context: Context, val workout: Workout) : BaseObservable() {
+class WorkoutViewModel(context: Context, val workout: BaseWorkout) : BaseObservable() {
 
     @Bindable
     val description: String? = if (Preference.getUnitType(context) == UnitType.IMPERIAL ||

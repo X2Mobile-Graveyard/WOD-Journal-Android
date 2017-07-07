@@ -4,9 +4,9 @@ import android.databinding.BaseObservable
 import android.databinding.Bindable
 import com.x2mobile.wodjar.BR
 import com.x2mobile.wodjar.data.model.ResultType
-import com.x2mobile.wodjar.data.model.Workout
+import com.x2mobile.wodjar.data.model.WorkoutCustom
 
-class WorkoutEditViewModel(val workout: Workout) : BaseObservable() {
+class WorkoutEditViewModel(val workout: WorkoutCustom) : BaseObservable() {
 
     @Bindable
     var description: String? = workout.description
@@ -43,6 +43,10 @@ class WorkoutEditViewModel(val workout: Workout) : BaseObservable() {
 
     fun notifyImageChange() {
         notifyPropertyChanged(BR.imageAvailable)
+    }
+
+    fun notifyDateChange() {
+        notifyPropertyChanged(BR.date)
     }
 
 }
