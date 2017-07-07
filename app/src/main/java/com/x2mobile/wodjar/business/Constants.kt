@@ -1,5 +1,7 @@
 package com.x2mobile.wodjar.business
 
+import com.x2mobile.wodjar.BuildConfig
+
 object Constants {
 
     const val ID_NA = -1
@@ -12,4 +14,8 @@ object Constants {
     const val YOUTUBE_API_KEY = "AIzaSyB34lB_4J82Bbv73MXQPRPOhBvvwdU77Xk"
 
     const val IMAGE_NAME = "%d_%d"
+
+    const val FILE_AUTHORITY = "${BuildConfig.APPLICATION_ID}.android.provider"
+
+    const val CAMERA_IMAGE_NAME = "camera.jpeg"
 }

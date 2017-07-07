@@ -4,13 +4,18 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
 import com.x2mobile.wodjar.R
+import com.x2mobile.wodjar.business.Constants
 import com.x2mobile.wodjar.data.event.ImageSetEvent
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
+import java.io.File
 
 class ImagePicker(val fragment: Fragment) {
 
@@ -18,10 +23,16 @@ class ImagePicker(val fragment: Fragment) {
 
     private val REQUEST_CODE_STORAGE = 97
 
+    private val cameraPhoto by lazy {
+        val file = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME)
+        file.createNewFile()
+        file
+    }
+
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK && intent != null) {
-                EventBus.getDefault().post(ImageSetEvent(intent.data))
+                EventBus.getDefault().post(ImageSetEvent(intent.data ?: Uri.fromFile(cameraPhoto)))
             }
             return true
         }
@@ -52,7 +63,10 @@ class ImagePicker(val fragment: Fragment) {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
         pickIntent.type = "image/*"
+
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(fragment.context, Constants.FILE_AUTHORITY, cameraPhoto))
+
         fragment.startActivityForResult(Intent.createChooser(pickIntent, fragment.getString(R.string.add_picture))
                 .putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)), REQUEST_CODE_PICK_IMAGE)
     }
