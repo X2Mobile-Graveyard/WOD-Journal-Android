@@ -10,98 +10,87 @@
             type="com.x2mobile.wodjar.ui.binding.model.WorkoutViewModel" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/fab_padding"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <LinearLayout
+            <android.support.percent.PercentRelativeLayout
+                android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/fab_padding"
-                android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
+                android:visible="@{viewModel.workout.imageUri != null}">
 
-                <android.support.percent.PercentRelativeLayout
-                    android:id="@+id/image_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visible="@{viewModel.workout.imageUri != null}">
+                <ImageView
+                    android:id="@+id/image"
+                    android:scaleType="centerCrop"
+                    app:layout_aspectRatio="178%"
+                    app:layout_widthPercent="100%" />
+            </android.support.percent.PercentRelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/image"
-                        android:scaleType="centerCrop"
-                        app:layout_aspectRatio="178%"
-                        app:layout_widthPercent="100%" />
-                </android.support.percent.PercentRelativeLayout>
+            <Button
+                android:id="@+id/history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|right"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_color_state"
+                android:minHeight="36dp"
+                android:text="@string/history"
+                android:textColor="@drawable/button_text_state"
+                android:visible="@{!TextUtils.isEmpty(viewModel.workout.history)}" />
 
-                <Button
-                    android:id="@+id/history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|right"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/button_color_state"
-                    android:minHeight="36dp"
-                    android:text="@string/history"
-                    android:textColor="@drawable/button_text_state"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.workout.history)}" />
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:visible="@{viewModel.workout.imageUri != null}" />
 
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:visible="@{viewModel.workout.imageUri != null}" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@{viewModel.description}"
+                android:visible="@{!TextUtils.isEmpty(viewModel.description)}" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/description"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.description)}" />
+            <FrameLayout
+                android:id="@+id/player_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visible="@{!TextUtils.isEmpty(viewModel.workout.video)}" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{viewModel.description}"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.description)}" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-                <FrameLayout
-                    android:id="@+id/player_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:visible="@{!TextUtils.isEmpty(viewModel.workout.video)}" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:clickable="true"
-            android:src="@drawable/ic_add"
-            app:elevation="4dp"
-            app:fabSize="auto"
-            app:pressedTranslationZ="12dp"
-            app:useCompatPadding="true" />
-
-    </RelativeLayout>
+            <Button
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/button_color_state"
+                android:minHeight="36dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:text="@string/log_result"
+                android:textColor="@drawable/button_text_state" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </layout>
