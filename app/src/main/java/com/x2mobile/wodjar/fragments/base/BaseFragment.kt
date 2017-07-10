@@ -30,14 +30,14 @@ open class BaseFragment : Fragment() {
     protected fun showLoginAlert() {
         alert(R.string.login_to_continue) {
             positiveButton(getString(R.string.login)) { startActivity(context.intentFor<LoginActivity>()) }
-            cancelButton { }
+            negativeButton(R.string.cancel) { }
         }.show()
     }
 
     protected fun confirmDeleteAlert(delete: () -> Unit) {
         alert(R.string.delete_confirmation) {
             positiveButton(getString(R.string.delete)) { delete.invoke() }
-            cancelButton { }
+            negativeButton(R.string.cancel) { }
         }.show()
     }
 
