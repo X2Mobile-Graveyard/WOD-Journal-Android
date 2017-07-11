@@ -23,11 +23,7 @@ class ImagePicker(val fragment: Fragment) {
 
     private val REQUEST_CODE_STORAGE = 97
 
-    private val cameraPhoto by lazy {
-        val file = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME)
-        file.createNewFile()
-        file
-    }
+    private lateinit var cameraPhoto : File
 
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
@@ -63,6 +59,9 @@ class ImagePicker(val fragment: Fragment) {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT)
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
         pickIntent.type = "image/*"
+
+        cameraPhoto = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME.format(System.currentTimeMillis()))
+        cameraPhoto.createNewFile()
 
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(fragment.context, Constants.FILE_AUTHORITY, cameraPhoto))

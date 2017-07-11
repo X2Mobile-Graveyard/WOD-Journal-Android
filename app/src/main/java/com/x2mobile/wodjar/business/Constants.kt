@@ -17,5 +17,5 @@ object Constants {
 
     const val FILE_AUTHORITY = "${BuildConfig.APPLICATION_ID}.android.provider"
 
-    const val CAMERA_IMAGE_NAME = "camera.jpeg"
+    const val CAMERA_IMAGE_NAME = "result_%d.jpeg"
 }
