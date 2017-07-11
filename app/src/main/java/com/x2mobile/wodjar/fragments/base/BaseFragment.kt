@@ -2,6 +2,7 @@ package com.x2mobile.wodjar.fragments.base
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import com.crashlytics.android.Crashlytics
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.activity.LoginActivity
 import com.x2mobile.wodjar.business.Preference
@@ -51,6 +52,7 @@ open class BaseFragment : Fragment() {
         } else if (throwable is ServerException) {
             toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
         } else {
+            Crashlytics.logException(throwable)
             toast(R.string.error_occurred)
         }
     }
