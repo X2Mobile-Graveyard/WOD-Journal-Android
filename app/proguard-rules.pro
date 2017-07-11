@@ -25,6 +25,7 @@
 #-renamesourcefileattribute SourceFile
 
 -keepattributes Signature, *Annotation*, LineNumberTable
+-renamesourcefileattribute SourceFile
 
 -dontwarn android.databinding.tool.**
 
