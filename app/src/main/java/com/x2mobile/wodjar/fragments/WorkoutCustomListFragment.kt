@@ -48,6 +48,6 @@ class WorkoutCustomListFragment : WorkoutBaseListFragment<WorkoutCustom>() {
     }
 
     override fun sortWorkouts(workouts: List<WorkoutCustom>): List<WorkoutCustom> {
-        return workouts.sortedBy(WorkoutCustom::date)
+        return workouts.sortedBy(WorkoutCustom::date).reversed()
     }
 }
