@@ -19,21 +19,27 @@ class WorkoutEditViewModel(val workout: WorkoutCustom) : BaseObservable() {
     var weightSelected: Boolean = workout.resultType == ResultType.WEIGHT
         set(value) {
             field = value
-            workout.resultType = ResultType.WEIGHT
+            if (value) {
+                workout.resultType = ResultType.WEIGHT
+            }
         }
 
     @Bindable
     var repsSelected: Boolean = workout.resultType == ResultType.REPETITION
         set(value) {
             field = value
-            workout.resultType = ResultType.REPETITION
+            if (value) {
+                workout.resultType = ResultType.REPETITION
+            }
         }
 
     @Bindable
     var timeSelected: Boolean = workout.resultType == ResultType.TIME
         set(value) {
             field = value
-            workout.resultType = ResultType.TIME
+            if (value) {
+                workout.resultType = ResultType.TIME
+            }
         }
 
     @Bindable
