@@ -26,12 +26,12 @@ class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
 
     private val REQUEST_CODE_STORAGE = 97
 
-    private lateinit var cameraFile: File
+    private var cameraFile: File? = null
 
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-                EventBus.getDefault().post(ImageSetEvent(intent?.data ?: Uri.fromFile(cameraFile)))
+                EventBus.getDefault().post(ImageSetEvent(intent?.data ?: Uri.fromFile(cameraFile!!)))
             }
             return true
         }
@@ -51,7 +51,9 @@ class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
     }
 
     fun onSaveInstance(outState: Bundle?) {
-        outState?.putSerializable(KEY_CAMERA_FILE, cameraFile)
+        if (cameraFile != null) {
+            outState?.putSerializable(KEY_CAMERA_FILE, cameraFile)
+        }
     }
 
     fun addPicture(fragment: Fragment) {
