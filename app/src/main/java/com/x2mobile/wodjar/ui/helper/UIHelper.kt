@@ -16,7 +16,7 @@ object UIHelper {
                 ResultType.WEIGHT -> context.getString(R.string.weight_prefix,
                         context.getString(if (Preference.getUnitType(context) == UnitType.METRIC) R.string.kg_suffix else R.string.lb_suffix,
                                 MathUtil.convertWeight(value, UnitType.METRIC, Preference.getUnitType(context))))
-                ResultType.REPETITION -> context.getString(R.string.reps_prefix, value)
+                ResultType.REPETITION -> context.getString(R.string.reps_prefix, value.toInt())
                 ResultType.TIME -> context.getString(R.string.time_prefix, TimeUtil.formatTime(value.toLong()))
             }
         }
