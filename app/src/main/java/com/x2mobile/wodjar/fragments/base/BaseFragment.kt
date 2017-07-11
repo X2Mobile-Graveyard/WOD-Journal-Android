@@ -11,7 +11,6 @@ import com.x2mobile.wodjar.business.network.exception.ServerException
 import com.x2mobile.wodjar.business.network.exception.UnauthorizedException
 import com.x2mobile.wodjar.data.event.LoggedOutEvent
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.toast
