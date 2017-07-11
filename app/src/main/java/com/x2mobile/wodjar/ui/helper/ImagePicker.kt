@@ -31,8 +31,8 @@ class ImagePicker(val fragment: Fragment) {
 
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
-            if (resultCode == Activity.RESULT_OK && intent != null) {
-                EventBus.getDefault().post(ImageSetEvent(intent.data ?: Uri.fromFile(cameraPhoto)))
+            if (resultCode == Activity.RESULT_OK) {
+                EventBus.getDefault().post(ImageSetEvent(intent?.data ?: Uri.fromFile(cameraPhoto)))
             }
             return true
         }
