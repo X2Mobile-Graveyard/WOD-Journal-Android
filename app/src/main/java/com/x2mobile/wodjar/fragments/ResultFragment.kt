@@ -47,7 +47,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     val viewModel: ResultViewModel by lazy { ResultViewModel(context, result) }
 
-    val imagePicker: ImagePicker by lazy { ImagePicker(this) }
+    val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
 
     val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
@@ -156,6 +156,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+        imagePicker.onSaveInstance(outState)
         outState?.putParcelable(NavigationConstants.KEY_RESULT, result)
     }
 

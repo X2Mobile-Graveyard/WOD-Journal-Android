@@ -43,7 +43,7 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     val viewModel: WorkoutEditViewModel by lazy { WorkoutEditViewModel(workout) }
 
-    val imagePicker: ImagePicker by lazy { ImagePicker(this) }
+    val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
 
     val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
@@ -102,6 +102,7 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+        imagePicker.onSaveInstance(outState)
         outState?.putParcelable(NavigationConstants.KEY_WORKOUT, workout)
     }
 

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -17,18 +18,20 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
 import java.io.File
 
-class ImagePicker(val fragment: Fragment) {
+class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
+
+    private val KEY_CAMERA_FILE = "camera_file"
 
     private val REQUEST_CODE_PICK_IMAGE = 13
 
     private val REQUEST_CODE_STORAGE = 97
 
-    private lateinit var cameraPhoto : File
+    private lateinit var cameraFile: File
 
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
         if (requestCode == REQUEST_CODE_PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-                EventBus.getDefault().post(ImageSetEvent(intent?.data ?: Uri.fromFile(cameraPhoto)))
+                EventBus.getDefault().post(ImageSetEvent(intent?.data ?: Uri.fromFile(cameraFile)))
             }
             return true
         }
@@ -47,6 +50,10 @@ class ImagePicker(val fragment: Fragment) {
         return false
     }
 
+    fun onSaveInstance(outState: Bundle?) {
+        outState?.putSerializable(KEY_CAMERA_FILE, cameraFile)
+    }
+
     fun addPicture(fragment: Fragment) {
         if (ContextCompat.checkSelfPermission(fragment.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             addPictureInternal()
@@ -60,13 +67,19 @@ class ImagePicker(val fragment: Fragment) {
         pickIntent.addCategory(Intent.CATEGORY_OPENABLE)
         pickIntent.type = "image/*"
 
-        cameraPhoto = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME.format(System.currentTimeMillis()))
-        cameraPhoto.createNewFile()
+        cameraFile = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME.format(System.currentTimeMillis()))
+        cameraFile.createNewFile()
 
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(fragment.context, Constants.FILE_AUTHORITY, cameraPhoto))
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(fragment.context, Constants.FILE_AUTHORITY, cameraFile))
 
         fragment.startActivityForResult(Intent.createChooser(pickIntent, fragment.getString(R.string.add_picture))
                 .putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)), REQUEST_CODE_PICK_IMAGE)
+    }
+
+    init {
+        if (savedArguments?.containsKey(KEY_CAMERA_FILE) ?: false) {
+            cameraFile = savedArguments!!.getSerializable(KEY_CAMERA_FILE) as File
+        }
     }
 }
