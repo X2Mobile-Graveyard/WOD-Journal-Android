@@ -27,7 +27,7 @@ object Service {
         val okHttpBuilder = OkHttpClient.Builder()
                 .addInterceptor(AuthorizationInterceptor(WodJarApplication.INSTANCE))
                 .cache(Cache(WodJarApplication.INSTANCE.cacheDir, SIZE_OF_CACHE))
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(true)
 
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
