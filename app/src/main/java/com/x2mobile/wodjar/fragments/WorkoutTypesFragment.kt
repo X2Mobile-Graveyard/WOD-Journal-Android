@@ -79,12 +79,12 @@ class WorkoutTypesFragment : BaseFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedIn(event: LoggedInEvent) {
-        Service.getWorkouts(selectedTab.workoutType)
+        fetchWorkouts(selectedTab.workoutType)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoggedOut(event: LoggedOutEvent) {
-        Service.getDefaultWorkouts(selectedTab.workoutType)
+        fetchWorkouts(selectedTab.workoutType)
     }
 
     @Suppress("UNUSED_PARAMETER")
