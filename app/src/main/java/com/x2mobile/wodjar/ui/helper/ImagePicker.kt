@@ -70,7 +70,7 @@ class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
         pickIntent.type = "image/*"
 
         cameraFile = File(fragment.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), Constants.CAMERA_IMAGE_NAME.format(System.currentTimeMillis()))
-        cameraFile.createNewFile()
+        cameraFile!!.createNewFile()
 
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(fragment.context, Constants.FILE_AUTHORITY, cameraFile))
