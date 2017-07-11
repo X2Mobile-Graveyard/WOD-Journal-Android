@@ -153,6 +153,7 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
                 activity.setResult(NavigationConstants.RESULT_DELETED)
                 activity.finish()
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
