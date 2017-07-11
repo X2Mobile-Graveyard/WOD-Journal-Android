@@ -24,7 +24,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepattributes Signature, *Annotation*
+-keepattributes Signature, *Annotation*, LineNumberTable
 
 -dontwarn android.databinding.tool.**
 
