@@ -147,7 +147,7 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
             R.id.delete_menu -> {
                 //Updating the cached version
                 val workouts = EventBus.getDefault().getStickyEvent(WorkoutsCustomRequestEvent::class.java).response.body()!!
-                workouts.removeIf { it.id == workout.id }
+                workouts.removeAll { it.id == workout.id }
 
                 Service.deleteWorkout(workout.id)
 
