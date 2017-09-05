@@ -9,12 +9,8 @@ import retrofit2.Response
 
 class UpdateUserCallback : BaseCallback<Void>() {
 
-    override fun onFailure(call: Call<Void>?, throwable: Throwable?) {
-        EventBus.getDefault().post(UpdateUserRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<Void>?, throwable: Throwable?) = EventBus.getDefault().post(UpdateUserRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<Void>?, response: Response<Void>) {
-        EventBus.getDefault().post(UpdateUserRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<Void>?, response: Response<Void>) = EventBus.getDefault().post(UpdateUserRequestEvent(call, response))
 
 }

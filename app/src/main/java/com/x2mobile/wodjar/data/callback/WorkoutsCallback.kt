@@ -8,20 +8,16 @@ import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Response
 
-class WorkoutsCallback(val workoutType: WorkoutType) : BaseCallback<MutableList<Workout>>() {
+class WorkoutsCallback(private val workoutType: WorkoutType) : BaseCallback<MutableList<Workout>>() {
 
-    override fun onSuccess(call: Call<MutableList<Workout>>?, response: Response<MutableList<Workout>>) {
-        EventBus.getDefault().postSticky(when (workoutType) {
-            WorkoutType.GIRLS -> WorkoutGirlsRequestEvent(call, response)
-            WorkoutType.HEROES -> WorkoutHeroesRequestEvent(call, response)
-            WorkoutType.CHALLENGES -> WorkoutChallengesRequestEvent(call, response)
-            WorkoutType.OPENS -> WorkoutOpensRequestEvent(call, response)
-            else -> throw UnsupportedOperationException()
-        })
-    }
+    override fun onSuccess(call: Call<MutableList<Workout>>?, response: Response<MutableList<Workout>>) = EventBus.getDefault().postSticky(when (workoutType) {
+        WorkoutType.GIRLS -> WorkoutGirlsRequestEvent(call, response)
+        WorkoutType.HEROES -> WorkoutHeroesRequestEvent(call, response)
+        WorkoutType.CHALLENGES -> WorkoutChallengesRequestEvent(call, response)
+        WorkoutType.OPENS -> WorkoutOpensRequestEvent(call, response)
+        else -> throw UnsupportedOperationException()
+    })
 
-    override fun onFailure(call: Call<MutableList<Workout>>?, throwable: Throwable?) {
-        EventBus.getDefault().post(WorkoutsRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<MutableList<Workout>>?, throwable: Throwable?) = EventBus.getDefault().post(WorkoutsRequestFailureEvent(call, throwable))
 
 }

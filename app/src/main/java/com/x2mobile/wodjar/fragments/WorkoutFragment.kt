@@ -29,28 +29,20 @@ class WorkoutFragment : WorkoutBaseFragment<Workout>(), WorkoutResultListener {
         toolbarDelegate.title = workout.name!!
     }
 
-    override fun getWorkoutResultTitle(): String {
-        return workout.name!!
-    }
+    override fun getWorkoutResultTitle(): String = workout.name!!
 
-    override fun getRequestEventType(): KClass<out RequestResponseEvent<MutableList<Workout>>> {
-        return when (workout.type) {
-            WorkoutType.GIRLS -> WorkoutGirlsRequestEvent::class
-            WorkoutType.HEROES -> WorkoutHeroesRequestEvent::class
-            WorkoutType.CHALLENGES -> WorkoutChallengesRequestEvent::class
-            WorkoutType.OPENS -> WorkoutOpensRequestEvent::class
-            else -> throw UnsupportedOperationException()
-        }
+    override fun getRequestEventType(): KClass<out RequestResponseEvent<MutableList<Workout>>> = when (workout.type) {
+        WorkoutType.GIRLS -> WorkoutGirlsRequestEvent::class
+        WorkoutType.HEROES -> WorkoutHeroesRequestEvent::class
+        WorkoutType.CHALLENGES -> WorkoutChallengesRequestEvent::class
+        WorkoutType.OPENS -> WorkoutOpensRequestEvent::class
+        else -> throw UnsupportedOperationException()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutResponse(requestResponseEvent: WorkoutRequestEvent) {
-        handleWorkoutResponse(requestResponseEvent)
-    }
+    fun onWorkoutResponse(requestResponseEvent: WorkoutRequestEvent) = handleWorkoutResponse(requestResponseEvent)
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutFailure(requestFailureEvent: WorkoutRequestFailureEvent) {
-        handleRequestFailure(requestFailureEvent.throwable)
-    }
+    fun onWorkoutFailure(requestFailureEvent: WorkoutRequestFailureEvent) = handleRequestFailure(requestFailureEvent.throwable)
 }

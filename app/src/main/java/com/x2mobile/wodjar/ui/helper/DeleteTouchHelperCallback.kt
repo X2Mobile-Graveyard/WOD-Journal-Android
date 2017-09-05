@@ -12,9 +12,9 @@ import com.x2mobile.wodjar.R
 
 class DeleteTouchHelperCallback(context: Context, val callback: DeleteListener) : ItemTouchHelper.Callback() {
 
-    var deleteIcon: Drawable? = null
+    private var deleteIcon: Drawable? = null
 
-    val backgroundPaint: Paint = Paint()
+    private val backgroundPaint: Paint = Paint()
 
     init {
         deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
@@ -23,17 +23,11 @@ class DeleteTouchHelperCallback(context: Context, val callback: DeleteListener) 
         backgroundPaint.color = Color.RED
     }
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.END)
-    }
+    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int = ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.END)
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        return false
-    }
+    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        callback.onItemRemoved(viewHolder.adapterPosition)
-    }
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = callback.onItemRemoved(viewHolder.adapterPosition)
 
     override fun onChildDraw(canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
                              dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
@@ -50,13 +44,9 @@ class DeleteTouchHelperCallback(context: Context, val callback: DeleteListener) 
         }
     }
 
-    override fun isItemViewSwipeEnabled(): Boolean {
-        return true
-    }
+    override fun isItemViewSwipeEnabled(): Boolean = true
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return false
-    }
+    override fun isLongPressDragEnabled(): Boolean = false
 }
 
 interface DeleteListener {

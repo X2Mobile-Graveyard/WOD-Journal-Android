@@ -2,7 +2,6 @@ package com.x2mobile.wodjar.activity
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import com.x2mobile.wodjar.R
@@ -36,11 +35,10 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
     }
 
     override fun onNavigationItemSelected(navigationType: NavigationDrawerFragment.NavigationType) {
-        val selectedFragment: Fragment?
-        when (navigationType) {
-            NavigationDrawerFragment.NavigationType.PR -> selectedFragment = PersonalRecordsFragment()
-            NavigationDrawerFragment.NavigationType.WOD -> selectedFragment = WorkoutTypesFragment()
-            NavigationDrawerFragment.NavigationType.OPTIONS -> selectedFragment = OptionsFragment()
+        val selectedFragment = when (navigationType) {
+            NavigationDrawerFragment.NavigationType.PR -> PersonalRecordsFragment()
+            NavigationDrawerFragment.NavigationType.WOD -> WorkoutTypesFragment()
+            NavigationDrawerFragment.NavigationType.OPTIONS -> OptionsFragment()
             else -> throw UnsupportedOperationException("Navigation type: $navigationType not supported")
         }
         // update the main content by replacing fragments
@@ -49,14 +47,11 @@ class MainMenuActivity : AppCompatActivity(), NavigationDrawerCallback, ToolbarD
         mainScreenBinding.drawer?.closeDrawer(GravityCompat.START)
     }
 
-    override fun showIndeterminateLoading(show: Boolean) {
-    }
+    override fun showIndeterminateLoading(show: Boolean) = Unit
 
-    override fun enableTitleChange() {
-    }
+    override fun enableTitleChange() = Unit
 
-    override fun startTitleChange() {
-    }
+    override fun startTitleChange() = Unit
 }
 
 

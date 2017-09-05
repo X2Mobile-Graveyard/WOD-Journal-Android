@@ -9,7 +9,7 @@ class PersonalRecordResult : Result, Parcelable {
 
     override var parentId: Int
         get() = personalRecordId
-        set(value) {}
+        set(value) = Unit
 
     @SerializedName("personal_record_id")
     var personalRecordId: Int = Constants.ID_NA
@@ -25,19 +25,13 @@ class PersonalRecordResult : Result, Parcelable {
         dest.writeInt(personalRecordId)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<PersonalRecordResult> = object : Parcelable.Creator<PersonalRecordResult> {
-            override fun createFromParcel(source: Parcel): PersonalRecordResult {
-                return PersonalRecordResult(source)
-            }
+            override fun createFromParcel(source: Parcel): PersonalRecordResult = PersonalRecordResult(source)
 
-            override fun newArray(size: Int): Array<PersonalRecordResult?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<PersonalRecordResult?> = arrayOfNulls(size)
         }
     }
 }

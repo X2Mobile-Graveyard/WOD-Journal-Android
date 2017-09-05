@@ -28,7 +28,7 @@ class PersonalRecord() : Parcelable, Filterable {
     var bestResult: Float = 0.0f
 
     @SerializedName("updated_at")
-    var updated: Date? = null
+    private var updated: Date? = null
 
     constructor(name: String) : this(name, ResultType.WEIGHT)
 
@@ -55,23 +55,15 @@ class PersonalRecord() : Parcelable, Filterable {
         dest.writeSerializable(updated)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
-    override fun matches(query: String): Boolean {
-        return name?.contains(query, true) ?: false
-    }
+    override fun matches(query: String): Boolean = name?.contains(query, true) == true
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<PersonalRecord> = object : Parcelable.Creator<PersonalRecord> {
-            override fun createFromParcel(source: Parcel): PersonalRecord {
-                return PersonalRecord(source)
-            }
+            override fun createFromParcel(source: Parcel): PersonalRecord = PersonalRecord(source)
 
-            override fun newArray(size: Int): Array<PersonalRecord?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<PersonalRecord?> = arrayOfNulls(size)
         }
     }
 

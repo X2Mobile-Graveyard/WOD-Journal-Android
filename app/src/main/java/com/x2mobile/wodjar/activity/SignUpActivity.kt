@@ -5,9 +5,11 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.x2mobile.wodjar.R
@@ -26,19 +28,15 @@ import org.jetbrains.anko.toast
 
 class SignUpActivity : BaseFormActivity() {
 
-    var user: User? = null
+    private var user: User? = null
 
     var imageUri: Uri? = null
 
-    val name: EditText by lazy {
-        findViewById(R.id.name) as EditText
-    }
+    val name: EditText by lazy { findViewById<EditText>(R.id.name) }
 
-    val image: ImageView by lazy {
-        findViewById(R.id.image) as ImageView
-    }
+    val image: ImageView by lazy { findViewById<ImageView>(R.id.image) }
 
-    var progress: ProgressDialog? = null
+    private var progress: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +48,7 @@ class SignUpActivity : BaseFormActivity() {
                     .setGuidelines(CropImageView.Guidelines.ON).start(this)
         }
 
-        val register = findViewById(R.id.register)
+        val register = findViewById<Button>(R.id.register)
         register.setOnClickListener {
             if (isInputValid()) {
                 progress = indeterminateProgressDialog(R.string.registering)
@@ -74,7 +72,7 @@ class SignUpActivity : BaseFormActivity() {
             val result = CropImage.getActivityResult(intent)
             if (resultCode == Activity.RESULT_OK) {
                 imageUri = result.uri
-                Glide.with(this).load(imageUri).fitCenter().into(image)
+                Glide.with(this).load(imageUri).apply(RequestOptions().fitCenter()).into(image)
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 toast(result.error.message!!)
             }

@@ -50,25 +50,15 @@ class ResultViewModel(val context: Context, val result: Result) : BaseObservable
         }
 
     @Bindable
-    fun getWeightLiftedHint(): String {
-        return context.getString(R.string.weight_lifted, context.getString(if (Preference.getUnitType(context) ==
-                UnitType.METRIC) R.string.kg else R.string.lb))
-    }
+    fun getWeightLiftedHint(): String = context.getString(R.string.weight_lifted, context.getString(if (Preference.getUnitType(context) ==
+            UnitType.METRIC) R.string.kg else R.string.lb))
 
     @Bindable
-    fun isImageAvailable(): Boolean {
-        return result.imageUri != null
-    }
+    fun isImageAvailable(): Boolean = result.imageUri != null
 
-    fun notifyImageChange() {
-        notifyPropertyChanged(BR.imageAvailable)
-    }
+    fun notifyImageChange() = notifyPropertyChanged(BR.imageAvailable)
 
-    fun notifyTimeResultChange() {
-        result.notifyPropertyChanged(BR.resultTime)
-    }
+    fun notifyTimeResultChange() = result.notifyPropertyChanged(BR.resultTime)
 
-    fun notifyDateChange() {
-        result.notifyPropertyChanged(BR.date)
-    }
+    fun notifyDateChange() = result.notifyPropertyChanged(BR.date)
 }

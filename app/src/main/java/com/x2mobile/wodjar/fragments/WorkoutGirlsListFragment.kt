@@ -7,8 +7,6 @@ import org.greenrobot.eventbus.ThreadMode
 class WorkoutGirlsListFragment : WorkoutListFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutsResponse(requestResponseEvent: WorkoutGirlsRequestEvent) {
-        handleWorkoutsResponse(requestResponseEvent)
-    }
+    fun onWorkoutsResponse(requestResponseEvent: WorkoutGirlsRequestEvent) = handleWorkoutsResponse(requestResponseEvent)
 
 }

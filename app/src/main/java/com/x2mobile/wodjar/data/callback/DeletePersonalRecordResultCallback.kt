@@ -9,12 +9,8 @@ import retrofit2.Response
 
 class DeletePersonalRecordResultCallback : BaseCallback<Void>() {
 
-    override fun onFailure(call: Call<Void>?, throwable: Throwable?) {
-        EventBus.getDefault().post(DeletePersonalRecordResultRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<Void>?, throwable: Throwable?) = EventBus.getDefault().post(DeletePersonalRecordResultRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<Void>?, response: Response<Void>) {
-        EventBus.getDefault().post(DeletePersonalRecordResultRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<Void>?, response: Response<Void>) = EventBus.getDefault().post(DeletePersonalRecordResultRequestEvent(call, response))
 
 }

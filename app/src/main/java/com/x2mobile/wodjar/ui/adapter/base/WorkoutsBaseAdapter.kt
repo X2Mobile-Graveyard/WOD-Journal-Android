@@ -16,8 +16,8 @@ abstract class WorkoutsBaseAdapter<T : BaseWorkout> : FilterableBaseAdapter<T, W
 open class WorkoutsBaseViewHolder<in T : BaseWorkout>(itemView: View, val callback: WorkoutListener<T>) : BaseViewHolder<T>(itemView) {
 
     val context: Context by lazy { itemView.context }
-    val description: TextView by lazy { itemView.findViewById(R.id.description) as TextView }
-    val result: TextView by lazy { itemView.findViewById(R.id.best_result) as TextView }
+    val description: TextView by lazy { itemView.findViewById<TextView>(R.id.description) }
+    val result: TextView by lazy { itemView.findViewById<TextView>(R.id.best_result) }
 
     override fun bindData(item: T) {
         itemView.setOnClickListener { callback.onWorkoutClicked(item) }

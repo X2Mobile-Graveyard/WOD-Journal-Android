@@ -9,12 +9,8 @@ import retrofit2.Response
 
 class DeleteWorkoutCallback : BaseCallback<Void>() {
 
-    override fun onFailure(call: Call<Void>?, throwable: Throwable?) {
-        EventBus.getDefault().post(DeleteWorkoutRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<Void>?, throwable: Throwable?) = EventBus.getDefault().post(DeleteWorkoutRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<Void>?, response: Response<Void>) {
-        EventBus.getDefault().post(DeleteWorkoutRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<Void>?, response: Response<Void>) = EventBus.getDefault().post(DeleteWorkoutRequestEvent(call, response))
 
 }

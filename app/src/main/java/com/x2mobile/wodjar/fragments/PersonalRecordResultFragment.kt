@@ -17,7 +17,7 @@ import org.jetbrains.anko.support.v4.toast
 
 class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), DatePickerDialog.OnDateSetListener {
 
-    val personalRecord: PersonalRecord by lazy {
+    private val personalRecord: PersonalRecord by lazy {
         savedArguments?.get(NavigationConstants.KEY_PERSONAL_RECORD) as PersonalRecord? ?:
                 arguments?.get(NavigationConstants.KEY_PERSONAL_RECORD) as PersonalRecord? ?: PersonalRecord(getString(R.string.personal_record))
     }
@@ -42,25 +42,19 @@ class PersonalRecordResultFragment : ResultFragment<PersonalRecordResult>(), Dat
         return personalRecordResult
     }
 
-    override fun saveResult(result: PersonalRecordResult) {
-        if (result.id == Constants.ID_NA) {
-            if (personalRecord.id == Constants.ID_NA) {
-                Service.savePersonalRecordResult(personalRecord.name!!, result)
-            } else {
-                Service.savePersonalRecordResult(result)
-            }
+    override fun saveResult(result: PersonalRecordResult) = if (result.id == Constants.ID_NA) {
+        if (personalRecord.id == Constants.ID_NA) {
+            Service.savePersonalRecordResult(personalRecord.name!!, result)
         } else {
-            Service.updatePersonalRecordResult(result)
+            Service.savePersonalRecordResult(result)
         }
+    } else {
+        Service.updatePersonalRecordResult(result)
     }
 
-    override fun deleteResult(result: PersonalRecordResult) {
-        Service.deletePersonalRecordResult(result.id)
-    }
+    override fun deleteResult(result: PersonalRecordResult) = Service.deletePersonalRecordResult(result.id)
 
-    override fun prepareShareText(result: PersonalRecordResult): String {
-        return personalRecord.name + "\n\n" + super.prepareShareText(result)
-    }
+    override fun prepareShareText(result: PersonalRecordResult): String = personalRecord.name + "\n\n" + super.prepareShareText(result)
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTitleSet(event: TitleSetEvent) {

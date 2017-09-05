@@ -9,12 +9,8 @@ import retrofit2.Response
 
 class UpdatePersonalRecordCallback : BaseCallback<Void>() {
 
-    override fun onFailure(call: Call<Void>?, throwable: Throwable?) {
-        EventBus.getDefault().post(UpdatePersonalRecordRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<Void>?, throwable: Throwable?) = EventBus.getDefault().post(UpdatePersonalRecordRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<Void>?, response: Response<Void>) {
-        EventBus.getDefault().post(UpdatePersonalRecordRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<Void>?, response: Response<Void>) = EventBus.getDefault().post(UpdatePersonalRecordRequestEvent(call, response))
 
 }

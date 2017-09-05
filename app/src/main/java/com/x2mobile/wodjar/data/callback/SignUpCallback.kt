@@ -9,12 +9,8 @@ import retrofit2.Response
 
 class SignUpCallback : BaseCallback<Void>() {
 
-    override fun onFailure(call: Call<Void>?, throwable: Throwable?) {
-        EventBus.getDefault().post(SignUpRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<Void>?, throwable: Throwable?) = EventBus.getDefault().post(SignUpRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<Void>?, response: Response<Void>) {
-        EventBus.getDefault().post(SignUpRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<Void>?, response: Response<Void>) = EventBus.getDefault().post(SignUpRequestEvent(call, response))
 
 }

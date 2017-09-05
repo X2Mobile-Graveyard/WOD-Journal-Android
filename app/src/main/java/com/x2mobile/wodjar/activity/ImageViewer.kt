@@ -4,15 +4,20 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.x2mobile.wodjar.R
 
 
@@ -32,8 +37,8 @@ class ImageViewer : AppCompatActivity() {
         val windowRect = Rect()
         window.decorView.getWindowVisibleDisplayFrame(windowRect)
 
-        val container = findViewById(R.id.container)
-        val image = findViewById(R.id.image) as ImageView
+        val container = findViewById<View>(R.id.container)
+        val image = findViewById<ImageView>(R.id.image)
 
         val imageAnimator = ValueAnimator.ofInt(0, 100)
         imageAnimator.addUpdateListener { animator ->
@@ -56,21 +61,16 @@ class ImageViewer : AppCompatActivity() {
         animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.duration = ANIMATION_DURATION
 
-        Glide.with(this@ImageViewer).load(uri).override(windowRect.width(), windowRect.height())
-                .listener(object : RequestListener<Uri, GlideDrawable> {
-                    override fun onResourceReady(resource: GlideDrawable?, model: Uri?, target: com.bumptech.glide.request.target.Target<GlideDrawable>?,
-                                                 isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+        Glide.with(this@ImageViewer).load(uri).apply(RequestOptions().override(windowRect.width(), windowRect.height()))
+                .listener(object : RequestListener<Drawable> {
+
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         animatorSet.start()
                         return false
                     }
 
-
-                    override fun onException(e: java.lang.Exception?, model: Uri?, target: com.bumptech.glide.request.target.Target<GlideDrawable>?,
-                                             isFirstResource: Boolean): Boolean {
-                        return false
-                    }
-                })
-                .into(image)
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean = false
+                }).into(image)
 
         image.setOnClickListener { finish() }
     }

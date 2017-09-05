@@ -1,6 +1,7 @@
 package com.x2mobile.wodjar.fragments
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -47,21 +48,20 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
         toolbarDelegate.title = getString(R.string.personal_records)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.personal_record, container, false);
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.personal_records, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
         ItemTouchHelper(DeleteTouchHelperCallback(context, this)).attachToRecyclerView(recyclerView)
 
-        val add = view.findViewById(R.id.add)
+        val add = view.findViewById<FloatingActionButton>(R.id.add)
         add.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 startActivity(context.intentFor<PersonalRecordResultActivity>())
@@ -96,16 +96,14 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
         })
     }
 
-    override fun onPersonalRecordClicked(personalRecord: PersonalRecord) {
-        if (Preference.isLoggedIn(context)) {
-            if (personalRecord.present) {
-                startActivity(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord))
-            } else {
-                startActivity(context.intentFor<PersonalRecordResultActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord))
-            }
+    override fun onPersonalRecordClicked(personalRecord: PersonalRecord) = if (Preference.isLoggedIn(context)) {
+        if (personalRecord.present) {
+            startActivity(context.intentFor<PersonalRecordActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord))
         } else {
-            showLoginAlert()
+            startActivity(context.intentFor<PersonalRecordResultActivity>(NavigationConstants.KEY_PERSONAL_RECORD to personalRecord))
         }
+    } else {
+        showLoginAlert()
     }
 
     override fun onItemRemoved(position: Int) {
@@ -115,75 +113,55 @@ class PersonalRecordsFragment : BaseFragment(), PersonalRecordListener, DeleteLi
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoggedIn(event: LoggedInEvent) {
-        retrievePersonalRecords()
-    }
+    fun onLoggedIn(event: LoggedInEvent) = retrievePersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoggedOut(event: LoggedOutEvent) {
-        retrievePersonalRecords()
-    }
+    fun onLoggedOut(event: LoggedOutEvent) = retrievePersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onPersonalRecordsResponse(requestResponseEvent: PersonalRecordsRequestEvent) {
-        if (requestResponseEvent.response.body() != null) {
-            adapter.setItems(requestResponseEvent.response.body()!!.sortedBy(PersonalRecord::name).toMutableList())
-        } else {
-            toast(R.string.error_occurred)
-        }
+    fun onPersonalRecordsResponse(requestResponseEvent: PersonalRecordsRequestEvent) = if (requestResponseEvent.response.body() != null) {
+        adapter.setItems(requestResponseEvent.response.body()!!.sortedBy(PersonalRecord::name).toMutableList())
+    } else {
+        toast(R.string.error_occurred)
     }
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordsFailure(requestFailureEvent: PersonalRecordsRequestFailureEvent) {
-        if (requestFailureEvent.default) {
-            val personalRecordNames = resources.getStringArray(R.array.personal_record_type_names)
-            val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
-            assert(personalRecordNames.size == resultTypes.size)
+    fun onPersonalRecordsFailure(requestFailureEvent: PersonalRecordsRequestFailureEvent) = if (requestFailureEvent.default) {
+        val personalRecordNames = resources.getStringArray(R.array.personal_record_type_names)
+        val resultTypes = resources.getIntArray(R.array.personal_record_result_types)
+        assert(personalRecordNames.size == resultTypes.size)
 
-            val personalRecords = ArrayList<PersonalRecord>()
+        val personalRecords = ArrayList<PersonalRecord>()
 
-            personalRecordNames.forEachIndexed { index, name ->
-                personalRecords.add(PersonalRecord(name, ResultType.values()[resultTypes[index]]))
-            }
-
-            adapter.setItems(personalRecords)
-        } else {
-            handleRequestFailure(requestFailureEvent.throwable)
+        personalRecordNames.forEachIndexed { index, name ->
+            personalRecords.add(PersonalRecord(name, ResultType.values()[resultTypes[index]]))
         }
+
+        adapter.setItems(personalRecords)
+    } else {
+        handleRequestFailure(requestFailureEvent.throwable)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordUpdated(event: UpdatePersonalRecordRequestEvent) {
-        Service.getPersonalRecords()
-    }
+    fun onPersonalRecordUpdated(event: UpdatePersonalRecordRequestEvent) = Service.getPersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordDeleted(event: DeletePersonalRecordRequestEvent) {
-        Service.getPersonalRecords()
-    }
+    fun onPersonalRecordDeleted(event: DeletePersonalRecordRequestEvent) = Service.getPersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordResultAdded(event: AddPersonalRecordResultRequestEvent) {
-        Service.getPersonalRecords()
-    }
+    fun onPersonalRecordResultAdded(event: AddPersonalRecordResultRequestEvent) = Service.getPersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordResultUpdated(event: UpdatePersonalRecordResultRequestEvent) {
-        Service.getPersonalRecords()
-    }
+    fun onPersonalRecordResultUpdated(event: UpdatePersonalRecordResultRequestEvent) = Service.getPersonalRecords()
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPersonalRecordResultDeleted(event: DeletePersonalRecordResultRequestEvent) {
-        Service.getPersonalRecords()
-    }
+    fun onPersonalRecordResultDeleted(event: DeletePersonalRecordResultRequestEvent) = Service.getPersonalRecords()
 
-    private fun retrievePersonalRecords() {
-        if (Preference.isLoggedIn(context)) {
-            Service.getPersonalRecords()
-        } else {
-            Service.getDefaultPersonalRecords()
-        }
+    private fun retrievePersonalRecords() = if (Preference.isLoggedIn(context)) {
+        Service.getPersonalRecords()
+    } else {
+        Service.getDefaultPersonalRecords()
     }
 
 }

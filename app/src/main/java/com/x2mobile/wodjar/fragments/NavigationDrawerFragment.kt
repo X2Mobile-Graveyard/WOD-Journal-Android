@@ -17,6 +17,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.x2mobile.wodjar.BuildConfig
@@ -64,10 +65,10 @@ class NavigationDrawerFragment : Fragment() {
 
         EventBus.getDefault().register(this)
 
-        if (savedInstanceState != null) {
-            selectedNavigationType = NavigationType.fromId(savedInstanceState.getInt(STATE_SELECTED_ID))!!
+        selectedNavigationType = if (savedInstanceState != null) {
+            NavigationType.fromId(savedInstanceState.getInt(STATE_SELECTED_ID))!!
         } else {
-            selectedNavigationType = NavigationType.PR
+            NavigationType.PR
         }
     }
 
@@ -77,9 +78,8 @@ class NavigationDrawerFragment : Fragment() {
         mCallbacks?.onNavigationItemSelected(selectedNavigationType)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.navigation, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater!!.inflate(R.layout.navigation, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,41 +87,46 @@ class NavigationDrawerFragment : Fragment() {
 
         navigationView.setNavigationItemSelectedListener { item ->
             selectedNavigationType = NavigationType.fromId(item.itemId)!!
-            if (selectedNavigationType == NavigationType.FEEDBACK) {
-                var displayName = Preference.getDisplayName(context)
-                if (TextUtils.isEmpty(displayName)) {
-                    displayName = ""
-                }
+            when (selectedNavigationType) {
+                NavigationType.FEEDBACK -> {
+                    var displayName = Preference.getDisplayName(context)
+                    if (TextUtils.isEmpty(displayName)) {
+                        displayName = ""
+                    }
 
-                val emailIntent = Intent(Intent.ACTION_SENDTO)
-                emailIntent.data = Uri.fromParts(MAILTO, CONTACT_X2MOBILE_NET, null)
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject, getString(R.string.app_name)))
-                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_body, displayName, BuildConfig.VERSION_NAME,
-                        Build.MODEL, Build.VERSION.SDK_INT))
-                startActivity(Intent.createChooser(emailIntent, null))
-                false
-            } else if (selectedNavigationType == NavigationType.LOGIN) {
-                startActivity(context.intentFor<LoginActivity>())
-                false
-            } else if (selectedNavigationType == NavigationType.LOGOUT) {
-                Preference.clear(context)
-                EventBus.getDefault().removeAllStickyEvents()
-                EventBus.getDefault().post(LoggedOutEvent())
-                handleUserInfo()
-                false
-            } else {
-                mCallbacks?.onNavigationItemSelected(selectedNavigationType)
-                true
+                    val emailIntent = Intent(Intent.ACTION_SENDTO)
+                    emailIntent.data = Uri.fromParts(MAILTO, CONTACT_X2MOBILE_NET, null)
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject, getString(R.string.app_name)))
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_body, displayName, BuildConfig.VERSION_NAME,
+                            Build.MODEL, Build.VERSION.SDK_INT))
+                    startActivity(Intent.createChooser(emailIntent, null))
+                    false
+                }
+                NavigationType.LOGIN -> {
+                    startActivity(context.intentFor<LoginActivity>())
+                    false
+                }
+                NavigationType.LOGOUT -> {
+                    Preference.clear(context)
+                    EventBus.getDefault().removeAllStickyEvents()
+                    EventBus.getDefault().post(LoggedOutEvent())
+                    handleUserInfo()
+                    false
+                }
+                else -> {
+                    mCallbacks?.onNavigationItemSelected(selectedNavigationType)
+                    true
+                }
             }
         }
 
         navigationView.setCheckedItem(selectedNavigationType.id)
         val headerView = navigationView.getHeaderView(0)
 
-        val editContainer = headerView.findViewById(R.id.edit_container)
-        val done = headerView.findViewById(R.id.done)
+        val editContainer = headerView.findViewById<ViewGroup>(R.id.edit_container)
+        val done = headerView.findViewById<ImageView>(R.id.done)
 
-        name = headerView.findViewById(R.id.name) as TextView
+        name = headerView.findViewById(R.id.name)
         name.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 edit.setText(name.text)
@@ -131,7 +136,7 @@ class NavigationDrawerFragment : Fragment() {
             }
         }
 
-        edit = headerView.findViewById(R.id.edit) as EditText
+        edit = headerView.findViewById(R.id.edit)
         edit.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 name.text = edit.text
@@ -148,7 +153,7 @@ class NavigationDrawerFragment : Fragment() {
             editContainer.visibility = View.GONE
         }
 
-        avatar = headerView.findViewById(R.id.avatar) as ImageView
+        avatar = headerView.findViewById(R.id.avatar)
         avatar.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 CropImage.activity(null).setCropShape(CropImageView.CropShape.RECTANGLE).setAspectRatio(1, 1)
@@ -160,9 +165,9 @@ class NavigationDrawerFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        try {
-            mCallbacks = context as NavigationDrawerCallback?
-        } catch (e: ClassCastException) {
+        mCallbacks = try {
+            context as NavigationDrawerCallback?
+        } catch (exception: ClassCastException) {
             throw ClassCastException("Activity must implement NavigationDrawerCallback.")
         }
 
@@ -204,18 +209,16 @@ class NavigationDrawerFragment : Fragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoggedIn(event: LoggedInEvent) {
-        handleUserInfo()
-    }
+    fun onLoggedIn(event: LoggedInEvent) = handleUserInfo()
 
-    fun saveProfile() {
+    private fun saveProfile() {
         doAsync {
             Service.updateUser(Preference.getUserId(context), User(Preference.getEmail(context), null,
                     Preference.getDisplayName(context), Uri.parse(Preference.getProfilePictureUrl(context))))
         }
     }
 
-    fun handleUserInfo() {
+    private fun handleUserInfo() {
         val isLoggedIn = Preference.isLoggedIn(context)
         navigationView.menu.findItem(R.id.logout).isVisible = isLoggedIn
         navigationView.menu.findItem(R.id.login).isVisible = !isLoggedIn
@@ -228,14 +231,11 @@ class NavigationDrawerFragment : Fragment() {
         setProfilePicture()
     }
 
-    fun setProfilePicture() {
+    private fun setProfilePicture() {
         val width = resources.getDimensionPixelOffset(R.dimen.profile_image_size)
         Glide.with(context)
                 .load(Preference.getProfilePictureUrl(context))
-                .override(width, width)
-                .centerCrop()
-                .placeholder(R.drawable.default_avatar)
-                .dontAnimate()
+                .apply(RequestOptions().override(width, width).centerCrop().placeholder(R.drawable.default_avatar).dontAnimate())
                 .into(avatar)
     }
 
@@ -245,9 +245,7 @@ class NavigationDrawerFragment : Fragment() {
 
         companion object {
 
-            fun fromId(@IdRes id: Int): NavigationType? {
-                return values().firstOrNull { it.id == id }
-            }
+            fun fromId(@IdRes id: Int): NavigationType? = values().firstOrNull { it.id == id }
         }
     }
 

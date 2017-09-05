@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 import com.x2mobile.wodjar.data.model.adapter.UriAdapter
 
 data class User(@SerializedName("email") val email: String,
-                @SerializedName("password") val password: String? = null,
+                @SerializedName("password") private val password: String? = null,
                 @SerializedName("name") val name: String? = null,
                 @SerializedName("image_url") @JsonAdapter(UriAdapter::class) var imageUri: Uri? = null) : Parcelable {
 
@@ -22,19 +22,13 @@ data class User(@SerializedName("email") val email: String,
         dest.writeParcelable(imageUri, flags)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<User> = object : Parcelable.Creator<User> {
-            override fun createFromParcel(source: Parcel): User {
-                return User(source)
-            }
+            override fun createFromParcel(source: Parcel): User = User(source)
 
-            override fun newArray(size: Int): Array<User?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<User?> = arrayOfNulls(size)
         }
     }
 }

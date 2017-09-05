@@ -11,14 +11,12 @@ import com.x2mobile.wodjar.fragments.base.BaseFragment
 
 class HistoryFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.history, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater!!.inflate(R.layout.history, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val history = view.findViewById(R.id.history) as TextView
+        val history = view.findViewById<TextView>(R.id.history)
         history.text = arguments!!.getString(KEY_HISTORY)
     }
 

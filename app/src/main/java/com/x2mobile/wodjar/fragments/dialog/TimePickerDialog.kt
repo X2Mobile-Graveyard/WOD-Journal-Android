@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit
 
 class TimePickerDialog : DialogFragment(), DialogInterface.OnClickListener {
 
-    lateinit var hoursPicker: NumberPicker
-    lateinit var minutesPicker: NumberPicker
-    lateinit var secondsPicker: NumberPicker
+    private lateinit var hoursPicker: NumberPicker
+    private lateinit var minutesPicker: NumberPicker
+    private lateinit var secondsPicker: NumberPicker
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context)
@@ -29,17 +29,17 @@ class TimePickerDialog : DialogFragment(), DialogInterface.OnClickListener {
         val minutes = TimeUnit.SECONDS.toMinutes(time - TimeUnit.HOURS.toSeconds(hours))
         val seconds = time - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes)
 
-        hoursPicker = view.findViewById(R.id.hours) as NumberPicker
+        hoursPicker = view.findViewById(R.id.hours)
         hoursPicker.minValue = 0
         hoursPicker.maxValue = 23
         hoursPicker.value = hours.toInt()
 
-        minutesPicker = view.findViewById(R.id.minutes) as NumberPicker
+        minutesPicker = view.findViewById(R.id.minutes)
         minutesPicker.minValue = 0
         minutesPicker.maxValue = 59
         minutesPicker.value = minutes.toInt()
 
-        secondsPicker = view.findViewById(R.id.seconds) as NumberPicker
+        secondsPicker = view.findViewById(R.id.seconds)
         secondsPicker.minValue = 0
         secondsPicker.maxValue = 59
         secondsPicker.value = seconds.toInt()

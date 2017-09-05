@@ -19,14 +19,12 @@ abstract class WorkoutBaseListFragment<T : BaseWorkout> : BaseFragment(), Workou
 
     protected abstract val adapter: WorkoutsBaseAdapter<T>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.workouts, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.workouts, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
@@ -44,12 +42,10 @@ abstract class WorkoutBaseListFragment<T : BaseWorkout> : BaseFragment(), Workou
         EventBus.getDefault().unregister(this)
     }
 
-    protected fun handleWorkoutsResponse(requestResponseEvent: RequestResponseEvent<MutableList<T>>) {
-        if (requestResponseEvent.response.body() != null) {
-            adapter.setItems(sortWorkouts(requestResponseEvent.response.body()!!).toMutableList())
-        } else {
-            toast(R.string.error_occurred)
-        }
+    protected fun handleWorkoutsResponse(requestResponseEvent: RequestResponseEvent<MutableList<T>>) = if (requestResponseEvent.response.body() != null) {
+        adapter.setItems(sortWorkouts(requestResponseEvent.response.body()!!).toMutableList())
+    } else {
+        toast(R.string.error_occurred)
     }
 
     abstract fun sortWorkouts(workouts: List<T>): List<T>

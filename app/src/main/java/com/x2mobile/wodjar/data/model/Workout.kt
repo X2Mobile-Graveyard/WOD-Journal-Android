@@ -22,9 +22,7 @@ class Workout : BaseWorkout, Filterable {
         dest.writeString(name)
     }
 
-    override fun matches(query: String): Boolean {
-        return name?.contains(query, true) ?: false
-    }
+    override fun matches(query: String): Boolean = name?.contains(query, true) == true
 
     override fun hashCode(): Int {
         var result = super.hashCode()
@@ -34,13 +32,9 @@ class Workout : BaseWorkout, Filterable {
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<Workout> = object : Parcelable.Creator<Workout> {
-            override fun createFromParcel(source: Parcel): Workout {
-                return Workout(source)
-            }
+            override fun createFromParcel(source: Parcel): Workout = Workout(source)
 
-            override fun newArray(size: Int): Array<Workout?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<Workout?> = arrayOfNulls(size)
         }
     }
 }

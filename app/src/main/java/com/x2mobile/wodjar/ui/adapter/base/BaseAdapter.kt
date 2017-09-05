@@ -8,25 +8,15 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
 
     private var items: MutableList<T>? = null
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bindData(getItem(position))
-    }
+    override fun onBindViewHolder(holder: VH, position: Int) = holder.bindData(getItem(position))
 
-    override fun getItemCount(): Int {
-        return items?.size ?: 0
-    }
+    override fun getItemCount(): Int = items?.size ?: 0
 
-    protected open fun getItems(): MutableList<T>? {
-        return items
-    }
+    protected open fun getItems(): MutableList<T>? = items
 
-    fun getItem(position: Int): T {
-        return items!![position]
-    }
+    fun getItem(position: Int): T = items!![position]
 
-    fun getItemPosition(item: T): Int {
-        return items!!.indexOf(item)
-    }
+    fun getItemPosition(item: T): Int = items!!.indexOf(item)
 
     open fun setItems(items: MutableList<T>?) {
         this.items = items

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.x2mobile.wodjar.activity.ImageViewer
 import org.jetbrains.anko.support.v4.intentFor
 
@@ -20,7 +21,7 @@ class ImageViewer(val fragment: Fragment, val image: ImageView) {
     var imageUri: Uri? = null
         set(value) {
             field = value
-            Glide.with(fragment).load(value).override(windowRect.width(), windowRect.height()).into(image)
+            Glide.with(fragment).load(value).apply(RequestOptions().override(windowRect.width(), windowRect.height())).into(image)
         }
 
     fun popup(imageContainer: View) {

@@ -41,16 +41,16 @@ open class BaseFragment : Fragment() {
         }.show()
     }
 
-    protected fun handleRequestFailure(throwable: Throwable?) {
-        if (throwable is UnauthorizedException) {
+    protected fun handleRequestFailure(throwable: Throwable?) = when (throwable) {
+        is UnauthorizedException -> {
             Preference.clear(context)
             EventBus.getDefault().removeAllStickyEvents()
             EventBus.getDefault().post(LoggedOutEvent())
             toast(R.string.login_expired)
             startActivity(context.intentFor<LoginActivity>())
-        } else if (throwable is ServerException) {
-            toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
-        } else {
+        }
+        is ServerException -> toast(throwable.errors?.firstOrNull() ?: getString(R.string.error_occurred))
+        else -> {
             Crashlytics.logException(throwable)
             toast(R.string.error_occurred)
         }

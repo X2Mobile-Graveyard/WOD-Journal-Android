@@ -10,12 +10,8 @@ import retrofit2.Response
 
 class WorkoutCustomCallback : BaseCallback<WorkoutCustom>() {
 
-    override fun onSuccess(call: Call<WorkoutCustom>?, response: Response<WorkoutCustom>) {
-        EventBus.getDefault().post(WorkoutCustomRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<WorkoutCustom>?, response: Response<WorkoutCustom>) = EventBus.getDefault().post(WorkoutCustomRequestEvent(call, response))
 
-    override fun onFailure(call: Call<WorkoutCustom>?, throwable: Throwable?) {
-        EventBus.getDefault().post(WorkoutCustomRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<WorkoutCustom>?, throwable: Throwable?) = EventBus.getDefault().post(WorkoutCustomRequestFailureEvent(call, throwable))
 
 }

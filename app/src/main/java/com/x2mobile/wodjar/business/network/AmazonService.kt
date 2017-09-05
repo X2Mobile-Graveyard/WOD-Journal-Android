@@ -19,11 +19,11 @@ import java.net.URLEncoder
 
 object AmazonService {
 
-    val amazonS3: AmazonS3Client by lazy {
+    private val amazonS3: AmazonS3Client by lazy {
         AmazonS3Client(CognitoCachingCredentialsProvider(WodJarApplication.INSTANCE, Constants.IDENTIFY_POLL_ID, Regions.EU_WEST_2))
     }
 
-    fun upload(fileName: String, imageUri: Uri): PutObjectResult? {
+    private fun upload(fileName: String, imageUri: Uri): PutObjectResult? {
         val data = FileUtil.prepareForUpload(WodJarApplication.INSTANCE, imageUri)
         if (data != null && data.second > 0) {
             val metadata = ObjectMetadata()

@@ -9,9 +9,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     val toolbarDelegate: ToolbarDelegate by lazy { activity as ToolbarDelegate }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
-    }
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) = setPreferencesFromResource(R.xml.preferences, rootKey)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

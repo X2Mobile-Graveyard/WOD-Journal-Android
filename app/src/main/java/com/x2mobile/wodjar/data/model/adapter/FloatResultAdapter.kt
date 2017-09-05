@@ -6,8 +6,6 @@ import java.io.IOException
 class FloatResultAdapter : ResultAdapter() {
 
     @Throws(IOException::class)
-    override fun read(jsonReader: JsonReader): Float? {
-        return jsonReader.nextDouble().toFloat()
-    }
+    override fun read(jsonReader: JsonReader): Float? = jsonReader.nextDouble().toFloat()
 
 }

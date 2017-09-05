@@ -10,12 +10,8 @@ import retrofit2.Response
 
 class PersonalRecordResultsCallback : BaseCallback<List<PersonalRecordResult>>() {
 
-    override fun onFailure(call: Call<List<PersonalRecordResult>>?, throwable: Throwable?) {
-        EventBus.getDefault().post(PersonalRecordResultsRequestFailureEvent(call, throwable))
-    }
+    override fun onFailure(call: Call<List<PersonalRecordResult>>?, throwable: Throwable?) = EventBus.getDefault().post(PersonalRecordResultsRequestFailureEvent(call, throwable))
 
-    override fun onSuccess(call: Call<List<PersonalRecordResult>>?, response: Response<List<PersonalRecordResult>>) {
-        EventBus.getDefault().post(PersonalRecordResultsRequestEvent(call, response))
-    }
+    override fun onSuccess(call: Call<List<PersonalRecordResult>>?, response: Response<List<PersonalRecordResult>>) = EventBus.getDefault().post(PersonalRecordResultsRequestEvent(call, response))
 
 }

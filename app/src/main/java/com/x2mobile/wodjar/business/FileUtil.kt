@@ -12,8 +12,8 @@ import java.io.InputStream
 
 object FileUtil {
 
-    val CONTENT_SCHEME = "content"
-    val FILE_SCHEME = "file"
+    private val CONTENT_SCHEME = "content"
+    private val FILE_SCHEME = "file"
 
     fun prepareForUpload(context: Context, uri: Uri): Pair<InputStream, Long>? {
         if (CONTENT_SCHEME.equals(uri.scheme, ignoreCase = true)) {

@@ -72,13 +72,9 @@ abstract class BaseWorkout() : Parcelable, Filterable {
         dest.writeInt(if (default) 1 else 0)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
-    override fun equals(other: Any?): Boolean {
-        return id == (other as? Workout)?.id ?: Constants.ID_NA
-    }
+    override fun equals(other: Any?): Boolean = id == (other as? Workout)?.id ?: Constants.ID_NA
 
     override fun hashCode(): Int {
         var result = id

@@ -41,9 +41,9 @@ import kotlin.reflect.KClass
 
 abstract class WorkoutBaseFragment<T : BaseWorkout> : BaseFragment(), WorkoutResultListener {
 
-    val REQUEST_CODE_WORKOUT_RESULT = 19
+    private val REQUEST_CODE_WORKOUT_RESULT = 19
 
-    val TAG_YOUTUBE_PLAYER = "video_player"
+    private val TAG_YOUTUBE_PLAYER = "video_player"
 
     lateinit var workout: T
 
@@ -70,7 +70,7 @@ abstract class WorkoutBaseFragment<T : BaseWorkout> : BaseFragment(), WorkoutRes
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<WorkoutBinding>(inflater, R.layout.workout, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.workout, container, false)
         binding.viewModel = WorkoutViewModel(context, workout)
         return binding.root
     }
@@ -134,48 +134,40 @@ abstract class WorkoutBaseFragment<T : BaseWorkout> : BaseFragment(), WorkoutRes
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onWorkoutResultClicked(workoutResult: WorkoutResult) {
-        startActivityForResult(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_RESULT to workoutResult,
-                NavigationConstants.KEY_WORKOUT to workout, NavigationConstants.KEY_TITLE to getWorkoutResultTitle()), REQUEST_CODE_WORKOUT_RESULT)
-    }
+    override fun onWorkoutResultClicked(workoutResult: WorkoutResult) = startActivityForResult(context.intentFor<WorkoutResultActivity>(NavigationConstants.KEY_RESULT to workoutResult,
+            NavigationConstants.KEY_WORKOUT to workout, NavigationConstants.KEY_TITLE to getWorkoutResultTitle()), REQUEST_CODE_WORKOUT_RESULT)
 
-    protected fun handleWorkoutResponse(requestResponseEvent: RequestResponseEvent<T>) {
-        if (requestResponseEvent.response.body() != null) {
-            workout = requestResponseEvent.response.body()!!
+    protected fun handleWorkoutResponse(requestResponseEvent: RequestResponseEvent<T>) = if (requestResponseEvent.response.body() != null) {
+        workout = requestResponseEvent.response.body()!!
 
-            binding.viewModel = WorkoutViewModel(context, workout)
-            imageViewer.imageUri = workout.imageUri
-            initYoutubePlayer(workout.video)
+        binding.viewModel = WorkoutViewModel(context, workout)
+        imageViewer.imageUri = workout.imageUri
+        initYoutubePlayer(workout.video)
 
-            arguments.putParcelable(NavigationConstants.KEY_WORKOUT, workout)
-        } else {
-            toast(R.string.error_occurred)
-        }
+        arguments.putParcelable(NavigationConstants.KEY_WORKOUT, workout)
+    } else {
+        toast(R.string.error_occurred)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutResultsResponse(requestResponseEvent: WorkoutResultsRequestEvent) {
-        if (requestResponseEvent.response.body() != null) {
-            val workoutResults = requestResponseEvent.response.body()!!.workoutResults
-                    .sortedBy(WorkoutResult::date).toMutableList()
-            workoutResults.forEach { it.type = workout.resultType }
-            adapter.setItems(workoutResults)
-        } else {
-            toast(R.string.error_occurred)
-        }
+    fun onWorkoutResultsResponse(requestResponseEvent: WorkoutResultsRequestEvent) = if (requestResponseEvent.response.body() != null) {
+        val workoutResults = requestResponseEvent.response.body()!!.workoutResults
+                .sortedBy(WorkoutResult::date).toMutableList()
+        workoutResults.forEach { it.type = workout.resultType }
+        adapter.setItems(workoutResults)
+    } else {
+        toast(R.string.error_occurred)
     }
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutResultsFailure(requestFailureEvent: WorkoutResultsRequestFailureEvent) {
-        handleRequestFailure(requestFailureEvent.throwable)
-    }
+    fun onWorkoutResultsFailure(requestFailureEvent: WorkoutResultsRequestFailureEvent) = handleRequestFailure(requestFailureEvent.throwable)
 
-    protected abstract fun getWorkoutResultTitle() : String
+    protected abstract fun getWorkoutResultTitle(): String
 
     protected abstract fun getRequestEventType(): KClass<out RequestResponseEvent<MutableList<T>>>
 
-    fun initYoutubePlayer(video: String?) {
+    private fun initYoutubePlayer(video: String?) {
         if (!TextUtils.isEmpty(video)) {
             var player = fragmentManager.findFragmentByTag(TAG_YOUTUBE_PLAYER) as? YouTubePlayerSupportFragment
             if (player == null) {
@@ -186,7 +178,7 @@ abstract class WorkoutBaseFragment<T : BaseWorkout> : BaseFragment(), WorkoutRes
         }
     }
 
-    fun updateWorkoutsCache(result: WorkoutResult?) {
+    private fun updateWorkoutsCache(result: WorkoutResult?) {
         val workouts = EventBus.getDefault().getStickyEvent(getRequestEventType().java).response.body()!!
         val workout = workouts.find { it.id == result?.workoutId }
         workout?.bestResult = adapter.getItems()?.best { it.result }?.result ?: 0f
@@ -198,8 +190,7 @@ abstract class WorkoutBaseFragment<T : BaseWorkout> : BaseFragment(), WorkoutRes
             player?.cueVideo(workout.video)
         }
 
-        override fun onInitializationFailure(provider: YouTubePlayer.Provider?, error: YouTubeInitializationResult?) {
-        }
+        override fun onInitializationFailure(provider: YouTubePlayer.Provider?, error: YouTubeInitializationResult?) = Unit
 
     }
 }

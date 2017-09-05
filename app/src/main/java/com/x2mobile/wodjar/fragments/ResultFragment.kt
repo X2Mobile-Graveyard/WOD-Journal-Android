@@ -3,12 +3,15 @@ package com.x2mobile.wodjar.fragments
 import android.app.ProgressDialog
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import android.widget.EditText
 import android.widget.RadioButton
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.x2mobile.wodjar.R
 import com.x2mobile.wodjar.business.NavigationConstants
@@ -36,7 +39,7 @@ import java.util.*
 
 abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
-    val DIALOG_DATE_PICKER = "date_picker"
+    private val DIALOG_DATE_PICKER = "date_picker"
 
     @Suppress("UNCHECKED_CAST")
     val result: T by lazy {
@@ -47,11 +50,11 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     val viewModel: ResultViewModel by lazy { ResultViewModel(context, result) }
 
-    val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
+    private val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
 
-    val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
+    private val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
-    val shareHelper: ShareHelper by lazy { ShareHelper(this) }
+    private val shareHelper: ShareHelper by lazy { ShareHelper(this) }
 
     var progress: ProgressDialog? = null
 
@@ -63,7 +66,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<ResultBinding>(inflater, R.layout.result, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.result, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
@@ -140,7 +143,12 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
             }
 
             R.id.share_menu -> {
-                shareHelper.share(prepareShareText(result), (binding.image.drawable as? GlideBitmapDrawable)?.bitmap)
+                Glide.with(this).asBitmap().load(result.imageUri).into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
+                        shareHelper.share(prepareShareText(result), resource)
+                    }
+
+                })
             }
 
             R.id.delete_menu -> {
@@ -198,9 +206,7 @@ abstract class ResultFragment<T : Result> : BaseFragment(), DatePickerDialog.OnD
 
     protected abstract fun deleteResult(result: T)
 
-    protected open fun prepareShareText(result: T): String {
-        return UIHelper.formatResult(context, result.result, result.type)!!
-    }
+    protected open fun prepareShareText(result: T): String = UIHelper.formatResult(context, result.result, result.type)!!
 
     private fun isInputValid(): Boolean {
         if (!isInputValid(binding.weight, binding.weightLifted)) {

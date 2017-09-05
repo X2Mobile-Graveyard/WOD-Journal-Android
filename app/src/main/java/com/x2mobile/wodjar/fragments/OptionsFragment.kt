@@ -11,14 +11,12 @@ import com.x2mobile.wodjar.fragments.base.BaseFragment
 
 class OptionsFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.options, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.options, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val buildNumber = view.findViewById(R.id.build_number) as TextView
+        val buildNumber = view.findViewById<TextView>(R.id.build_number)
         buildNumber.text = getString(R.string.version_info, BuildConfig.VERSION_NAME, BuildConfig.BUILD_NUMBER)
     }
 }

@@ -26,9 +26,9 @@ import java.lang.UnsupportedOperationException
 
 class WorkoutTypesFragment : BaseFragment() {
 
-    val KEY_SELECTED_TAB = "selected_tab"
+    private val KEY_SELECTED_TAB = "selected_tab"
 
-    lateinit var selectedTab: WorkoutTab
+    private lateinit var selectedTab: WorkoutTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +46,12 @@ class WorkoutTypesFragment : BaseFragment() {
         toolbarDelegate.title = getString(R.string.workouts)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.workout_types, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.workout_types, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewPager = view.findViewById(R.id.view_pager) as ViewPager
+        val viewPager = view.findViewById<ViewPager>(R.id.view_pager)
         viewPager.adapter = WorkoutTypesPagerAdapter(context, childFragmentManager)
         viewPager.onPageChangeListener {
             onPageSelected { position ->
@@ -62,7 +60,7 @@ class WorkoutTypesFragment : BaseFragment() {
             }
         }
 
-        val tabLayout = view.findViewById(R.id.tabs) as TabLayout
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
     }
 
@@ -78,22 +76,16 @@ class WorkoutTypesFragment : BaseFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoggedIn(event: LoggedInEvent) {
-        fetchWorkouts(selectedTab.workoutType)
-    }
+    fun onLoggedIn(event: LoggedInEvent) = fetchWorkouts(selectedTab.workoutType)
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoggedOut(event: LoggedOutEvent) {
-        fetchWorkouts(selectedTab.workoutType)
-    }
+    fun onLoggedOut(event: LoggedOutEvent) = fetchWorkouts(selectedTab.workoutType)
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutsFailure(requestFailureEvent: WorkoutsRequestFailureEvent) {
-        handleRequestFailure(requestFailureEvent.throwable)
-    }
+    fun onWorkoutsFailure(requestFailureEvent: WorkoutsRequestFailureEvent) = handleRequestFailure(requestFailureEvent.throwable)
 
-    fun fetchWorkouts(type: WorkoutType) {
+    private fun fetchWorkouts(type: WorkoutType) {
         if (Preference.isLoggedIn(context)) {
             if (type == WorkoutType.CUSTOM) {
                 Service.getWorkoutsCustom()
@@ -109,24 +101,18 @@ class WorkoutTypesFragment : BaseFragment() {
 
     class WorkoutTypesPagerAdapter(val context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
-        override fun getItem(position: Int): Fragment {
-            return when (position) {
-                WorkoutTab.CUSTOM.ordinal -> WorkoutCustomListFragment()
-                WorkoutTab.GIRLS.ordinal -> WorkoutGirlsListFragment()
-                WorkoutTab.HEROES.ordinal -> WorkoutHeroesListFragment()
-                WorkoutTab.CHALLENGES.ordinal -> WorkoutChallengesListFragment()
-                WorkoutTab.OPENS.ordinal -> WorkoutOpensListFragment()
-                else -> throw UnsupportedOperationException()
-            }
+        override fun getItem(position: Int): Fragment = when (position) {
+            WorkoutTab.CUSTOM.ordinal -> WorkoutCustomListFragment()
+            WorkoutTab.GIRLS.ordinal -> WorkoutGirlsListFragment()
+            WorkoutTab.HEROES.ordinal -> WorkoutHeroesListFragment()
+            WorkoutTab.CHALLENGES.ordinal -> WorkoutChallengesListFragment()
+            WorkoutTab.OPENS.ordinal -> WorkoutOpensListFragment()
+            else -> throw UnsupportedOperationException()
         }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return WorkoutTab.values()[position].toString()
-        }
+        override fun getPageTitle(position: Int): CharSequence = WorkoutTab.values()[position].toString()
 
-        override fun getCount(): Int {
-            return WorkoutTab.values().size
-        }
+        override fun getCount(): Int = WorkoutTab.values().size
 
     }
 

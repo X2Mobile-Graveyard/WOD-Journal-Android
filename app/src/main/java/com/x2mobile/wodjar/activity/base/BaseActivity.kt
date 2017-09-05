@@ -9,14 +9,12 @@ import org.jetbrains.anko.toast
 
 open class BaseActivity : BaseToolbarActivity() {
 
-    protected fun handleRequestFailure(throwable: Throwable?) {
-        if (throwable is UnauthorizedException) {
-            EventBus.getDefault().unregister(this)
-            toast(R.string.login_expired)
-            startActivity(intentFor<LoginActivity>())
-            finish()
-        } else {
-            toast(R.string.error_occurred)
-        }
+    protected fun handleRequestFailure(throwable: Throwable?) = if (throwable is UnauthorizedException) {
+        EventBus.getDefault().unregister(this)
+        toast(R.string.login_expired)
+        startActivity(intentFor<LoginActivity>())
+        finish()
+    } else {
+        toast(R.string.error_occurred)
     }
 }

@@ -1,6 +1,7 @@
 package com.x2mobile.wodjar.fragments
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +22,13 @@ class WorkoutCustomListFragment : WorkoutBaseListFragment<WorkoutCustom>() {
 
     override val adapter: WorkoutsCustomAdapter by lazy { WorkoutsCustomAdapter(context, this) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.workouts_custom, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.workouts_custom, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val add = view.findViewById(R.id.add)
+        val add = view.findViewById<FloatingActionButton>(R.id.add)
         add.setOnClickListener {
             if (Preference.isLoggedIn(context)) {
                 startActivity(context.intentFor<WorkoutEditActivity>())
@@ -38,16 +38,11 @@ class WorkoutCustomListFragment : WorkoutBaseListFragment<WorkoutCustom>() {
         }
     }
 
-    override fun onWorkoutClicked(workout: WorkoutCustom) {
-        startActivity(context.intentFor<WorkoutCustomActivity>(NavigationConstants.KEY_WORKOUT to workout))
-    }
+    override fun onWorkoutClicked(workout: WorkoutCustom) = startActivity(context.intentFor<WorkoutCustomActivity>(NavigationConstants.KEY_WORKOUT to workout))
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutsResponse(requestResponseEvent: WorkoutsCustomRequestEvent) {
-        handleWorkoutsResponse(requestResponseEvent)
-    }
+    fun onWorkoutsResponse(requestResponseEvent: WorkoutsCustomRequestEvent) = handleWorkoutsResponse(requestResponseEvent)
 
-    override fun sortWorkouts(workouts: List<WorkoutCustom>): List<WorkoutCustom> {
-        return workouts.sortedBy(WorkoutCustom::date).reversed()
-    }
+    override fun sortWorkouts(workouts: List<WorkoutCustom>): List<WorkoutCustom> =
+            workouts.sortedBy(WorkoutCustom::date).reversed()
 }

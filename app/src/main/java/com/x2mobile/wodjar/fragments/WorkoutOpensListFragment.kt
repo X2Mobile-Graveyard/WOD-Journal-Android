@@ -7,12 +7,8 @@ import org.greenrobot.eventbus.ThreadMode
 
 class WorkoutOpensListFragment : WorkoutListFragment() {
 
-    override fun sortWorkouts(workouts: List<Workout>): List<Workout> {
-        return super.sortWorkouts(workouts).asReversed()
-    }
+    override fun sortWorkouts(workouts: List<Workout>): List<Workout> = super.sortWorkouts(workouts).asReversed()
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onWorkoutsResponse(requestResponseEvent: WorkoutOpensRequestEvent) {
-        handleWorkoutsResponse(requestResponseEvent)
-    }
+    fun onWorkoutsResponse(requestResponseEvent: WorkoutOpensRequestEvent) = handleWorkoutsResponse(requestResponseEvent)
 }

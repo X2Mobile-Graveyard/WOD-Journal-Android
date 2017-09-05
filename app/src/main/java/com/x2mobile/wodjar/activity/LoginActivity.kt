@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -27,20 +28,20 @@ import org.jetbrains.anko.toast
 
 class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
 
-    val PERMISSION_EMAIL = "email"
+    private val PERMISSION_EMAIL = "email"
 
-    val REQUEST_CODE_REGISTER = 1
+    private val REQUEST_CODE_REGISTER = 1
 
-    val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
+    private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
 
-    var progress: ProgressDialog? = null
+    private var progress: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
         title = getString(R.string.login)
 
-        val login = findViewById(R.id.login)
+        val login = findViewById<Button>(R.id.login)
         login.setOnClickListener {
             if (isInputValid()) {
                 progress = indeterminateProgressDialog(R.string.logging)
@@ -48,12 +49,12 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
             }
         }
 
-        val register = findViewById(R.id.register)
+        val register = findViewById<Button>(R.id.register)
         register.setOnClickListener {
             startActivityForResult(intentFor<SignUpActivity>(), REQUEST_CODE_REGISTER)
         }
 
-        val facebookLogin = findViewById(R.id.facebook_login) as LoginButton
+        val facebookLogin = findViewById<LoginButton>(R.id.facebook_login)
         facebookLogin.setReadPermissions(PERMISSION_EMAIL)
         facebookLogin.registerCallback(callbackManager, this)
     }
@@ -71,16 +72,11 @@ class LoginActivity : BaseFormActivity(), FacebookCallback<LoginResult> {
         }
     }
 
-    override fun onSuccess(result: LoginResult) {
-        Service.login(result.accessToken.token)
-    }
+    override fun onSuccess(result: LoginResult) = Service.login(result.accessToken.token)
 
-    override fun onError(error: FacebookException?) {
-        toast(R.string.error_occurred)
-    }
+    override fun onError(error: FacebookException?) = toast(R.string.error_occurred)
 
-    override fun onCancel() {
-    }
+    override fun onCancel() = Unit
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginResponse(event: LoginRequestEvent) {

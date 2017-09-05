@@ -56,12 +56,10 @@ class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
         }
     }
 
-    fun addPicture(fragment: Fragment) {
-        if (ContextCompat.checkSelfPermission(fragment.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            addPictureInternal()
-        } else {
-            fragment.requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_STORAGE)
-        }
+    fun addPicture(fragment: Fragment) = if (ContextCompat.checkSelfPermission(fragment.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        addPictureInternal()
+    } else {
+        fragment.requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_STORAGE)
     }
 
     private fun addPictureInternal() {
@@ -80,8 +78,8 @@ class ImagePicker(val fragment: Fragment, savedArguments: Bundle?) {
     }
 
     init {
-        if (savedArguments?.containsKey(KEY_CAMERA_FILE) ?: false) {
-            cameraFile = savedArguments!!.getSerializable(KEY_CAMERA_FILE) as File
+        if (savedArguments?.containsKey(KEY_CAMERA_FILE) == true) {
+            cameraFile = savedArguments.getSerializable(KEY_CAMERA_FILE) as File
         }
     }
 }

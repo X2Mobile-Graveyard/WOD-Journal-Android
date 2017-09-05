@@ -16,19 +16,15 @@ import com.x2mobile.wodjar.util.TimeUtil
 
 class WorkoutResultsAdapter(val context: Context, val callback: WorkoutResultListener) : BaseAdapter<WorkoutResult, WorkoutResultsViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): WorkoutResultsViewHolder {
-        return WorkoutResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.workout_result_item, parent, false), callback)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): WorkoutResultsViewHolder = WorkoutResultsViewHolder(LayoutInflater.from(context).inflate(R.layout.workout_result_item, parent, false), callback)
 
-    public override fun getItems(): MutableList<WorkoutResult>? {
-        return super.getItems()
-    }
+    public override fun getItems(): MutableList<WorkoutResult>? = super.getItems()
 }
 
 class WorkoutResultsViewHolder(itemView: View, val callback: WorkoutResultListener) : BaseViewHolder<WorkoutResult>(itemView) {
 
-    val date: TextView by lazy { itemView.findViewById(R.id.date) as TextView }
-    val result: TextView by lazy { itemView.findViewById(R.id.result) as TextView }
+    val date: TextView by lazy { itemView.findViewById<TextView>(R.id.date) }
+    val result: TextView by lazy { itemView.findViewById<TextView>(R.id.result) }
 
     override fun bindData(item: WorkoutResult) {
         itemView.setOnClickListener { callback.onWorkoutResultClicked(item) }

@@ -88,16 +88,12 @@ abstract class Result() : BaseObservable(), Parcelable {
         dest.writeSerializable(date)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
-    override fun equals(other: Any?): Boolean {
-        if (other is Result) {
-            return id == other.id
-        } else {
-            return false
-        }
+    override fun equals(other: Any?): Boolean = if (other is Result) {
+        id == other.id
+    } else {
+        false
     }
 
     override fun hashCode(): Int {

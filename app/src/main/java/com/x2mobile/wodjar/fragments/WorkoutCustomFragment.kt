@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
 
 class WorkoutCustomFragment : WorkoutBaseFragment<WorkoutCustom>() {
 
-    val REQUEST_CODE_EDIT_WORKOUT = 29
+    private val REQUEST_CODE_EDIT_WORKOUT = 29
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,23 +83,18 @@ class WorkoutCustomFragment : WorkoutBaseFragment<WorkoutCustom>() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun getWorkoutResultTitle(): String {
-        return getString(R.string.workout_result)
-    }
+    override fun getWorkoutResultTitle(): String = getString(R.string.workout_result)
 
-    override fun getRequestEventType(): KClass<out RequestResponseEvent<MutableList<WorkoutCustom>>> {
-        return WorkoutsCustomRequestEvent::class
-    }
+    override fun getRequestEventType(): KClass<out RequestResponseEvent<MutableList<WorkoutCustom>>> =
+            WorkoutsCustomRequestEvent::class
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutResponse(requestResponseEvent: WorkoutCustomRequestEvent) {
-        handleWorkoutResponse(requestResponseEvent)
-    }
+    fun onWorkoutResponse(requestResponseEvent: WorkoutCustomRequestEvent) =
+            handleWorkoutResponse(requestResponseEvent)
 
     @Suppress("UNUSED_PARAMETER")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onWorkoutFailure(requestFailureEvent: WorkoutsCustomRequestFailureEvent) {
-        handleRequestFailure(requestFailureEvent.throwable)
-    }
+    fun onWorkoutFailure(requestFailureEvent: WorkoutsCustomRequestFailureEvent) =
+            handleRequestFailure(requestFailureEvent.throwable)
 
 }

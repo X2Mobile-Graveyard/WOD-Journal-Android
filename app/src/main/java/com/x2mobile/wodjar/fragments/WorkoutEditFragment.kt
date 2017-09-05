@@ -32,7 +32,7 @@ import java.util.*
 
 class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
-    val DIALOG_DATE_PICKER = "date_picker"
+    private val DIALOG_DATE_PICKER = "date_picker"
 
     val workout: WorkoutCustom by lazy {
         savedArguments?.get(NavigationConstants.KEY_WORKOUT) as WorkoutCustom? ?:
@@ -43,11 +43,11 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     val viewModel: WorkoutEditViewModel by lazy { WorkoutEditViewModel(workout) }
 
-    val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
+    private val imagePicker: ImagePicker by lazy { ImagePicker(this, savedArguments) }
 
-    val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
+    private val imageViewer: ImageViewer by lazy { ImageViewer(this, binding.image) }
 
-    var progress: ProgressDialog? = null
+    private var progress: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,12 +218,10 @@ class WorkoutEditFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
         handleRequestFailure(requestFailureEvent.throwable)
     }
 
-    fun saveWorkout(workout: WorkoutCustom) {
-        if (workout.id != Constants.ID_NA) {
-            Service.updateWorkout(workout)
-        } else {
-            Service.saveWorkout(workout)
-        }
+    private fun saveWorkout(workout: WorkoutCustom) = if (workout.id != Constants.ID_NA) {
+        Service.updateWorkout(workout)
+    } else {
+        Service.saveWorkout(workout)
     }
 
     private fun isInputValid(): Boolean {

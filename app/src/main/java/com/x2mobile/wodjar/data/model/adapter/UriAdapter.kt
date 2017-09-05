@@ -14,8 +14,6 @@ class UriAdapter : TypeAdapter<Uri>() {
     }
 
     @Throws(IOException::class)
-    override fun read(jsonReader: JsonReader): Uri? {
-        return Uri.parse(jsonReader.nextString())
-    }
+    override fun read(jsonReader: JsonReader): Uri? = Uri.parse(jsonReader.nextString())
 
 }

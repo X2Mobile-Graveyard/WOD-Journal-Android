@@ -9,7 +9,7 @@ class WorkoutResult : Result, Parcelable {
 
     override var parentId: Int
         get() = workoutId
-        set(value) {}
+        set(value) = Unit
 
     @SerializedName("wod_id")
     var workoutId: Int = Constants.ID_NA
@@ -30,19 +30,13 @@ class WorkoutResult : Result, Parcelable {
         dest.writeInt(if (default) 1 else 0)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<WorkoutResult> = object : Parcelable.Creator<WorkoutResult> {
-            override fun createFromParcel(source: Parcel): WorkoutResult {
-                return WorkoutResult(source)
-            }
+            override fun createFromParcel(source: Parcel): WorkoutResult = WorkoutResult(source)
 
-            override fun newArray(size: Int): Array<WorkoutResult?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<WorkoutResult?> = arrayOfNulls(size)
         }
     }
 

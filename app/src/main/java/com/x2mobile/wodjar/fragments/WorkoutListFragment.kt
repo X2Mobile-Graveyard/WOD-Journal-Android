@@ -42,12 +42,8 @@ open class WorkoutListFragment : WorkoutBaseListFragment<Workout>() {
         })
     }
 
-    override fun onWorkoutClicked(workout: Workout) {
-        startActivity(context.intentFor<WorkoutActivity>(NavigationConstants.KEY_WORKOUT to workout))
-    }
+    override fun onWorkoutClicked(workout: Workout) = startActivity(context.intentFor<WorkoutActivity>(NavigationConstants.KEY_WORKOUT to workout))
 
-    override fun sortWorkouts(workouts: List<Workout>): List<Workout> {
-        return workouts.sortedBy(Workout::name)
-    }
+    override fun sortWorkouts(workouts: List<Workout>): List<Workout> = workouts.sortedBy(Workout::name)
 
 }

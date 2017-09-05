@@ -33,9 +33,7 @@ class RootViewModel(title: String, val focusChangeListener: View.OnFocusChangeLi
             notifyPropertyChanged(BR.titleChangeEnabled)
         }
 
-    fun getEditClickListener(): View.OnClickListener {
-        return View.OnClickListener {
-            titleChangeStarted = true
-        }
+    fun getEditClickListener(): View.OnClickListener = View.OnClickListener {
+        titleChangeStarted = true
     }
 }

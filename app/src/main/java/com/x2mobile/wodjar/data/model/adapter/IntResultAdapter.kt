@@ -6,8 +6,6 @@ import java.io.IOException
 class IntResultAdapter : ResultAdapter() {
 
     @Throws(IOException::class)
-    override fun read(jsonReader: JsonReader): Int? {
-        return jsonReader.nextInt()
-    }
+    override fun read(jsonReader: JsonReader): Int? = jsonReader.nextInt()
 
 }

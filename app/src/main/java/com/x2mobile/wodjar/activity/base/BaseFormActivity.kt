@@ -8,13 +8,9 @@ import org.greenrobot.eventbus.EventBus
 
 open class BaseFormActivity : BaseToolbarActivity() {
 
-    protected val email: EditText by lazy {
-        findViewById(R.id.email) as EditText
-    }
+    protected val email: EditText by lazy { findViewById<EditText>(R.id.email) }
 
-    protected val password: EditText by lazy {
-        findViewById(R.id.password) as EditText
-    }
+    protected val password: EditText by lazy { findViewById<EditText>(R.id.password) }
 
     override fun onStart() {
         super.onStart()

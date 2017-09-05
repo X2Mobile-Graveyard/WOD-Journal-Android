@@ -49,16 +49,15 @@ open class BaseToolbarActivity : AppCompatActivity(), ToolbarDelegate {
                 })
         rootViewModel!!.title = getString(R.string.app_name)
 
-        rootLayoutBinding = DataBindingUtil.inflate<RootBinding>(layoutInflater, R.layout.root, null, false)
+        rootLayoutBinding = DataBindingUtil.inflate(layoutInflater, R.layout.root, null, false)
         rootLayoutBinding!!.viewModel = rootViewModel
 
         setSupportActionBar(rootLayoutBinding!!.toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
     }
 
-    override fun setContentView(@LayoutRes layoutResID: Int) {
-        setContentView(LayoutInflater.from(this).inflate(layoutResID, rootLayoutBinding!!.root as ViewGroup, false))
-    }
+    override fun setContentView(@LayoutRes layoutResID: Int) =
+            setContentView(LayoutInflater.from(this).inflate(layoutResID, rootLayoutBinding!!.root as ViewGroup, false))
 
     override fun setContentView(view: View) {
         val rootView = rootLayoutBinding!!.root as ViewGroup

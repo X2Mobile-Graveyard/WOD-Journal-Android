@@ -13,11 +13,7 @@ class ResizeAnimation(private val view: View, private val startHeight: Int, priv
         view.requestLayout()
     }
 
-    override fun initialize(width: Int, height: Int, parentWidth: Int, parentHeight: Int) {
-        super.initialize(startWidth, startHeight, parentWidth, parentHeight)
-    }
+    override fun initialize(width: Int, height: Int, parentWidth: Int, parentHeight: Int) = super.initialize(startWidth, startHeight, parentWidth, parentHeight)
 
-    override fun willChangeBounds(): Boolean {
-        return true
-    }
+    override fun willChangeBounds(): Boolean = true
 }

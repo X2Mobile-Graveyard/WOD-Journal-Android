@@ -14,8 +14,6 @@ class ResultTypeAdapter : TypeAdapter<ResultType>() {
     }
 
     @Throws(IOException::class)
-    override fun read(jsonReader: JsonReader): ResultType? {
-        return ResultType.values()[jsonReader.nextInt()]
-    }
+    override fun read(jsonReader: JsonReader): ResultType? = ResultType.values()[jsonReader.nextInt()]
 
 }

@@ -11,9 +11,9 @@ import com.facebook.share.widget.ShareDialog
 
 class ShareHelper(val fragment: Fragment) {
 
-    val SHARE_IMAGE_WIDTH = 480
+    private val SHARE_IMAGE_WIDTH = 480
 
-    val SHARE_TEXT_SIZE = 14f
+    private val SHARE_TEXT_SIZE = 14f
 
     fun share(text: String, image: Bitmap?) {
         val paint = TextPaint()

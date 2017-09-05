@@ -22,9 +22,7 @@ class WorkoutCustom : BaseWorkout {
         dest.writeSerializable(date)
     }
 
-    override fun matches(query: String): Boolean {
-        return true
-    }
+    override fun matches(query: String): Boolean = true
 
     override fun hashCode(): Int {
         var result = super.hashCode()
@@ -34,13 +32,9 @@ class WorkoutCustom : BaseWorkout {
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<WorkoutCustom> = object : Parcelable.Creator<WorkoutCustom> {
-            override fun createFromParcel(source: Parcel): WorkoutCustom {
-                return WorkoutCustom(source)
-            }
+            override fun createFromParcel(source: Parcel): WorkoutCustom = WorkoutCustom(source)
 
-            override fun newArray(size: Int): Array<WorkoutCustom?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<WorkoutCustom?> = arrayOfNulls(size)
         }
     }
 }

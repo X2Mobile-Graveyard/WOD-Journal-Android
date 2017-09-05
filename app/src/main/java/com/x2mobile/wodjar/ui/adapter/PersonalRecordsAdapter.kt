@@ -14,15 +14,13 @@ import com.x2mobile.wodjar.ui.helper.UIHelper
 
 class PersonalRecordsAdapter(val context: Context, val listener: PersonalRecordListener) : FilterableBaseAdapter<PersonalRecord, PersonalRecordViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonalRecordViewHolder {
-        return PersonalRecordViewHolder(LayoutInflater.from(context).inflate(R.layout.record_type_item, parent, false), listener)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonalRecordViewHolder = PersonalRecordViewHolder(LayoutInflater.from(context).inflate(R.layout.record_type_item, parent, false), listener)
 }
 
 class PersonalRecordViewHolder(itemView: View, val listener: PersonalRecordListener) : BaseViewHolder<PersonalRecord>(itemView) {
 
-    val name: TextView by lazy { itemView.findViewById(R.id.name) as TextView }
-    val result: TextView by lazy { itemView.findViewById(R.id.best_result) as TextView }
+    val name: TextView by lazy { itemView.findViewById<TextView>(R.id.name) }
+    val result: TextView by lazy { itemView.findViewById<TextView>(R.id.best_result) }
 
     override fun bindData(item: PersonalRecord) {
         val context = itemView.context

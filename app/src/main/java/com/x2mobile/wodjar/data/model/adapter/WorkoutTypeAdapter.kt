@@ -14,8 +14,6 @@ class WorkoutTypeAdapter : TypeAdapter<WorkoutType>() {
     }
 
     @Throws(IOException::class)
-    override fun read(jsonReader: JsonReader): WorkoutType? {
-        return WorkoutType.values()[jsonReader.nextString()!!.toInt()]
-    }
+    override fun read(jsonReader: JsonReader): WorkoutType? = WorkoutType.values()[jsonReader.nextString()!!.toInt()]
 
 }

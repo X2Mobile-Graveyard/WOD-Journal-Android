@@ -43,16 +43,10 @@ class WorkoutEditViewModel(val workout: WorkoutCustom) : BaseObservable() {
         }
 
     @Bindable
-    fun isImageAvailable(): Boolean {
-        return workout.imageUri != null
-    }
+    fun isImageAvailable(): Boolean = workout.imageUri != null
 
-    fun notifyImageChange() {
-        notifyPropertyChanged(BR.imageAvailable)
-    }
+    fun notifyImageChange() = notifyPropertyChanged(BR.imageAvailable)
 
-    fun notifyDateChange() {
-        notifyPropertyChanged(BR.date)
-    }
+    fun notifyDateChange() = notifyPropertyChanged(BR.date)
 
 }
