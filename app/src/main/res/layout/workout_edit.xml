@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
     <data>
 
@@ -13,6 +13,7 @@
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -112,7 +113,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_camera"
+                        app:srcCompat="@drawable/ic_camera"
                         android:tint="@android:color/black" />
 
                     <TextView
@@ -135,7 +136,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_today"
+                        app:srcCompat="@drawable/ic_today"
                         android:tint="@android:color/black" />
 
                     <TextView
@@ -169,7 +170,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="8dp"
-                    android:src="@drawable/ic_clear" />
+                    app:srcCompat="@drawable/ic_clear" />
             </android.support.percent.PercentRelativeLayout>
 
         </LinearLayout>

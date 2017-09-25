@@ -26,7 +26,7 @@
             android:id="@+id/image"
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
-            android:src="@drawable/ic_face"
+            app:srcCompat="@drawable/ic_face"
             android:tint="@color/accent" />
 
         <android.support.design.widget.TextInputLayout
